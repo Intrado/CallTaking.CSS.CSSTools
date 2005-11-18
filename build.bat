@@ -1,0 +1,3 @@
+@echo off
+p4 sync -f //call_taking/CSS/CSSTools/...
+ruby dobuild.rb %1 %2 %3 %4 %5 %6

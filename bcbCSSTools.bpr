@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="CSSToolsExp\b\bcbCSSTools.dll"/>
+    <OBJFILES value="BRelease\bcbMain.obj BRelease\cCritSec.obj BRelease\cEvent.obj 
+      BRelease\cEvtThread.obj BRelease\cHandledObject.obj 
+      BRelease\cHiddenNotifiableObject.obj BRelease\cKEvent.obj 
+      BRelease\cLimitedTimeQueue.obj BRelease\cLockableObject.obj 
+      BRelease\cLookupThreadTable.obj BRelease\cMappingTable.obj 
+      BRelease\cMonitor.obj BRelease\cMutex.obj BRelease\cNotifiableObject.obj 
+      BRelease\cNotifierObject.obj BRelease\cSafeLock.obj 
+      BRelease\cSemaphore.obj BRelease\cSharedList.obj BRelease\cSharedMemory.obj 
+      BRelease\cTemplateString.obj BRelease\cTEvent.obj BRelease\cThread.obj 
+      BRelease\cTime.obj BRelease\cTimerManager.obj BRelease\RemoteEvent.obj 
+      BRelease\stdafx.obj BRelease\ThreadPool.obj BRelease\TimedItem.obj 
+      BRelease\TimedQueue.obj BRelease\TimerQueueManager.obj 
+      BRelease\cAutoLock.obj"/>
+    <RESFILES value="bcbCSSTools.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="..\Diag\DiagExp\b\diag.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="Vcl50.lib"/>
+    <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Vcldb50.bpi vclado50.bpi ibsmp50.bpi 
+      VCLBDE50.bpi vcldbx50.bpi Qrpt50.bpi TeeUI50.bpi TeeDB50.bpi Tee50.bpi 
+      Dss50.bpi TeeQR50.bpi VCLIB50.bpi Vclmid50.bpi vclie50.bpi Inetdb50.bpi 
+      Inet50.bpi NMFast50.bpi webmid50.bpi bcbie50.bpi dclocx50.bpi 
+      bcb2kaxserver50.bpi dclusr50.bpi A401_R51.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="tlink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
+    <MAINSOURCE value="bcbCSSTools.bpf"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\Diag\DiagExp"/>
+    <LIBPATH value="G:\APRO\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -I..\Diag\DiagExp -src_suffix cpp -boa"/>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -C -X- -a8 -5 -b- -k- -y -vi 
+      -tWD -tWM -c"/>
+    <PFLAGS value="-N2BRelease -N0BRelease -$Y- -$L- -$D- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zn"/>
+    <LFLAGS value="-l&quot;g:\work\CSSTools\CSSToolsExp\b\&quot; -IBRelease -D&quot;&quot; -aa -Tpd -x -Gn -Gi"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0d32.obj $(PACKAGES) $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=1
+AutoIncBuild=1
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=Positron Public Safety Systems
+FileDescription=Borland Version of CSSTools
+FileVersion=1.0.0.0
+InternalName=bCssTools
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=bCSSTools.dll
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=2
+Item0=$(BCB)\include;$(BCB)\include\vcl;..\Diag\DiagExp
+Item1=$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=3
+Item0=G:\APRO\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Item1=G:\APRO;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Item2=$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=2
+Item0=BRelease
+Item1=BDebug
+
+[HistoryLists\hlFinalOutputDir]
+Count=5
+Item0=CSSToolsExp\b\
+Item1=BRelease\
+Item2=BRelease
+Item3=BDebug\
+Item4=BDebug
+
+[HistoryLists\hIBPIOutputDir]
+Count=1
+Item0=CSSToolsExp\b\
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+  </IDEOPTIONS>
+
+  <FILES>
+    <FILE type="override" value="stdafx.cpp" translator="Auto">
+      <CFLAG1 value=" -Hc-"/>
+    </FILE>
+  </FILES>
+</PROJECT>
