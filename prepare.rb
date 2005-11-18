@@ -20,7 +20,9 @@ def getP4Exports()
   clientRoot = p4.fetch_client()["Root"]
   begin
     $p4Deps.each { |dep| getP4Export(dep, p4, clientRoot)}
-  rescue P4Exception 
+  rescue P4Exception => msg
+    puts( msg )
+    p4.warnings.each { |w| puts( w ) }
     p4.errors.each { |e| puts( e ) }
   ensure
     puts(p4.output)
@@ -33,3 +35,4 @@ print "Importing Project Dependencies...\n"
 FileUtils.rm_rf("_import")
 Dir.mkdir("_import")
 getP4Exports()
+puts "==========================="

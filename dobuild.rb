@@ -11,11 +11,18 @@ def release(version)
   p4.parse_forms
   p4.connect()
   begin
+    clientRoot = p4.fetch_client()["Root"]
     p4.run_integ("//"+$project+"/Main/...", "//releases/"+$project+"/"+version+"/...")
     spec = p4.fetch_change
-    spec[ "Description" ] = "Created " + "//releases/"+$project+"/"+version+"/..."
+    spec[ "Description" ] = "Created " + "//releases/"+$project+"/"+version
     p4.submit_spec( spec )
-   rescue P4Exception 
+    puts "Syncing " + "//releases/"+$project+"/"+version+"/..."
+    p4.run_sync("//releases/"+$project+"/"+version+"/...")
+    Dir.chdir(clientRoot + "/releases/"+$project+"/"+version)
+    Dir.pwd
+  rescue P4Exception => msg
+    puts( msg )
+    p4.warnings.each { |w| puts( w ) }
     p4.errors.each { |e| puts( e ) }
   ensure
     puts(p4.output)
