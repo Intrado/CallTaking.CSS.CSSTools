@@ -17,7 +17,7 @@ def getP4Exports()
   p4 = P4.new()
   p4.parse_forms
   p4.connect()
-  clientRoot = p4.fetch_client()._root
+  clientRoot = p4.fetch_client()["Root"]
   begin
     $p4Deps.each { |dep| getP4Export(dep, p4, clientRoot)}
   rescue P4Exception 

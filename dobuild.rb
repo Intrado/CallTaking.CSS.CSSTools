@@ -12,7 +12,10 @@ def release(version)
   p4.connect()
   begin
     p4.run_integ("//"+$project+"/Main/...", "//releases/"+$project+"/"+version+"/...")
-  rescue P4Exception 
+    spec = p4.fetch_change
+    spec[ "Description" ] = "Created " + "//releases/"+$project+"/"+version+"/..."
+    p4.submit_spec( spec )
+   rescue P4Exception 
     p4.errors.each { |e| puts( e ) }
   ensure
     puts(p4.output)
