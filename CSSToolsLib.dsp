@@ -37,7 +37,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "ReleaseLib"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Z7 /Od /I "DiagExp\Include" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "CSSTOOLS_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Z7 /Od /I "_import\Diag\Include" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "CSSTOOLS_EXPORTS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
