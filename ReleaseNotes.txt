@@ -1,0 +1,14 @@
+Release 1.0.0.0
+   - Edit qux   (http://srveng003:8080/@c=2Kf@/10207?ac=10)
+   - Change requested by SBE   (http://srveng003:8080/@c=2Kf@/9855?ac=10)
+
+Release 1.0.0.0
+   - added export   (http://srveng003:8080/@c=2Kf@/9609?ac=10)
+   - Add 2 to test   (http://srveng003:8080/@c=2Kf@/9402?ac=10)
+   - Added qux.txt   (http://srveng003:8080/@c=2Kf@/9315?ac=10)
+
+
+Release 0.0.0.0
+  - First release
+
+===== Do not remove this line 10207 =====
