@@ -1,3 +1,11 @@
+Release 0.0.0.9
+   - Add ReleaseNotes.txt   (http://srveng003:8080/@c=2Kf@/10328?ac=10)
+   - Files Updated for Release 0.0.0.8   (http://srveng003:8080/@c=2Kf@/10271?ac=10)
+   - Files Updated for Release 0.0.0.7   (http://srveng003:8080/@c=2Kf@/10269?ac=10)
+   - Files Updated for Release 0.0.0.7   (http://srveng003:8080/@c=2Kf@/10266?ac=10)
+   - Files Updated for Release 0.0.0.7   (http://srveng003:8080/@c=2Kf@/10265?ac=10)
+   - Files Updated for Release 0.0.0.7   (http://srveng003:8080/@c=2Kf@/10260?ac=10)
+
 Release 1.0.0.0
    - Edit qux   (http://srveng003:8080/@c=2Kf@/10207?ac=10)
    - Change requested by SBE   (http://srveng003:8080/@c=2Kf@/9855?ac=10)
@@ -11,4 +19,4 @@ Release 1.0.0.0
 Release 0.0.0.0
   - First release
 
-===== Do not remove this line 10207 =====
+===== Do not remove this line 10328 =====
