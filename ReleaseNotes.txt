@@ -1,27 +1,4 @@
-Release 0.0.0.17
+1.0.3.0
+   - Initial P4 Release
 
-Release 0.0.0.16
-
-Release 0.0.0.16
-
-Release 0.0.0.15
-   - Update prepare.rb   (http://srveng003:8080/@c=2Kf@/10405?ac=10)
-
-Release 0.0.0.13
-
-Release 0.0.0.13
-
-Release 0.0.0.12
-   - Add ReleaseNotes.txt   (http://srveng003:8080/@c=2Kf@/10328?ac=10)
-   - Created //releases/call_taking/CSS/CSSTools/0.0.0.5   (http://srveng003:8080/@c=2Kf@/10142?ac=10)
-   - Adjust DSP   (http://srveng003:8080/@c=2Kf@/10089?ac=10)
-   - Setup _export for CSSTools   (http://srveng003:8080/@c=2Kf@/9979?ac=10)
-   - Added _export to CSSTools   (http://srveng003:8080/@c=2Kf@/9966?ac=10)
-   - Updated build scripts   (http://srveng003:8080/@c=2Kf@/9802?ac=10)
-   - Created //releases/call_taking/CSS/CSSTools/0.0.0.0/...   (http://srveng003:8080/@c=2Kf@/9793?ac=10)
-   - Added CSSTools to P4   (http://srveng003:8080/@c=2Kf@/9792?ac=10)
-
-Release 0.0.0.0
-  - First release
-
-===== Do not remove this line 10436 =====
+===== Do not remove this line 10524 =====
