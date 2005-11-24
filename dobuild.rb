@@ -83,6 +83,8 @@ $toCopy = [
 ]
 
 $buildCmd = ['msdev CSSTools.dsw /MAKE ALL /REBUILD']
+$docCmd = []
+$setupCmd = []
 
 $versionFile = ['csstools.rc']
 
