@@ -10,7 +10,7 @@ p4.disconnect
 
 $releaseDepot = "releases"
 
-$p4Deps = ["positron/common libraries/diag/2.0.1.18/DiagExp"]
+$p4Deps = ["positron/common libraries/diag/2.0.0.139/DiagExp"]
 
 # Main
 print "Importing Project Dependencies...\n"
