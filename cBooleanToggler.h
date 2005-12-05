@@ -3,10 +3,10 @@
  * ALL RIGHTS RESERVED.
  *
  *  created by:    fslight       date created:    2001/02/23
- * %derived_by:   sroy %       %date_modified:  2001/02/23 14:13:42 %
+ * %derived_by:   fslight %       %date_modified:  2001/02/23 14:13:42 %
  *
  * %name:         cBooleanToggler.h %
- * %version:      2 %
+ * %version:      3 %
  *
  * Description:
  *
@@ -25,8 +25,16 @@ class cBooleanToggler
 public:
   cBooleanToggler(bool *pVar): mpVar(pVar) { toggle = true; }
   cBooleanToggler(bool *pVar, bool initialValue): mpVar(pVar) { *mpVar = initialValue; toggle = true; }
-  virtual ~cBooleanToggler() { if (toggle) { *mpVar = !(*mpVar); } }
+  virtual ~cBooleanToggler() { ToggleNow(); }
   virtual void DontToggle() { toggle = false; }
+  virtual void ToggleNow()
+  {
+    if (toggle)
+    {
+      *mpVar = !(*mpVar);
+      DontToggle();
+    }
+  }
 };
 
 

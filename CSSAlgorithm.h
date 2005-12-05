@@ -6,7 +6,7 @@
  * %derived_by:   fslight %       %date_modified:  2002/01/16 09:46:05 %
  *
  * %name:         CSSAlgorithm.h %
- * %version:      7 %
+ * %version:      9 %
  *
  * Description:
  *
@@ -16,6 +16,17 @@
 
 #ifndef __CSSAlgorithm_h_INCLUDED__
 #define __CSSAlgorithm_h_INCLUDED__
+
+
+template<class _II, class _OI, class _Pr> _OI copy_if(_II first, _II last, _OI out, _Pr _P)
+{
+  while (first != last)
+  {
+    if (_P(*first)) *out++ = *first;
+    ++first;
+  }
+  return out;
+}
 
 
 /* Inspired from remove_copy_if (see <algorithm>) but modified to work with maps and to move instead of copy.
@@ -96,6 +107,7 @@ template<class _II, class _Pr> inline _II map_find_if(_II _F, _II _L, _Pr _P)
       break;
   return (_F);
 }
+
 
 // Like transform, but works with a map as input (_II can be a map<A, B>::iterator, _Uop will be called on iterator->second).
 template<class _II, class _OI, class _Uop> inline _OI map_transform(_II _F, _II _L, _OI _X, _Uop _U)
