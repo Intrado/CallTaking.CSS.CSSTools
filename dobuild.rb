@@ -1,11 +1,21 @@
 require 'p4'
-p4 = P4.new()
-p4.parse_forms
-p4.connect()
-client = p4.fetch_client()
-p4.run_sync("-f", "//backroom/buildtools/...")
+
+begin
+  p4 = P4.new()
+  p4.parse_forms
+  p4.connect()
+  client = p4.fetch_client()
+  p4.run_sync("-f", "//backroom/buildtools/...")
+rescue P4Exception => msg
+  puts( msg )
+  p4.warnings.each { |w| puts( w ) }
+  p4.errors.each { |e| puts( e ) }
+ ensure
+  p4.disconnect
+end
+
 require client['Root']+'/backroom/buildtools/buildtools'
-p4.disconnect
+
 
 $project = "call_taking/CSS/CSSTools"
 
