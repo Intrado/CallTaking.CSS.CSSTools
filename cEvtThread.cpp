@@ -80,7 +80,7 @@ cEvtThread::~cEvtThread()
   
 }
 
-cEvtThread::Func(cEvtThread * pObj)
+void cEvtThread::Func(cEvtThread * pObj)
 {
   DiagTrace(TRACE_MODULE, "Func", "Starting new thread");
   if (pObj!= NULL)

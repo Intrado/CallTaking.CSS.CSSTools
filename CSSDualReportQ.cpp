@@ -19,7 +19,7 @@ namespace CSS
     mReportQ.init();
     {
       // Patch for Microsoft Visual C++ 5 Article ID: Q167749 
-      cCSSReportQ * (cCSSReportQ::*fp) () = cCSSReportQ::init;
+      cCSSReportQ * (cCSSReportQ::*fp) () = &CSS::cCSSReportQ::init;
       (((cCSSReportQ*)this)->*fp) ();
     }
     
@@ -37,7 +37,7 @@ namespace CSS
     {
       {
         // Patch for Microsoft Visual C++ 5 Article ID: Q167749 
-        bool (cCSSReportQ::*fp) () = cCSSReportQ::terminate;
+        bool (cCSSReportQ::*fp) () = &CSS::cCSSReportQ::terminate;
         (((cCSSReportQ* )this)->*fp) ();
       }
       
@@ -61,7 +61,7 @@ namespace CSS
       // Split the list in two parts: one contains the Low priority reporters, the other contains all others.
       cCSSEvent::ReporterList normalHighRep, lowRep;
       cCSSEvent::ReporterList::iterator it = find_if(pReporters->begin(), pReporters->end(),
-                                                 bind2nd(mem_fun(cCSSReporter::IsPriority), cCSSReporter::Low));
+                                                 bind2nd(mem_fun(&CSS::cCSSReporter::IsPriority), cCSSReporter::Low));
 
       copy(pReporters->begin(), it, inserter(normalHighRep, normalHighRep.end()));
       copy(it, pReporters->end(), inserter(lowRep, lowRep.end()));

@@ -61,7 +61,7 @@ LISTLOOKUP:: iterator k;
     TheLookupThreadRec.pGroupId = (char *)malloc(strlen(pGroupId) * sizeof(char));
     strcpy(TheLookupThreadRec.pGroupId, pGroupId);
 #else // UNDER_CE
-    TheLookupThreadRec.pGroupId = strdup(pGroupId);
+    TheLookupThreadRec.pGroupId = _strdup(pGroupId);
 #endif // UNDER_CE    
     TheLookupThreadRec.pEvtThread = pTheNewEvtThread;
 

@@ -14,7 +14,7 @@ enum
 	};
 
 
-CONST  FRAMESIZE = (_NbClients+1)*2;   	
+CONST int FRAMESIZE = (_NbClients+1)*2;   	
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -201,7 +201,7 @@ WORD cSharedList::getIndexPtrWr(void)
 }
 
 
-cSharedList::SetIndexPtrWr (WORD value)
+void cSharedList::SetIndexPtrWr (WORD value)
 {
 WORD *w;
  w = (WORD*)Buffer();
@@ -216,7 +216,7 @@ w = (WORD*)Buffer();
 }
 
 
-cSharedList::SetIndexPtrRd (WORD value)
+void cSharedList::SetIndexPtrRd (WORD value)
 {
 WORD *w;
 w = (WORD*)Buffer();

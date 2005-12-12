@@ -46,7 +46,7 @@ public:
 	int Id;
 
 private:
-	static Func(cEvtThread* pObj);
+	static void Func(cEvtThread* pObj);
 	// Dispatch l'evenement 
 	virtual void Dispatch();	
 	// Vide la queue pour nettoyage de ressource

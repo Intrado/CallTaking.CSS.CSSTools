@@ -127,7 +127,7 @@ int cCommandLine::FindSwitch(const char *apSwitch)
 {
   for (int i = 0 ; i < mArgc ; i++)
   {
-    if (stricmp(mArgv[i], apSwitch) == 0)
+    if (_stricmp(mArgv[i], apSwitch) == 0)
     {
       return i;
     }

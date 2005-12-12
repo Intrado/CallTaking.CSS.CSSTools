@@ -3,7 +3,7 @@
 void DiagDllTraceI(const char *module, const char *position, const char *message, const int iVal)
 {
   char txt[16];
-  DiagDllTrace(module, position, (string(message) + itoa(iVal, txt, 10)).c_str());
+  DiagDllTrace(module, position, (string(message) + _itoa(iVal, txt, 10)).c_str());
 }
 
 
@@ -22,7 +22,7 @@ void DiagDllTrace3(const char *module, const char *position, const char *message
 void DiagDllWarningI(const char *module, const char *position, const char *message, const int iVal)
 {
   char txt[16];
-  DiagDllWarning(module, position, (string(message) + itoa(iVal, txt, 10)).c_str());
+  DiagDllWarning(module, position, (string(message) + _itoa(iVal, txt, 10)).c_str());
 }
 
 
@@ -41,7 +41,7 @@ void DiagDllWarning3(const char *module, const char *position, const char *messa
 void DiagDllErrorI(const char *module, const char *position, const char *message, const int iVal, bool trace)
 {
   char txt[16];
-  DiagDllError(module, position, (string(message) + itoa(iVal, txt, 10)).c_str());
+  DiagDllError(module, position, (string(message) + _itoa(iVal, txt, 10)).c_str());
 }
 
 
@@ -60,7 +60,7 @@ void DiagDllError3(const char *module, const char *position, const char *message
 void DiagDllOutI(const char *module, const char *position, const char *message, const int iVal)
 {
   char txt[16];
-  DiagDllOut(module, position, (string(message) + itoa(iVal, txt, 10)).c_str());
+  DiagDllOut(module, position, (string(message) + _itoa(iVal, txt, 10)).c_str());
 }
 
 

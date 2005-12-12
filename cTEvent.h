@@ -23,8 +23,8 @@ public:
 
 protected:
 	virtual ~cTEvent();
-  cTEvent(class cTEvent const &){};
-  operator=(class cTEvent const &){};
+	cTEvent(class cTEvent const &){};
+	void operator=(class cTEvent const &){};
 
 private:
 	static int inst;

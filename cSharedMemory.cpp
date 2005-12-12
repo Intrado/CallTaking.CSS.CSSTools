@@ -23,7 +23,7 @@ cSharedMemory::~cSharedMemory()
 
 }
 
- cSharedMemory::InitSecurity(void)
+ void cSharedMemory::InitSecurity(void)
 {
   sa = new (SECURITY_ATTRIBUTES);
   sd = new (PSECURITY_DESCRIPTOR);

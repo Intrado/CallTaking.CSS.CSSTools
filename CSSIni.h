@@ -67,7 +67,7 @@ namespace CSS
     {
       bool operator()(const std::string s1, const std::string s2) const
       {
-        return (stricmp(s1.c_str(), s2.c_str()) < 0); // Case-insensitive comparison.
+        return (_stricmp(s1.c_str(), s2.c_str()) < 0); // Case-insensitive comparison.
       }
     };
     typedef cLockableMap<std::string, cCSSIni*, cNameCmp> tIniInstanceMap;

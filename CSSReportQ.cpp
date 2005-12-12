@@ -253,7 +253,7 @@ namespace CSS
     if (event->mSignalLowPriorityOnly)
     {
       it = find_if(pReporters->begin(), pReporters->end(), 
-                   bind2nd(mem_fun(cCSSReporter::IsPriority), cCSSReporter::Low));
+                   bind2nd(mem_fun(&CSS::cCSSReporter::IsPriority), cCSSReporter::Low));
     }
     else
     {

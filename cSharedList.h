@@ -44,9 +44,9 @@ public:
 protected:
 
 	WORD getIndexPtrWr(void);
-	SetIndexPtrWr (WORD value);
+	void SetIndexPtrWr (WORD value);
 	WORD getIndexPtrRd(void);
-	SetIndexPtrRd (WORD value);
+	void SetIndexPtrRd (WORD value);
  	WORD getRecSize(void);
 	WORD getNbRec(void);
  
@@ -57,7 +57,7 @@ private:
 
 private:
 
-    InitSecurity(void);
+    void InitSecurity(void);
 
 
 };

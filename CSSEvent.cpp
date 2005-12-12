@@ -34,7 +34,7 @@ namespace CSS
     if (it == end())
     {
       // Insert the reporter in the list.
-      it = find_if(begin(), end(), bind2nd(mem_fun(cCSSReporter::IsPriority), NextPriority(reporter->GetPriority())));
+      it = find_if(begin(), end(), bind2nd(mem_fun(&CSS::cCSSReporter::IsPriority), NextPriority(reporter->GetPriority())));
       insert(it, reporter);
     }
   }

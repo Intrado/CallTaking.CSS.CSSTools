@@ -41,7 +41,7 @@ cCSSTimeout::cCSSTimeout(string name)
   mName = name;
   mpMC = 0;
   mExpirationTime = 0;
-  mStatus = TimerStatus::Disable;
+  mStatus = Disable;
 
   /* Since there is one static cCSSTimeout instance somewhere in telephony, we know the first
      call to this constructor is made by the main thread before the program's main is called (in
@@ -68,7 +68,7 @@ cCSSTimeout::~cCSSTimeout()
 cCSSTimeout* cCSSTimeout::init(cCSSMulticondition *pMC)
 {
   mpMC = pMC;
-  mStatus = TimerStatus::Expired;
+  mStatus = Expired;
   return this;
 }
 

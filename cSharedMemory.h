@@ -43,21 +43,21 @@ private:
 
 protected:
 	   
-	  cMutex Lock;
+  cMutex Lock;
 
-	  const char *mp_SharedMemName;
-      DWORD m_Size;
+  const char *mp_SharedMemName;
+  DWORD m_Size;
 
-      void * m_Buffer;
-	  bool bCreated;
-	  LPSECURITY_ATTRIBUTES sa;
-      PSECURITY_DESCRIPTOR sd;
-	  
-	  InitSecurity();
-	  int Size();
+  void * m_Buffer;
+  bool bCreated;
+  LPSECURITY_ATTRIBUTES sa;
+  PSECURITY_DESCRIPTOR sd;
+
+  void InitSecurity();
+  int Size();
 
 
-	  void   Close( void );
+  void   Close( void );
 
 
 
