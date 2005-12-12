@@ -90,6 +90,16 @@ $toCopy = [
   %w(Release/CSSTools.dll _export/vs6),
   %w(Release/CSSTools.lib _export/vs6),
   %w(ReleaseLib/CSSToolsLib.lib _export/vs6),
+
+  %w(ReleaseVS7/CSSTools7.dll _export/vs7),
+  %w(ReleaseVS7/CSSTools7.lib _export/vs7),
+  %w(ReleaseVS7/CSSTools7.pdb _export/vs7),
+  %w(ReleaseLib7/CSSToolsLib7.lib _export/vs7),
+
+  %w(ReleaseVS8/CSSTools8.dll _export/vs8),
+  %w(ReleaseVS8/CSSTools8.lib _export/vs8),
+  %w(ReleaseVS8/CSSTools8.pdb _export/vs8),
+  %w(ReleaseLib8/CSSToolsLib8.lib _export/vs8),
 ]
 
 $buildCmd = [

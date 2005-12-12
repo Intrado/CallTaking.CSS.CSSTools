@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\ReleaseLibVS8\CSSToolsLib.lib"
+				OutputFile=".\ReleaseLibVS8\CSSToolsLib8.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

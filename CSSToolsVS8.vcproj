@@ -73,12 +73,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib diag.lib"
-				OutputFile=".\ReleaseVS8/CSSTools.dll"
+				OutputFile=".\ReleaseVS8/CSSTools8.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="_import\DiagVS8\Release"
 				GenerateDebugInformation="true"
-				ImportLibrary=".\ReleaseVS8/CSSTools.lib"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName)8.pdb"
+				ImportLibrary=".\ReleaseVS8/CSSTools8.lib"
 				TargetMachine="1"
 			/>
 			<Tool

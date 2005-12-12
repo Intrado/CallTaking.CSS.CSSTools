@@ -44,6 +44,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="_import\DiagVS7\Release"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName)7.pdb"
 				ImportLibrary=".\ReleaseVS7/CSSTools7.lib"
 				TargetMachine="1"/>
 			<Tool
