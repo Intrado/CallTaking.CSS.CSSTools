@@ -1,3 +1,6 @@
+1.1.0.0
+   - Updated for Release with VS7 and VS8
+
 1.0.3.2
    - Changed sync so that it works even if buildtools is checked out   (http://srveng003:8080/@c=2Kf@/12516?ac=10)
    - Merge continuus tasks 121404, 121405.   (http://srveng003:8080/@c=2Kf@/11796?ac=10)
@@ -9,4 +12,4 @@
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 12516 =====
+===== Do not remove this line 13028 =====
