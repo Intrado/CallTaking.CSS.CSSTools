@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSSTools", "CSSToolsVS7.vcproj", "{CE6358EE-AACA-4874-9756-45B7E8C5147C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSSToolsLib", "CSSToolsLibVS7.vcproj", "{D8912709-DA06-40B8-ADD5-AB8ABFA9B962}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{CE6358EE-AACA-4874-9756-45B7E8C5147C}.Release.ActiveCfg = Release|Win32
+		{CE6358EE-AACA-4874-9756-45B7E8C5147C}.Release.Build.0 = Release|Win32
+		{D8912709-DA06-40B8-ADD5-AB8ABFA9B962}.Release.ActiveCfg = Release|Win32
+		{D8912709-DA06-40B8-ADD5-AB8ABFA9B962}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
