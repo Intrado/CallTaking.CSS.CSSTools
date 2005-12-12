@@ -10,7 +10,7 @@ rescue P4Exception => msg
   puts( msg )
   p4.warnings.each { |w| puts( w ) }
   p4.errors.each { |e| puts( e ) }
- ensure
+ensure
   p4.disconnect
 end
 
@@ -92,7 +92,10 @@ $toCopy = [
   %w(ReleaseLib/CSSToolsLib.lib _export/vs6),
 ]
 
-$buildCmd = ['msdev CSSTools.dsw /MAKE ALL /REBUILD']
+$buildCmd = [
+#  "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
+  "#{$devenv8} CSSToolsVS8.sln /Rebuild"
+]
 $docCmd = []
 $setupCmd = []
 

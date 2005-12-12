@@ -12,7 +12,8 @@ $releaseDepot = "releases"
 
 $p4Deps = [
   "positron/common libraries/diag/2.0.0.139/DiagExp",
-  ["positron/common libraries/diag/2.0.1.27/DiagExp", "_import/diag_vs8"],
+  ["positron/common libraries/diag/2.0.1.27/DiagExp", "_import/diagVS7"],
+  ["positron/common libraries/diag/2.0.1.27/DiagExp", "_import/diagVS8"],
 ]
 
 # Main
