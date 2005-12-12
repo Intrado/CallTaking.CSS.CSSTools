@@ -103,8 +103,8 @@ $toCopy = [
 ]
 
 $buildCmd = [
-#  "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
-#  "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
+  "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
+  "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
   "#{$devenv8} CSSToolsVS8.sln /Rebuild Release",
 ]
 $docCmd = []
