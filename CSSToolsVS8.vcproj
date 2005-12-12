@@ -78,7 +78,7 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="_import\DiagVS8\Release"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(TargetDir)$(TargetName)8.pdb"
+				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				ImportLibrary=".\ReleaseVS8/CSSTools8.lib"
 				TargetMachine="1"
 			/>
