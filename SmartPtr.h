@@ -194,14 +194,14 @@ public:
 	template <class NewType>
 	bool operator==(const BaseSmartPtr<NewType> &p_) const 
 	{ 
-		return p == dynamic_cast<T*>(((volatile BaseSmartPtr<NewType>) p_).GetInternalPtr()); 
+		return p == dynamic_cast<T*>(((/*volatile*/ BaseSmartPtr<NewType>) p_).GetInternalPtr()); 
 	}
 
 	// different types of smartPtr may contain the same object.
 	template <class NewType>
 	bool operator!=(const BaseSmartPtr<NewType> &p_) const 
 	{ 
-		return p != dynamic_cast<T*>(((volatile BaseSmartPtr<NewType>) p_).GetInternalPtr()); 
+		return p != dynamic_cast<T*>(((/*volatile*/ BaseSmartPtr<NewType>) p_).GetInternalPtr()); 
 	}
 
 	// auto-cast pointer assignment.
@@ -231,7 +231,7 @@ public:
 	SmartPtr(BaseSmartPtr<NewType> &p_) : BaseSmartPtr<T>(dynamic_cast<T*>(p_.GetInternalPtr()))
 	{
 		#ifdef UNSAFE_CASTING
-			assert(IsTypeOrNull(((volatile BaseSmartPtr<NewType>) p_),T*));
+			assert(IsTypeOrNull(((/*volatile*/ BaseSmartPtr<NewType>) p_),T*));
 		#endif
 	}
 
@@ -262,16 +262,16 @@ public:
 	bool operator<(const SmartPtr<T> &p_) const { return p < p_.p; }
 
 	// assignment that do not require to be casted.
-  SmartPtr& operator=(const SmartPtr<T> &p_) { return operator=(((volatile SmartPtr<T>) p_).GetInternalPtr()); }
+  SmartPtr& operator=(const SmartPtr<T> &p_) { return operator=(((/*volatile*/ SmartPtr<T>) p_).GetInternalPtr()); }
 
 	// casting pointer assignment.
 	template <class NewType>
 	SmartPtr& operator=(const BaseSmartPtr<NewType> &p_)
   {
 		#ifdef UNSAFE_CASTING
-			assert(IsTypeOrNull(((volatile BaseSmartPtr<NewType>) p_),T*));
+			assert(IsTypeOrNull(((/*volatile*/ BaseSmartPtr<NewType>) p_),T*));
 		#endif
-		return operator=(((volatile BaseSmartPtr<NewType>) p_).GetInternalPtr());
+		return operator=(((/*volatile*/ BaseSmartPtr<NewType>) p_).GetInternalPtr());
 	}
 
 	// copy the actual object pointer.
