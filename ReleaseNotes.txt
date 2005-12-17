@@ -1,3 +1,6 @@
+1.1.0.1
+   - Removed volatile from SmartPtr   (http://srveng003:8080/@c=2Kf@/13604?ac=10)
+
 1.1.0.0
    - Updated for Release with VS7 and VS8
 
@@ -12,4 +15,4 @@
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 13028 =====
+===== Do not remove this line 13604 =====
