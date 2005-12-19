@@ -24,7 +24,7 @@ public:
 protected:
 	virtual ~cTEvent();
 	cTEvent(class cTEvent const &){};
-	void operator=(class cTEvent const &){};
+	int operator=(class cTEvent const &){return 0;};
 
 private:
 	static int inst;
