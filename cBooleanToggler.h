@@ -23,15 +23,32 @@ class cBooleanToggler
   bool *mpVar;
   bool toggle;
 public:
+  cBooleanToggler(): mpVar(0) { toggle = true; }
+
   cBooleanToggler(bool *pVar): mpVar(pVar) { toggle = true; }
-  cBooleanToggler(bool *pVar, bool initialValue): mpVar(pVar) { *mpVar = initialValue; toggle = true; }
+
+  cBooleanToggler(bool *pVar, bool initialValue): mpVar(pVar)
+  {
+    if (mpVar)
+      *mpVar = initialValue;
+    toggle = true;
+  }
+
+  virtual void SetVar(bool *pVar)
+  {
+    mpVar = pVar;
+  }
+
   virtual ~cBooleanToggler() { ToggleNow(); }
+
   virtual void DontToggle() { toggle = false; }
+
   virtual void ToggleNow()
   {
     if (toggle)
     {
-      *mpVar = !(*mpVar);
+      if (mpVar)
+        *mpVar = !(*mpVar);
       DontToggle();
     }
   }
