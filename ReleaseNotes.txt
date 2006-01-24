@@ -1,3 +1,6 @@
+1.1.0.3 - Released 2006/01/24
+   - Add default constructor and SetVar function in cBooleanToggler.   (http://srveng003:8080/@c=2Kf@/17411?ac=10)
+
 1.1.0.2
    - Fixed return type of operator=   (http://srveng003:8080/@c=2Kf@/13721?ac=10)
 
@@ -18,4 +21,4 @@
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 13721 =====
+===== Do not remove this line 17411 =====
