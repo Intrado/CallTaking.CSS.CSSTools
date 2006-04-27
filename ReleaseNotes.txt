@@ -1,3 +1,8 @@
+1.1.0.4 - Released 2006/04/27
+   - Correct CSSDiagEx so it fits with Diag new definitions
+Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
+   - Remove Diag definitions that are now already defined in Diag   (http://srveng003:8080/@c=2Kf@/27848?ac=10)
+
 1.1.0.3 - Released 2006/01/24
    - Add default constructor and SetVar function in cBooleanToggler.   (http://srveng003:8080/@c=2Kf@/17411?ac=10)
 
@@ -21,4 +26,4 @@
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 17411 =====
+===== Do not remove this line 27851 =====
