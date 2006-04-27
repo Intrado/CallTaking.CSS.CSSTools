@@ -6,19 +6,8 @@
 #include <sstream>
 
 // DiagDll* functions.
-CSSTOOLS_API void DiagDllTraceI(const char *module, const char *position, const char *message, const int iVal);
-CSSTOOLS_API void DiagDllTrace2(const char *module, const char *position, const char *message, const char *message2);
-CSSTOOLS_API void DiagDllTrace3(const char *module, const char *position, const char *message, const char *message2 ,const char *message3);
-
 CSSTOOLS_API void DiagDllWarningI(const char *module, const char *position, const char *message, const int iVal);
-CSSTOOLS_API void DiagDllWarning2(const char *module, const char *position, const char *message, const char *message2);
-CSSTOOLS_API void DiagDllWarning3(const char *module, const char *position, const char *message, const char *message2 ,const char *message3);
-
 CSSTOOLS_API void DiagDllErrorI(const char *module, const char *position, const char *message, const int iVal, bool trace = true);
-
-CSSTOOLS_API void DiagDllOutI(const char *module, const char *position, const char *message, const int iVal);
-CSSTOOLS_API void DiagDllOut2(const char *module, const char *position, const char *message, const char *message2);
-CSSTOOLS_API void DiagDllOut3(const char *module, const char *position, const char *message, const char *message2 ,const char *message3);
 
 // DiagTrace functions.
 inline void DiagTrace(const char *module, const char *position, const char *message = "Starting") {  DiagDllTrace(module, position, message); }
