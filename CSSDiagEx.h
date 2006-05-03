@@ -49,7 +49,6 @@ inline void DiagWarning(const char *module, const char *position, const std::str
 inline void DiagWarning(const char *module, const char *position, const std::ostringstream &message) { DiagDllWarning(module, position, message.str().c_str()); }
 
 // DiagError functions.
-inline void DiagError(const char *module, const char *position, const char *message, bool trace = true) {  DiagDllError(module, position, message, trace); }
 inline void DiagError(const char *module, const char *position, const std::string &message, bool trace = true) {  DiagDllError(module, position, message.c_str(), trace); }
 
 inline void DiagError(const char *module, const char *position, const char *message, const int iVal, bool trace = true) { DiagDllErrorI(module, position, message, iVal, trace); }
