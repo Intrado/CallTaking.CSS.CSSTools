@@ -1,3 +1,6 @@
+1.1.0.5 - Released 2006/05/03
+   - Add a DiagError function definition to avoid ambiguity with DiagError(char*,char*.char*,bool) calls.   (http://srveng003:8080/@c=2Kf@/28211?ac=10)
+
 1.1.0.4 - Released 2006/04/27
    - Correct CSSDiagEx so it fits with Diag new definitions
 Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
@@ -26,4 +29,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 27851 =====
+===== Do not remove this line 28211 =====
