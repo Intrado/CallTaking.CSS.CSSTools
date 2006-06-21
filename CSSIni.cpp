@@ -12,7 +12,7 @@ namespace CSS
 {  
   const char *cCSSIni::moduleName = "CSSIni";
   const char *cCSSIni::INI_EXT = ".INI";
-  const int cCSSIni::N_SIZE_KEY = 512;
+  const int cCSSIni::N_SIZE_KEY = 1024;
   const int cCSSIni::N_SIZE_BUFFER = 512;
   const int cCSSIni::N_TEXT = 10;
 
