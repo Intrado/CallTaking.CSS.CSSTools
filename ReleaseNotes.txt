@@ -1,3 +1,7 @@
+1.1.0.6 - Released 2006/06/28
+   - CSSTOOLS: Increase length of possible value of INI file key to 1024 characters (fix for Mantis issue 14289).   (http://srveng003:8080/@c=2Kf@/32021?ac=10)
+   - Remove standard const char* DiagError function since it was added in Diag.h   (http://srveng003:8080/@c=2Kf@/28223?ac=10)
+
 1.1.0.5 - Released 2006/05/03
    - Add a DiagError function definition to avoid ambiguity with DiagError(char*,char*.char*,bool) calls.   (http://srveng003:8080/@c=2Kf@/28211?ac=10)
 
@@ -29,4 +33,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 28211 =====
+===== Do not remove this line 32021 =====
