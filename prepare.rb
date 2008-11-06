@@ -1,7 +1,6 @@
 require 'p4'
 
 p4 = P4.new()
-p4.parse_forms
 p4.connect()
 client = p4.fetch_client()
 p4.run_sync("-f", "//backroom/buildtools/...")
