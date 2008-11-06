@@ -77,6 +77,7 @@ $toCopy = [
   %w(RemoteEvent.h _export),
   %w(SimpleList.h _export),
   %w(SmartPtr.h _export),
+  %w(StringConversion.h _export),
   %w(sTEventRec.h _export),
   %w(ThreadPool.h _export),
   %w(TicketOutlet.h _export),
