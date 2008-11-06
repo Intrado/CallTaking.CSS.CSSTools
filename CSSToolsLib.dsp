@@ -222,6 +222,10 @@ SOURCE=.\stdafx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\StringConversion.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ThreadPool.cpp
 # End Source File
 # Begin Source File
@@ -483,6 +487,10 @@ SOURCE=.\StdAfx.h
 # Begin Source File
 
 SOURCE=.\sTEventRec.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StringConversion.h
 # End Source File
 # Begin Source File
 

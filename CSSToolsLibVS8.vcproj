@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="CSSToolsLib"
 	ProjectGUID="{94ABD72A-67FA-4A4D-8F18-5A2DCFF5B580}"
+	RootNamespace="CSSToolsLib"
 	>
 	<Platforms>
 		<Platform
@@ -641,6 +642,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\StringConversion.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ThreadPool.cpp"
 				>
 				<FileConfiguration
@@ -966,6 +971,10 @@
 			</File>
 			<File
 				RelativePath="sTEventRec.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StringConversion.h"
 				>
 			</File>
 			<File

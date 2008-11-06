@@ -538,6 +538,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\StringConversion.cpp">
+			</File>
+			<File
 				RelativePath="ThreadPool.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -797,6 +800,9 @@
 			</File>
 			<File
 				RelativePath="sTEventRec.h">
+			</File>
+			<File
+				RelativePath=".\StringConversion.h">
 			</File>
 			<File
 				RelativePath="ThreadPool.h">
