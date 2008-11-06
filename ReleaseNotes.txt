@@ -1,3 +1,10 @@
+1.1.0.7 - Released 2008/11/06
+   - Shorten conversion function names (unicode2Ansi to U2A)   (http://srveng003:8080/@c=2Kf@/106040?ac=10)
+   - Remove parse_forms from build scripts   (http://srveng003:8080/@c=2Kf@/106038?ac=10)
+   - Add copy of StringConversion.h into dobuild   (http://srveng003:8080/@c=2Kf@/106037?ac=10)
+   - Add StringConversion into CSSTools _export   (http://srveng003:8080/@c=2Kf@/106035?ac=10)
+   - Add StringConversion into CSSTools   (http://srveng003:8080/@c=2Kf@/106034?ac=10)
+
 1.1.0.6 - Released 2006/06/28
    - CSSTOOLS: Increase length of possible value of INI file key to 1024 characters (fix for Mantis issue 14289).   (http://srveng003:8080/@c=2Kf@/32021?ac=10)
    - Remove standard const char* DiagError function since it was added in Diag.h   (http://srveng003:8080/@c=2Kf@/28223?ac=10)
@@ -33,4 +40,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 32021 =====
+===== Do not remove this line 106040 =====
