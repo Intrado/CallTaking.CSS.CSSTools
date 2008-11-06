@@ -1,3 +1,6 @@
+1.1.0.8 - Released 2008/11/06
+   - Add StringConversion into CSSTools project and add export macro   (http://srveng003:8080/@c=2Kf@/106048?ac=10)
+
 1.1.0.7 - Released 2008/11/06
    - Shorten conversion function names (unicode2Ansi to U2A)   (http://srveng003:8080/@c=2Kf@/106040?ac=10)
    - Remove parse_forms from build scripts   (http://srveng003:8080/@c=2Kf@/106038?ac=10)
@@ -40,4 +43,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 106040 =====
+===== Do not remove this line 106048 =====
