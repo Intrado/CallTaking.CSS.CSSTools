@@ -6,6 +6,8 @@
 
 using namespace std;
 
+#include "StringConversion.h"
+
 static const char *ModuleName = "StringConversion";
 
 #define STACK_LIMIT 56 * 1024   // 56 K
