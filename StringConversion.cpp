@@ -59,22 +59,22 @@ static wstring convertA2U(const char *s)
   return ret;
 }
 
-string  unicodeToAnsi(const wstring &s)
+string U2A(const wstring &s)
 {
   return convertU2A(s.c_str());
 }
 
-string  unicodeToAnsi(const wchar_t * const s)
+string U2A(const wchar_t * const s)
 {
   return convertU2A(s);
 }
 
-wstring ansiToUnicode(const string &s)
+wstring A2U(const string &s)
 {
   return convertA2U(s.c_str());
 }
 
-wstring ansiToUnicode(const char * const s)
+wstring A2U(const char * const s)
 {
   return convertA2U(s);
 }

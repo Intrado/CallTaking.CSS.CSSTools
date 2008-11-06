@@ -8,12 +8,12 @@
 
 using namespace std;
 
-extern  string  unicodeToAnsi(const wstring &s);
+extern  string  U2A(const wstring &s);
 
-extern  string  unicodeToAnsi(const wchar_t * const s);
+extern  string  U2A(const wchar_t * const s);
 
-extern  wstring ansiToUnicode(const string &s);
+extern  wstring A2U(const string &s);
 
-extern  wstring ansiToUnicode(const char * const s);
+extern  wstring A2U(const char * const s);
 
 #endif
