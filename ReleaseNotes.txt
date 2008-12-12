@@ -1,3 +1,6 @@
+1.1.0.8 - Released 2008/12/12
+   - Remove CSSTools static Diag module registration, and replace any CSSTrace with DiagTrace   (http://srveng003:8080/@c=2Kf@/110120?ac=10)
+
 1.1.0.7 - Released 2008/11/06
    - Remove extern directive for StringConversion   (http://srveng003:8080/@c=2Kf@/106052?ac=10)
    - Add StringConversion into CSSTools project and add export macro   (http://srveng003:8080/@c=2Kf@/106048?ac=10)
@@ -42,4 +45,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 106052 =====
+===== Do not remove this line 110120 =====
