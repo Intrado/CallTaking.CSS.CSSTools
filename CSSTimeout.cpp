@@ -201,7 +201,7 @@ int cCSSTimeout::getValue() // Return the number of seconds left before expirati
     }
   }
 
-  CSSTrace(kModuleName,"GetValue","Actual Time", value);
+  DiagTrace(kModuleName,"GetValue","Actual Time", value);
   return value;
 }
 

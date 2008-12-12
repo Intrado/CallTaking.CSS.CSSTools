@@ -35,7 +35,7 @@ namespace CSS
   {
     int WinResult;
     char dir[N_SIZE_BUFFER + 1];
-    CSSTrace(moduleName, "Init", "Starting");
+    DiagTrace(moduleName, "Init", "Starting");
 
     // Determine whether we are in a Power911 telephony or not
     bool isPower911 = true;
@@ -108,7 +108,7 @@ namespace CSS
             sysDir += aTicketPadName + ".sav";
             CopyFile(sysDir.c_str(), workDir.c_str(), TRUE);
           }
-          CSSTrace(moduleName, "Init", "Ticket Path : ", TicketPath);;
+          DiagTrace(moduleName, "Init", "Ticket Path : ", TicketPath);;
         }
 
         TicketPadName = TicketPath + aTicketPadName;
@@ -133,7 +133,7 @@ namespace CSS
     string key;
     int KeyValue = 0;
     bool bRead;
-    CSSTrace(moduleName, "GetTicket", "Starting");
+    DiagTrace(moduleName, "GetTicket", "Starting");
     {
       cAutoLock _lock(&lockTicketPad);
       section = COUNTER;
@@ -143,7 +143,7 @@ namespace CSS
       {
         bRead = getConfigKey(section, key, KeyValue);
         /*  Obtient la nouvelle valeur Unique */
-        CSSTrace(moduleName, "GetTicket ", " Read First time : " + TicketFileName + " " + section + " " + key + " " , KeyValue);;
+        DiagTrace(moduleName, "GetTicket ", " Read First time : " + TicketFileName + " " + section + " " + key + " " , KeyValue);;
         if (bRead == false)
         {
           DiagError(moduleName, "GetTicket", "Error on Read File : " + TicketFileName + " " + section + " " + key + " " ,KeyValue);
@@ -153,12 +153,12 @@ namespace CSS
         bFirstReading = false;
       };
       KeyValue = TicketNumber;
-      CSSTrace(moduleName, "GetTicket", " Read Value ", KeyValue);;
+      DiagTrace(moduleName, "GetTicket", " Read Value ", KeyValue);;
       if (KeyValue >= 2147483647)
       {
         /*  Mise a jour de la Prochaine valeur */
         /*  Verifie si valeur maximal atteinte pour etre positif sur un 32bits signee  (2 Puissance 31)- 1 =2147483647 */
-        CSSTrace(moduleName, "GetTicket", " Reset Value to 1 was: ", KeyValue);;
+        DiagTrace(moduleName, "GetTicket", " Reset Value to 1 was: ", KeyValue);;
         KeyValue = 1;
       }
       else
@@ -170,7 +170,7 @@ namespace CSS
       {
         DiagError(moduleName, "GetConfigKey", " Error on SetConfig " + TicketFileName + " " + section + " " + key + " ", KeyValue);
       };
-      CSSTrace(moduleName, "GetTicket", " Write File : " + TicketFileName + " " + section + " " + key + " " + ToStr(KeyValue, 10));;
+      DiagTrace(moduleName, "GetTicket", " Write File : " + TicketFileName + " " + section + " " + key + " " + ToStr(KeyValue, 10));;
       Value = TicketNumber;
       return Value;
     };
@@ -181,7 +181,7 @@ namespace CSS
     ofstream TicketPadFileWr;
     /* ---------------------------------METHODES PRIVEES--------------------------------------- */
     ifstream TicketPadFileRd;
-    CSSTrace(moduleName, "VerifyAndCreate", " We open The file for verify if it exist : ", FileName);;
+    DiagTrace(moduleName, "VerifyAndCreate", " We open The file for verify if it exist : ", FileName);;
     TicketPadFileRd.open(FileName.c_str(), ios::in);
     if (TicketPadFileRd.bad())
     {
@@ -209,7 +209,7 @@ namespace CSS
     }
     else
     {
-      CSSTrace(moduleName, "VerifyAndCreate", " The file exist and we close it ", FileName);;
+      DiagTrace(moduleName, "VerifyAndCreate", " The file exist and we close it ", FileName);;
       try
       {
         TicketPadFileRd.close();
@@ -221,7 +221,7 @@ namespace CSS
       }
       ;
     };
-    CSSTrace(moduleName, "VerifyAndCreate", " Exit");;
+    DiagTrace(moduleName, "VerifyAndCreate", " Exit");;
     return true;
   }
   

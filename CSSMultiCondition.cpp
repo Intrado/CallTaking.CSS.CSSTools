@@ -47,7 +47,7 @@ namespace CSS
 
   cCSSMulticondition::tSignalType cCSSMulticondition::wait()
   {
-    CSSTrace(kModuleName, "Wait", "Waiting for MC : ", mName);
+    DiagTrace(kModuleName, "Wait", "Waiting for MC : ", mName);
     mSignalType = kNotSetMct;
     mpWaitEvent->Reset();
     this->Release();
@@ -63,12 +63,12 @@ namespace CSS
       if (mSignalType == kNotSetMct)
       {
         mSignalType = aType;
-        CSSTrace(kModuleName, "Signal", "  type setted, MC=", mName);
+        DiagTrace(kModuleName, "Signal", "  type setted, MC=", mName);
         mpWaitEvent->Signal();
       }
       else
       {
-        CSSTrace(kModuleName, "Signal", "type <> NIL MC = ", mName);
+        DiagTrace(kModuleName, "Signal", "type <> NIL MC = ", mName);
       }
     }
   }
@@ -76,7 +76,7 @@ namespace CSS
   void cCSSMulticondition::setType(tSignalType aType)
   {
     cAutoLock _Lock(this);
-    CSSTrace(kModuleName, "SetType", "MC : ", mName, "Locking mutex");
+    DiagTrace(kModuleName, "SetType", "MC : ", mName, "Locking mutex");
     mSignalType = aType;
   }
   

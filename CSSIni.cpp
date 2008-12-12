@@ -144,7 +144,7 @@ namespace CSS
 		{
 			/*  Decomposition des chaines */
 			KeySize = WinResult;
-  		CSSTrace(moduleName, "GetAllSectionKey", "Taille: ", KeySize);
+  		DiagTrace(moduleName, "GetAllSectionKey", "Taille: ", KeySize);
 
       J = 0;
 			K = 0;
@@ -161,14 +161,14 @@ namespace CSS
 					KeyArray[J] = (SubArray).substr(0, K );
 
           /*  Filtrage des commentaires */
-					CSSTrace(moduleName, "GetAllSectionKey", "KeyRead:", KeyArray[J]);
-					CSSTrace(moduleName, "GetAllSectionKey", "KeySize:", KeyArray[J].length());
+					DiagTrace(moduleName, "GetAllSectionKey", "KeyRead:", KeyArray[J]);
+					DiagTrace(moduleName, "GetAllSectionKey", "KeySize:", KeyArray[J].length());
 
           NewKeyFilter = FilterTextLine(KeyArray[J]);
 					KeyArray[J] = NewKeyFilter;
 
-          CSSTrace(moduleName, "GetAllSectionKey", "KeyRead (After filter): ", KeyArray[J]);
-					CSSTrace(moduleName, "GetAllSectionKey", "KeySize (After filter): ", KeyArray[J].length());
+          DiagTrace(moduleName, "GetAllSectionKey", "KeyRead (After filter): ", KeyArray[J]);
+					DiagTrace(moduleName, "GetAllSectionKey", "KeySize (After filter): ", KeyArray[J].length());
 
           NbSectionKey++;
 					J = J + 1;
@@ -203,7 +203,7 @@ namespace CSS
 		/*  Obtient l'information desiree de la Section et de la Cle */
 		if (WinSize >= 0)
 		{
-			CSSTrace(moduleName, "nGetConfigKey", "KeyRead:", WinSize);
+			DiagTrace(moduleName, "nGetConfigKey", "KeyRead:", WinSize);
 		}
 		else
 		{
@@ -227,11 +227,11 @@ namespace CSS
 		/*  Obtient l'information desiree de la Section et de la Cle */
 		if (WinSize >= 0)
 		{
-			CSSTrace(moduleName, "nGetConfigKeyDef", "KeyRead:", WinSize);
+			DiagTrace(moduleName, "nGetConfigKeyDef", "KeyRead:", WinSize);
 		}
 		else
 		{
-			CSSTrace(moduleName, "nGetConfigKeyDef", "defaut value returned : ", defaultVal);
+			DiagTrace(moduleName, "nGetConfigKeyDef", "defaut value returned : ", defaultVal);
 			return defaultVal;
 		};
 		return WinSize;
@@ -258,8 +258,8 @@ namespace CSS
 			SubArray = string(KeyData);
 			KeyRead = (SubArray).substr(0, WinSize );
 
-      CSSTrace(moduleName, "GetConfigKey", "KeyRead:", KeyRead);
-			CSSTrace(moduleName, "GetConfigKey", "KeySize:", WinSize);
+      DiagTrace(moduleName, "GetConfigKey", "KeyRead:", KeyRead);
+			DiagTrace(moduleName, "GetConfigKey", "KeySize:", WinSize);
 		}
 		else
 		{
@@ -267,8 +267,8 @@ namespace CSS
 		};
 		KeyRead = FilterTextLine(KeyRead);
 
-    CSSTrace(moduleName, "GetConfigKey", "KeyRead (After filter):", KeyRead);
-		CSSTrace(moduleName, "GetConfigKey", "KeySize (After filter):", KeyRead.length());
+    DiagTrace(moduleName, "GetConfigKey", "KeyRead (After filter):", KeyRead);
+		DiagTrace(moduleName, "GetConfigKey", "KeySize (After filter):", KeyRead.length());
 		return KeyRead;
 	}
 	
@@ -293,18 +293,18 @@ namespace CSS
 			SubArray = string(KeyData);
 			KeyRead = (SubArray).substr(0, WinSize );
 
-      CSSTrace(moduleName, "GetConfigKeyDef", "KeyRead:", KeyRead);
-			CSSTrace(moduleName, "GetConfigKeyDef", "KeySize:", WinSize);
+      DiagTrace(moduleName, "GetConfigKeyDef", "KeyRead:", KeyRead);
+			DiagTrace(moduleName, "GetConfigKeyDef", "KeySize:", WinSize);
 		}
 		else
 		{
-      CSSTrace(moduleName, "GetConfigKeyDef", "defaut value returned : ", defaultVal);
+      DiagTrace(moduleName, "GetConfigKeyDef", "defaut value returned : ", defaultVal);
 			return defaultVal;
 		};
 		KeyRead = FilterTextLine(KeyRead);
 
-    CSSTrace(moduleName, "GetConfigKeyDef", "KeyRead (After filter):", KeyRead);
-		CSSTrace(moduleName, "GetConfigKeyDef", "KeySize (After filter):", KeyRead.length());
+    DiagTrace(moduleName, "GetConfigKeyDef", "KeyRead (After filter):", KeyRead);
+		DiagTrace(moduleName, "GetConfigKeyDef", "KeySize (After filter):", KeyRead.length());
 		return KeyRead;
 	}
 
@@ -396,7 +396,7 @@ namespace CSS
 			  };
 		  };
 
-      CSSTrace(cCSSIni::moduleName, "FilterSpace", "Size to cut:", J);
+      DiagTrace(cCSSIni::moduleName, "FilterSpace", "Size to cut:", J);
 
       K = Lg - J - 1;
 		  for (int I1 = 0; I1 <= K; I1++)

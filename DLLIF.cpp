@@ -160,7 +160,7 @@ void cDLLIF::createDllRegIni(string iniFileName)
   if (!iniFileName.empty()) //T2S
 //  if (iniFileName != NULL)
   {
-    CSSTrace(moduleName, "Init", "CreateRegIni in Dll", iniFileName);;
+    DiagTrace(moduleName, "Init", "CreateRegIni in Dll", iniFileName);;
     if (lpfnCreateRegIni != NULL)
     {
       /*  Pour une raison de compatibilite */
@@ -430,10 +430,10 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
   /*  Called by Diag when a Diag event occurs */
   string modName;
   int lg;
-  CSSTrace(moduleName, "Apply", "Receiving Diag event with : ", enabledModuleName);;
+  DiagTrace(moduleName, "Apply", "Receiving Diag event with : ", enabledModuleName);;
   if ((eventType == DiagEnableAllModules))
   {
-    CSSTrace(moduleName, "Apply", "Enabling all ", dllIF->dllBaseName, ".dll modules");;
+    DiagTrace(moduleName, "Apply", "Enabling all ", dllIF->dllBaseName, ".dll modules");;
     if (*dllIF->lpfnStartReportAllFile != NULL)
       (*dllIF->lpfnStartReportAllFile) (Trace);
     else if (*dllIF->lpfnStartReportAllFilec != NULL)
@@ -444,7 +444,7 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
   
   else if ((eventType == DiagDisableAllModules))
   {
-    CSSTrace(moduleName, "Apply", "Disabling all ", dllIF->dllBaseName, ".dll modules");;
+    DiagTrace(moduleName, "Apply", "Disabling all ", dllIF->dllBaseName, ".dll modules");;
 
     if (*dllIF->lpfnStopReportAllFile != NULL)
       (*dllIF->lpfnStopReportAllFile) (Trace);
@@ -463,10 +463,10 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
       modName = enabledModuleName.substr(lg + 1, enabledModuleName.length() - lg + 1);
       if (((dllName == (dllIF->dllBaseName + "."))))
       {
-        CSSTrace(moduleName, "Apply", "Module of ", dllIF->dllBaseName, ".DLL");;
+        DiagTrace(moduleName, "Apply", "Module of ", dllIF->dllBaseName, ".DLL");;
         if ((eventType == DiagEnableModule))
         {
-          CSSTrace(moduleName, "Apply", "Enabling ", dllIF->dllBaseName, ("." + modName).c_str());;
+          DiagTrace(moduleName, "Apply", "Enabling ", dllIF->dllBaseName, ("." + modName).c_str());;
           dllModuleName = new char[modName.length() + 1]; //T2S
           dllModuleName = ((string)modName).c_str(); //T2S
           
@@ -483,7 +483,7 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
         
         else if ((eventType == DiagDisableModule))
         {
-          CSSTrace(moduleName, "Apply", "Disabling ", dllIF->dllBaseName, ("." + modName).c_str());;
+          DiagTrace(moduleName, "Apply", "Disabling ", dllIF->dllBaseName, ("." + modName).c_str());;
 	  dllModuleName = new char[modName.length() + 1]; //T2S
 	  dllModuleName = ((string)modName).c_str(); //T2S
           if (*dllIF->lpfnRemoveDiagFileFromList != NULL)

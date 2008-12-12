@@ -73,7 +73,7 @@ namespace CSS
   
   cCSSReportQ * cCSSReportQ::init()
   {
-    CSSTrace(moduleName, "Init", "Starting");;
+    DiagTrace(moduleName, "Init", "Starting");;
     DoInit();
     return ((cCSSReportQ* )this);
   }
@@ -81,14 +81,14 @@ namespace CSS
   cCSSReportQ * cCSSReportQ::init(string reportQueueName)
   {
     mReportQueueName=reportQueueName;
-    CSSTrace(moduleName, "Init","Queue Name : ", reportQueueName);;
+    DiagTrace(moduleName, "Init","Queue Name : ", reportQueueName);;
     DoInit();
     return ((cCSSReportQ* )this);
   }
   
   bool cCSSReportQ::report(cCSSEvent * event)
   {
-    CSSTrace(moduleName, "Report", mReportQueueName, " : Starting " );
+    DiagTrace(moduleName, "Report", mReportQueueName, " : Starting " );
     {
       cAutoLock _lock(&mLock);
       
@@ -105,10 +105,10 @@ namespace CSS
       else
       {
         delete event;
-        CSSTrace (moduleName, "Report", mReportQueueName, " : Event flushed ");
+        DiagTrace (moduleName, "Report", mReportQueueName, " : Event flushed ");
       }
     }
-    CSSTrace(moduleName, "Report", mReportQueueName, " : Ending");
+    DiagTrace(moduleName, "Report", mReportQueueName, " : Ending");
     return true;
   }
   
@@ -130,7 +130,7 @@ namespace CSS
   
   bool cCSSReportQ::terminate()
   {
-    CSSTrace(moduleName, "Terminate", "Starting");;
+    DiagTrace(moduleName, "Terminate", "Starting");;
     if (eventThread)
     {
       {
@@ -143,7 +143,7 @@ namespace CSS
       cThread::Join(eventThread);
       eventThread = NULL;
     }
-    CSSTrace(moduleName, "Terminate", "Ending");;
+    DiagTrace(moduleName, "Terminate", "Ending");;
     return true;
   }
   
@@ -193,27 +193,27 @@ namespace CSS
         cAutoLock _lock(&report->mLock);
         if (report->eventQueue.size() == 0)
         {
-          CSSTrace(moduleName, "PerformMonitor",report->mReportQueueName, " : eventQ empty : Waiting ");
+          DiagTrace(moduleName, "PerformMonitor",report->mReportQueueName, " : eventQ empty : Waiting ");
           if (report->terminateThread == true)
           {
-            CSSTrace(moduleName, "PerformMonitor",report->mReportQueueName, " : Terminate");;
+            DiagTrace(moduleName, "PerformMonitor",report->mReportQueueName, " : Terminate");;
             break;
           };
           report->mpNewEvent->wait(report->mLock);
-          CSSTrace(moduleName, "PerformMonitor", report->mReportQueueName, " : eventQ condition received");;
+          DiagTrace(moduleName, "PerformMonitor", report->mReportQueueName, " : eventQ condition received");;
         };
         
         if (report->suspended > 0)
         {
-          CSSTrace(moduleName, "PerformMonitor", report->mReportQueueName, " : report suspended ");
+          DiagTrace(moduleName, "PerformMonitor", report->mReportQueueName, " : report suspended ");
           report->mpReportSuspended->wait(report->mLock);
-          CSSTrace(moduleName, "PerformMonitor",report->mReportQueueName, " : suspendCd received ");
+          DiagTrace(moduleName, "PerformMonitor",report->mReportQueueName, " : suspendCd received ");
           Sleep(100);
         };
         
         if (report->terminateThread == true)
         {
-          CSSTrace(moduleName, "PerformMonitor", report->mReportQueueName, " : Terminate ");
+          DiagTrace(moduleName, "PerformMonitor", report->mReportQueueName, " : Terminate ");
           break;
         };
         currEvent = NULL;
@@ -247,7 +247,7 @@ namespace CSS
   
   void cCSSReportQ::signalEvent(cCSSEvent::ReporterList *pReporters, cCSSEvent * event)
   {
-    CSSTrace(moduleName, "SignalEvent",mReportQueueName, " : Starting");
+    DiagTrace(moduleName, "SignalEvent",mReportQueueName, " : Starting");
 
     cCSSEvent::ReporterList::iterator it;
     if (event->mSignalLowPriorityOnly)
@@ -263,7 +263,7 @@ namespace CSS
     // signal2() is simply a version of signal() that can be called through a STL algorithm.
     for_each(it, pReporters->end(), bind2nd(mem_fun(&cCSSReporter::signal2), event));
 
-    CSSTrace(moduleName, "SignalEvent",mReportQueueName, " : Ending");
+    DiagTrace(moduleName, "SignalEvent",mReportQueueName, " : Ending");
   }
   
   namespace CSS

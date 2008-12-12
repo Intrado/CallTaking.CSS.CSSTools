@@ -32,7 +32,7 @@
 typedef void (_cdecl *PDIAGDLLREGISTERDEBUGMODULE)(const char *module, const char *nameState, bool &state);
 
 bool CSS::Diag::TraceOn = false;
-bool CSSToolsTraceOn = false;
+bool CSSToolsTraceOn = true;
 
 cCSSObject::cCSSObject()
 {
@@ -41,29 +41,3 @@ cCSSObject::cCSSObject()
 cCSSObject::~cCSSObject()
 {
 }
-
-// Register to diag statically when the library is loaded
-class CSSToolsDebugModuleRegistration
-{
-public:
-  CSSToolsDebugModuleRegistration()
-  {
-    PDIAGDLLREGISTERDEBUGMODULE pDiagDllRegisterDebugModule = NULL;
-    HINSTANCE DiagDll = LoadLibrary(gDiagDllName);
-
-    if (DiagDll != NULL)
-    {
-      pDiagDllRegisterDebugModule = (PDIAGDLLREGISTERDEBUGMODULE) GetProcAddress(DiagDll,"DiagDllRegisterDebugModule");
-      if (pDiagDllRegisterDebugModule != NULL)
-      {
-        // Register the CSS debug flag to Diag
-        pDiagDllRegisterDebugModule("CSS", "CSSGENERIC", CSS::Diag::TraceOn);
-        pDiagDllRegisterDebugModule("CSS", "CSSTOOLS", CSSToolsTraceOn);
-      }
-      FreeLibrary(DiagDll);
-    }
-  } 
-} StaticObject;
-
- 
-

@@ -15,7 +15,7 @@ namespace CSS
   const char *cCSSDualReportQ::moduleName = "CSSDualReportQ";
   cCSSDualReportQ * cCSSDualReportQ::initDual ()
   {
-    CSSTrace(moduleName, "Init", "Starting");
+    DiagTrace(moduleName, "Init", "Starting");
     mReportQ.init();
     {
       // Patch for Microsoft Visual C++ 5 Article ID: Q167749 
@@ -23,7 +23,7 @@ namespace CSS
       (((cCSSReportQ*)this)->*fp) ();
     }
     
-    CSSTrace(moduleName, "Init", "Ending");
+    DiagTrace(moduleName, "Init", "Ending");
     return ((cCSSDualReportQ *)this);
   }
   
@@ -31,7 +31,7 @@ namespace CSS
   bool cCSSDualReportQ::terminate ()
   {
     bool res;
-    CSSTrace(moduleName, "Terminate", "Starting");
+    DiagTrace(moduleName, "Terminate", "Starting");
     res = mReportQ.terminate ();
     if (res == true)
     {
@@ -42,7 +42,7 @@ namespace CSS
       }
       
     };
-    CSSTrace(moduleName, "Terminate", "Ending");
+    DiagTrace(moduleName, "Terminate", "Ending");
     return res;
   }
 
@@ -53,7 +53,7 @@ namespace CSS
     /* This function will first signal the event to the High and Normal priority reporters that are
        registered for it, and then report the event to the mReportQ member with a new reporters list
        containing only the Low priority reporters. */
-    CSSTrace(moduleName, "SignalEvent", "Starting");
+    DiagTrace(moduleName, "SignalEvent", "Starting");
 
     int size = pReporters->size ();
     if (size > 0)
@@ -86,7 +86,7 @@ namespace CSS
       delete event;
     }
 
-    CSSTrace(moduleName, "SignalEvent", "Ending");
+    DiagTrace(moduleName, "SignalEvent", "Ending");
   }
   
   namespace CSS

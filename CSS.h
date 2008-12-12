@@ -18,16 +18,5 @@
 #define __CSS_H_INCLUDED__
 
 #include "CSSDiagEx.h"
-// Boolean definition for CSS debug module registration
-namespace CSS
-{
-  namespace Diag
-  {
-    extern CSSTOOLS_API bool TraceOn;
-  };
-
-// Must be included only here so that the functions contained in CSSTrace.h use the right Diag::TraceOn variable.
-#include "CSSTrace.h"
-};
 
 #endif

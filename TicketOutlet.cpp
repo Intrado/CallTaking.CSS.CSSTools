@@ -15,19 +15,19 @@ namespace CSS
     {
       cAutoLock _lock(&lockTicketOutlet);
       TicketPadRef = NULL;
-      CSSTrace(moduleName, "GetTicketPad", "Verify if TickedPad : ", TicketPadName, " exist ");;
+      DiagTrace(moduleName, "GetTicketPad", "Verify if TickedPad : ", TicketPadName, " exist ");;
       TicketPadRef = ((cTicketPad *) getInstance(TicketPadName));
       /*  Le TicketPad existe-t-il ? */
       if (TicketPadRef == NULL)
       {
         /*  Il n'existe pas, on en cree un */
-        CSSTrace(moduleName, "GetTicketPad", "Create a TickedPad : ", TicketPadName);;
+        DiagTrace(moduleName, "GetTicketPad", "Create a TickedPad : ", TicketPadName);;
         TicketPadRef = (new cTicketPad)->init(TicketPadName);
         registerInstance(TicketPadName, TicketPadRef);
       }
       else
       {
-        CSSTrace(moduleName, "GetTicketPad", "The TickedPad : ", TicketPadName, " exist");;
+        DiagTrace(moduleName, "GetTicketPad", "The TickedPad : ", TicketPadName, " exist");;
       };
       return TicketPadRef;
     };
@@ -36,13 +36,13 @@ namespace CSS
   /*  Lock */
   cTicketOutlet *cTicketOutlet::init()
   {
-    CSSTrace(moduleName, "Init", "Enter...");;
+    DiagTrace(moduleName, "Init", "Enter...");;
     
     {
       cAutoLock _lock(&lockTicketOutlet);
       instanceList.clear();
     };
-    CSSTrace(moduleName, "Init", "Exit...");;
+    DiagTrace(moduleName, "Init", "Exit...");;
     return this;
   }
   
@@ -80,12 +80,12 @@ namespace CSS
         rec = ((InstanceRec *) instanceList.at(i));
         if (rec->NameInstance == NameInstance)
         {
-          CSSTrace(moduleName, "Init", "Name Instance Already Recorded Size: ", size);
+          DiagTrace(moduleName, "Init", "Name Instance Already Recorded Size: ", size);
           return true;
         };
       };
     };
-    CSSTrace(moduleName, "Init", "Enregistrement");;
+    DiagTrace(moduleName, "Init", "Enregistrement");;
     rec = (new InstanceRec);
     rec->RefInstance = RefInstance;
     rec->NameInstance = NameInstance;
@@ -111,10 +111,10 @@ namespace CSS
         rec = ((InstanceRec *) instanceList.at(i));
         if (rec->RefInstance == RefInstance)
         {
-          CSSTrace(moduleName, "Unregister", "Unregistering ", rec->NameInstance);;
+          DiagTrace(moduleName, "Unregister", "Unregistering ", rec->NameInstance);;
           if (i == size - 1)
           {
-            CSSTrace(moduleName, "Init", "DESEnregistrement");;
+            DiagTrace(moduleName, "Init", "DESEnregistrement");;
             delete ((InstanceRec *)instanceList.back())->RefInstance;
             delete instanceList.back();
             instanceList.pop_back();
@@ -122,7 +122,7 @@ namespace CSS
           }
           else if (i == 0)
           {
-            CSSTrace(moduleName, "Init", "DESEnregistrement");;
+            DiagTrace(moduleName, "Init", "DESEnregistrement");;
             delete ((InstanceRec *)instanceList.back())->RefInstance;
             delete instanceList.front();
             instanceList.pop_front();
@@ -130,7 +130,7 @@ namespace CSS
           }
           else
           {
-            CSSTrace(moduleName, "Init", "DESEnregistrement");;
+            DiagTrace(moduleName, "Init", "DESEnregistrement");;
             rec2 = ((InstanceRec *) instanceList.back());
             
             delete ((InstanceRec *)instanceList.back())->RefInstance;
@@ -161,7 +161,7 @@ namespace CSS
         rec = ((InstanceRec *) instanceList.at(i));
         if ((rec->NameInstance == Name))
         {
-          CSSTrace(moduleName, "GetInstance", "Reference trouvee : ", rec->NameInstance);;
+          DiagTrace(moduleName, "GetInstance", "Reference trouvee : ", rec->NameInstance);;
           return rec->RefInstance;
         };
       };
