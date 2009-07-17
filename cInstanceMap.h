@@ -43,6 +43,7 @@ public:
   bool GetNext(cKey Key, cKey &nextKey, cElement *nextElement);
   bool IsEmpty();
   void Clear();
+  int GetSize() {return mMap.size();}
 
 protected:
 
