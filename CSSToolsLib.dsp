@@ -252,6 +252,10 @@ SOURCE=.\TimerQueueManager.cpp
 
 SOURCE=.\util.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\ViperTools.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -519,6 +523,10 @@ SOURCE=.\TimerQueueManager.h
 # Begin Source File
 
 SOURCE=.\util.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViperTools.h
 # End Source File
 # End Group
 # End Target

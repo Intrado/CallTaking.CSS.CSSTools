@@ -617,6 +617,9 @@
 						PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;CSSTOOLS_EXPORTS;$(NoInherit)"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\ViperTools.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -824,6 +827,9 @@
 			</File>
 			<File
 				RelativePath="util.h">
+			</File>
+			<File
+				RelativePath=".\ViperTools.h">
 			</File>
 		</Filter>
 		<Filter

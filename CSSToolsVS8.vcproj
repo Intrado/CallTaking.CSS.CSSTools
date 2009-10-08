@@ -758,6 +758,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\ViperTools.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1033,6 +1037,10 @@
 			</File>
 			<File
 				RelativePath="util.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ViperTools.h"
 				>
 			</File>
 		</Filter>
