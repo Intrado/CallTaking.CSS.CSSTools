@@ -86,6 +86,7 @@ $toCopy = [
   %w(TimerQueueManager.h _export),
   %w(ToStr.h _export),
   %w(util.h _export),
+  %w(ViperTools.h _export),
 
   %w(Release/CSSTools.dll _export/vs6),
   %w(Release/CSSTools.lib _export/vs6),
