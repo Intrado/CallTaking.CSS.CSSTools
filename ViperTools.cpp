@@ -7,6 +7,8 @@ using namespace std;
 
 double cViperTools::mViperVersion = 0;
 
+string GetRegistryKey(string diagModuleName, string path, string value);
+
 double cViperTools::GetViperVersion(string diagModuleName)
 {  
   if (diagModuleName.size() == 0)
@@ -16,35 +18,17 @@ double cViperTools::GetViperVersion(string diagModuleName)
 
   if (mViperVersion == 0)
   {
-    HKEY hKey;
-    LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Positron\\Viper", 0, KEY_READ, &hKey);
-    if (r != ERROR_SUCCESS)
-    {        
-      DiagWarning(diagModuleName, "GetViperVersion", "Can't open Viper registry key");
-    }
-    else
+    string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "Version");
+    if (version.size() == 0)
     {
-      char val[1024];
-      DWORD size = 1024;
-      r = RegQueryValueEx(hKey, "Version", 0, 0, (unsigned char*)val, &size);
-      if (r != ERROR_SUCCESS)
-      {
-        if (r == ERROR_FILE_NOT_FOUND)
-        {
-          DiagTrace(diagModuleName, "GetViperVersion", "Value Version in Viper key not found");
-        }
-        else
-        {
-          DiagWarning(diagModuleName, "GetViperVersion", "Error while trying to extract value Version in Viper key");
-        }
-      }
-      else
-      {
-        istringstream iss;
-        iss.str(val);
-        iss >> mViperVersion;
-      }
-      RegCloseKey(hKey);
+      string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Positron Industries Inc.\\Viper", "Version");
+    }
+  
+    if (version.size() > 0)
+    {
+      istringstream iss;
+      iss.str(version.c_str());
+      iss >> mViperVersion;
     }
   }
 
@@ -60,3 +44,37 @@ double cViperTools::GetViperVersion(string diagModuleName)
 }
 
 
+string GetRegistryKey(string diagModuleName, string path, string value)
+{
+  HKEY hKey;
+  string returnValue;
+  LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+  if (r != ERROR_SUCCESS)
+  {        
+    DiagTrace(diagModuleName, "GetRegistryKey", "Can't open " + path + " registry key.");
+  }
+  else
+  {
+    char val[1024];
+    DWORD size = 1024;
+    r = RegQueryValueEx(hKey, "Version", 0, 0, (unsigned char*)val, &size);
+    if (r != ERROR_SUCCESS)
+    {
+      if (r == ERROR_FILE_NOT_FOUND)
+      {
+        DiagTrace(diagModuleName, "GetRegistryKey", "Value [" + value + "] in Viper key not found");
+      }
+      else
+      {
+        DiagTrace(diagModuleName, "GetRegistryKey", "Can't open " + path + "\\" + value + " Version registry key.");
+      }
+    }
+    else
+    {
+      returnValue = val;
+    }
+   
+    RegCloseKey(hKey);
+  }
+  return returnValue;
+}
