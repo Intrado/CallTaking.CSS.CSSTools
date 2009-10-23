@@ -1,3 +1,6 @@
+1.1.0.11 - Released 2009/10/23
+   - Read viper Version key in 'Positron' instead of in 'Positron Industries Inc.'   (http://srveng003:8080/@c=2Kf@/139681?ac=10)
+
 1.1.0.10 - Released 2009/10/08
    - Add ViperTools.h into export   (http://srveng003:8080/@c=2Kf@/138029?ac=10)
    - Add ViperTools in CSSTools. Add GetViperVersion in ViperTools   (http://srveng003:8080/@c=2Kf@/138021?ac=10)
@@ -52,4 +55,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 138029 =====
+===== Do not remove this line 139681 =====
