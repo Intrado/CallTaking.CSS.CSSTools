@@ -17,7 +17,7 @@ double cViperTools::GetViperVersion(string diagModuleName)
   if (mViperVersion == 0)
   {
     HKEY hKey;
-    LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Positron Industries Inc.\\Viper", 0, KEY_READ, &hKey);
+    LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Positron\\Viper", 0, KEY_READ, &hKey);
     if (r != ERROR_SUCCESS)
     {        
       DiagWarning(diagModuleName, "GetViperVersion", "Can't open Viper registry key");
