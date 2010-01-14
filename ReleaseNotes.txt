@@ -1,3 +1,6 @@
+1.1.0.13 - Released 2010/01/14
+   - Add pure virtual function monitoring thread   (http://perforce:8080/@c=2Kf@/145368?ac=10)
+
 1.1.0.12 - Released 2009/10/23
    - Read Version key in 2 locations. Positron\Pots (for pots server) and Positron Industries\Viper (for power911)   (http://srveng003:8080/@c=2Kf@/139742?ac=10)
 
@@ -58,4 +61,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 139742 =====
+===== Do not remove this line 145368 =====
