@@ -72,6 +72,7 @@ $toCopy = [
   %w(DLLIF.h _export),
   %w(IniFile.h _export),
   %w(LockableStlContainers.h _export),
+  %w(MonitorPVFC.h _export),
   %w(NewAutoInitialize.h _export),
   %w(RemoteEvent.h _export),
   %w(SimpleList.h _export),

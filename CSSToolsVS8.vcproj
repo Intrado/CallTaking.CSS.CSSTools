@@ -638,6 +638,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\MonitorPVFC.cpp"
+				>
+			</File>
+			<File
 				RelativePath="RemoteEvent.cpp"
 				>
 				<FileConfiguration
@@ -977,6 +981,10 @@
 			</File>
 			<File
 				RelativePath="LockableStlContainers.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MonitorPVFC.h"
 				>
 			</File>
 			<File

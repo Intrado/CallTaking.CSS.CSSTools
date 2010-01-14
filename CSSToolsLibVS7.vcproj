@@ -501,6 +501,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\MonitorPVFC.cpp">
+			</File>
+			<File
 				RelativePath="RemoteEvent.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -764,6 +767,9 @@
 			</File>
 			<File
 				RelativePath="LockableStlContainers.h">
+			</File>
+			<File
+				RelativePath=".\MonitorPVFC.h">
 			</File>
 			<File
 				RelativePath="NewAutoInitialize.h">

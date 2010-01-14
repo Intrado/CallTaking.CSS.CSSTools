@@ -214,6 +214,10 @@ SOURCE=.\IniFile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\MonitorPVFC.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\RemoteEvent.cpp
 # End Source File
 # Begin Source File
@@ -467,6 +471,10 @@ SOURCE=.\IniFile.h
 # Begin Source File
 
 SOURCE=.\LockableStlContainers.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MonitorPVFC.h
 # End Source File
 # Begin Source File
 
