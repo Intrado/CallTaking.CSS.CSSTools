@@ -30,6 +30,10 @@ namespace CSS
   string GetPower911CommonDataDir()
   {
     string result = "";
+
+// Compiler higher than VC 6.0
+#if _MSC_VER > 1200
+
     if (getenv("PositronDevelopmentEnvironment") != NULL)
     {
       // Developper workstation: use the current working directory as the base directory
@@ -57,6 +61,14 @@ namespace CSS
       }
       result = string(dataDir) + "\\Positron\\Power911\\" + psapName;
     }
+
+// VC 6.0
+#else if
+
+    result = "."; // base path relative to the current directory
+
+#endif
+
     return result;
   }
 
@@ -96,8 +108,13 @@ namespace CSS
             workDir += "\\";
           }
 
+// Compiler higher than VC 6.0
+#if _MSC_VER > 1200
+
           // Ensure folder does exist
           int res = SHCreateDirectoryEx(NULL, workDir.c_str(), NULL);
+
+#endif
           TicketPath = workDir; 
           if (workDir != sysDir)
           {
