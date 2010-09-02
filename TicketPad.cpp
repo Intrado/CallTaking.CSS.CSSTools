@@ -13,6 +13,7 @@
 #define new new(detectLeak, __FILE__, __LINE__)
 #endif
 #include "CSS.h"
+#include <shlobj.h> // Needed for SHGetFolderPath
 
 namespace CSS
 {
@@ -24,7 +25,43 @@ namespace CSS
   const char *cTicketPad::SECTION_COUNTER = "[Counter]\r\n";
   const char *cTicketPad::KEY_VALUE = "Value=1\r\n";
   cTicketOutlet *ourTicketOutlet;
-  
+
+  // Utility functions
+  string GetPower911CommonDataDir()
+  {
+    string result = "";
+    if (getenv("PositronDevelopmentEnvironment") != NULL)
+    {
+      // Developper workstation: use the current working directory as the base directory
+      result = "."; // base path relative to the current directory
+    }
+    else
+    {
+      // The base directory is the system's common application data directory
+      // For example, C:\Documents and Settings\All Users\Application Data on a US English version of Windows XP
+      // See the documentation of the SHGetFolderPath function for the exact location on different OS versions
+      char dataDir[MAX_PATH];
+      ZeroMemory(dataDir, MAX_PATH);
+      HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, dataDir);
+      if (hr != S_OK)
+      {
+        DiagDllError("TicketPad", "GetCommonDataDir", "Could not retrieve the common application data folder. Using current directory instead.");
+        ZeroMemory(dataDir, MAX_PATH);
+        GetCurrentDirectory(MAX_PATH, dataDir);
+      }
+      string psapName = "Default";
+      char *psapNameValue = getenv("PositronPsapName");
+      if (psapNameValue != NULL)
+      {
+        psapName = psapNameValue;
+      }
+      result = string(dataDir) + "\\Positron\\Power911\\" + psapName;
+    }
+    return result;
+  }
+
+
+ 
   cTicketPad::cTicketPad()
   {
     bFirstReading = true;
@@ -37,16 +74,6 @@ namespace CSS
     char dir[N_SIZE_BUFFER + 1];
     DiagTrace(moduleName, "Init", "Starting");
 
-    // Determine whether we are in a Power911 telephony or not
-    bool isPower911 = true;
-    char telephonyAppName[256];
-    DWORD result = GetEnvironmentVariable("TelephonyAppName", telephonyAppName, 256);
-    if (result != 0 && strcmp(telephonyAppName, "Power911") != 0)
-    {
-      isPower911 = false;
-    }
-
-    
     {
       cAutoLock _lock(&lockTicketPad);
       if (!aTicketPadName.empty()) 
@@ -62,43 +89,15 @@ namespace CSS
             sysDir += "\\";
           }
 
-          /* We want the file to be in the temp directory.  If there is already a file in the temp directory,
-             use it.  If not, copy the one from the system directory.  If the temp directory doesn't exist,
-             work in the system directory. */
-          string workDir;
-
-          if (!isPower911)
-          {
-            // Simon uses TEMP dir
-            char *envTemp = getenv("TEMP");
-            if (envTemp == 0)
-            {
-              workDir = sysDir;
-            }
-            else
-            {
-              workDir = envTemp;
-            }
-          }
-          else
-          {
-            // Power911 uses current dir
-            char currDir[1024];
-            DWORD result = GetCurrentDirectory(1024, currDir);
-            if (result > 0)
-            {
-              workDir = currDir;
-            }
-            else
-            {
-              workDir = sysDir;
-            }              
-          }
+          // Power911 uses common application data dir
+          string workDir = GetPower911CommonDataDir();
           if (*workDir.rbegin() != '\\')
           {
             workDir += "\\";
           }
 
+          // Ensure folder does exist
+          int res = SHCreateDirectoryEx(NULL, workDir.c_str(), NULL);
           TicketPath = workDir; 
           if (workDir != sysDir)
           {
