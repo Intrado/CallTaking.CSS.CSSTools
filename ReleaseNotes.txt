@@ -1,3 +1,7 @@
+1.2.0.0 - Released 2010/09/02
+   - Do not call shlobj.h functions with VC6 compiler   (http://perforce:8080/@c=2Kf@/154643?ac=10)
+   - TicketPad: Support for windows 7: Use appdata folder (all user).   (http://perforce:8080/@c=2Kf@/154631?ac=10)
+
 1.1.0.13 - Released 2010/01/14
    - Add pure virtual function monitoring thread   (http://perforce:8080/@c=2Kf@/145368?ac=10)
 
@@ -61,4 +65,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 145368 =====
+===== Do not remove this line 154643 =====
