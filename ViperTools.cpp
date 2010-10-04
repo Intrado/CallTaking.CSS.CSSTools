@@ -21,7 +21,7 @@ double cViperTools::GetViperVersion(string diagModuleName)
     string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "Version");
     if (version.size() == 0)
     {
-      string version = GetRegistryKey(diagModuleName, "Software\\Positron Industries Inc.\\Viper", "Version");
+      version = GetRegistryKey(diagModuleName, "Software\\Positron Industries Inc.\\Viper", "Version");
     }
   
     if (version.size() > 0)
