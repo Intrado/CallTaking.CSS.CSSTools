@@ -1,3 +1,6 @@
+1.2.0.3 - Released 2011/11/01
+   - ViperTools: Add GetViperServicePack() function in Viper tools, and SetDefaultVersion() to set the version to be returned if registry keys are not found or cannot be obtained   (http://perforce:8080/@c=2Kf@/172399?ac=10)
+
 1.2.0.2 - Released 2010/10/04
    - Fix reading of Viper version   (http://perforce:8080/@c=2Kf@/156395?ac=10)
 
@@ -71,4 +74,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 156395 =====
+===== Do not remove this line 172399 =====
