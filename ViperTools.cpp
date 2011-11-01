@@ -5,9 +5,18 @@
 
 using namespace std;
 
-double cViperTools::mViperVersion = 0;
+double cViperTools::gViperVersion = 0;
+int cViperTools::gViperServicePack = -1;
+double cViperTools::gDefaultViperVersion = 3.0;
+int cViperTools::gDefaultViperServicePack = 2;
 
 string GetRegistryKey(string diagModuleName, string path, string value);
+
+void cViperTools::SetDefaultViperVersion(double version, int servicePack)
+{
+  gDefaultViperVersion = version;
+  gDefaultViperServicePack = servicePack;
+}
 
 double cViperTools::GetViperVersion(string diagModuleName)
 {  
@@ -16,7 +25,7 @@ double cViperTools::GetViperVersion(string diagModuleName)
     diagModuleName = "ViperTools";
   }
 
-  if (mViperVersion == 0)
+  if (gViperVersion == 0)
   {
     string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "Version");
     if (version.size() == 0)
@@ -28,21 +37,55 @@ double cViperTools::GetViperVersion(string diagModuleName)
     {
       istringstream iss;
       iss.str(version.c_str());
-      iss >> mViperVersion;
+      iss >> gViperVersion;
     }
   }
-
-  // Return viper version, 1.2 if not found
-  if (mViperVersion == 0)
+  
+  if (gViperVersion == 0)
   {
-    return 1.2;
+    // Return default version
+    return gDefaultViperVersion;
   }
   else
   {
-    return mViperVersion;
+    return gViperVersion;
   }
 }
 
+// Read the Viper service pack registry key and return the value
+int cViperTools::GetViperServicePack(std::string diagModuleName)
+{
+  if (diagModuleName.size() == 0)
+  {
+    diagModuleName = "ViperTools";
+  }
+
+  if (gViperServicePack == 0)
+  {
+    string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "SP");
+    if (version.size() == 0)
+    {
+      version = GetRegistryKey(diagModuleName, "Software\\Positron Industries Inc.\\Viper", "SP");
+    }
+  
+    if (version.size() > 0)
+    {
+      istringstream iss;
+      iss.str(version.c_str());
+      iss >> gViperServicePack;
+    }
+  }
+  
+  if (gViperServicePack == -1)
+  {
+    // Return default SP
+    return gDefaultViperServicePack;
+  }
+  else
+  {
+    return gViperServicePack;
+  }
+}
 
 string GetRegistryKey(string diagModuleName, string path, string value)
 {
