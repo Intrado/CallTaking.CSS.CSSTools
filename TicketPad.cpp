@@ -59,7 +59,44 @@ namespace CSS
       {
         psapName = psapNameValue;
       }
-      result = string(dataDir) + "\\Positron\\Power911\\" + psapName;
+      // Get data folder from registry if present. 
+      // For A9C, under 
+      // path = HKLM\Software\Positron Industries Inc.\A9CcallControl
+      // key = ApplicationData
+      // value = \Positron\A9CcallControl
+      {
+        string appDir = "\\Positron\\Power911\\";
+        string path = "HKLM\\Software\\Positron Industries Inc.\\A9CcallControl";
+        string key = "ApplicationData";
+        HKEY hKey;
+        LONG rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+        if ( rc != ERROR_SUCCESS )
+        {
+          DiagTrace("TicketPad", "GetCommonDataDir", "Can't open " + path + " registry key."); 
+        }
+        else
+        {
+          unsigned char value[1024];
+          DWORD size = 1024;
+          rc = RegQueryValueEx(hKey, key.c_str(), 0, 0, value, &size);
+          if ( rc != ERROR_SUCCESS )
+          {
+            DiagTrace("TicketPad", "GetCommonDataDir", "Can't find " + path + "\\" + key + " registry key.");
+          }
+          else
+          {
+            // convert to "\\Positron\\A9CcallControl"
+            appDir = ( value[0] != '\\' ? "\\\\" : "");
+            for (unsigned i = 0; i < size && value[i] != 0; i++ )
+            {
+              appDir += value[i];
+              if ( value[i] == '\\' ) appDir += '\\';
+            }
+          }
+        }
+        //result = string(dataDir) + "\\Positron\\Power911\\" + psapName;
+        result = string(dataDir) + appDir + psapName;
+      }
     }
 
 // VC 6.0
