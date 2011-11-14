@@ -66,7 +66,7 @@ namespace CSS
       // value = \Positron\A9CcallControl
       {
         string appDir = "\\Positron\\Power911\\";
-        string path = "HKLM\\Software\\Positron Industries Inc.\\A9CcallControl";
+        string path = "SOFTWARE\\Positron Industries Inc.\\A9CcallControl";
         string key = "ApplicationData";
         HKEY hKey;
         LONG rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
@@ -91,6 +91,10 @@ namespace CSS
             {
               appDir += value[i];
               if ( value[i] == '\\' ) appDir += '\\';
+            }
+            if (*appDir.rbegin() != '\\')
+            {
+              appDir += "\\";   // add '\' at the end if needed
             }
           }
         }
