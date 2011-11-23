@@ -60,7 +60,7 @@ int cViperTools::GetViperServicePack(std::string diagModuleName)
     diagModuleName = "ViperTools";
   }
 
-  if (gViperServicePack == 0)
+  if (gViperServicePack == -1)
   {
     string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "SP");
     if (version.size() == 0)
@@ -78,6 +78,7 @@ int cViperTools::GetViperServicePack(std::string diagModuleName)
   
   if (gViperServicePack == -1)
   {
+    gViperServicePack = 0;  // prevent multiple registry check if the key not found
     // Return default SP
     return gDefaultViperServicePack;
   }
