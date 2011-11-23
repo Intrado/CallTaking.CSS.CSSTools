@@ -65,7 +65,7 @@ namespace CSS
       // key = ApplicationData
       // value = \Positron\A9CcallControl
       {
-        string appDir = "\\Positron\\Power911\\";
+        string appDir = "\\Positron\\Power911\\" + psapName;
         string path = "SOFTWARE\\Positron Industries Inc.\\A9CcallControl";
         string key = "ApplicationData";
         HKEY hKey;
@@ -99,7 +99,7 @@ namespace CSS
           }
         }
         //result = string(dataDir) + "\\Positron\\Power911\\" + psapName;
-        result = string(dataDir) + appDir + psapName;
+        result = string(dataDir) + appDir;
       }
     }
 
