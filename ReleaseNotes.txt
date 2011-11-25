@@ -1,3 +1,7 @@
+1.2.0.5 - Released 2011/11/25
+   - Fix bug in getting version number of service pack from registry   (http://perforce:8080/@c=2Kf@/173331?ac=10)
+   - TicketPad for A9C: The files with extension .sav should not be located under Default but directly in A9CCallControl directory.    (http://perforce:8080/@c=2Kf@/173330?ac=10)
+
 1.2.0.4 - Released 2011/11/14
    - Minor bug fix for reading registry for A9C   (http://perforce:8080/@c=2Kf@/172971?ac=10)
    - Read TicketPad path from registry for project A9C   (http://perforce:8080/@c=2Kf@/172878?ac=10)
@@ -78,4 +82,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 172971 =====
+===== Do not remove this line 173331 =====
