@@ -261,6 +261,8 @@ public:
 	
 	bool operator<(const SmartPtr<T> &p_) const { return p < p_.p; }
 
+
+
 	// assignment that do not require to be casted.
   SmartPtr& operator=(const SmartPtr<T> &p_) { return operator=(((/*volatile*/ SmartPtr<T>) p_).GetInternalPtr()); }
 
@@ -292,7 +294,7 @@ public:
 	template<class NewType>
 	operator SmartPtr<NewType>()
 	{
-		return SmartPtr<NewType> (p);
+		return SmartPtr<NewType>(dynamic_cast<NewType*>(p));
 	}
 	
 	// Special case... NULL assignment.

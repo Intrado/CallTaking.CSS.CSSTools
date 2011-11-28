@@ -7,6 +7,8 @@
 #include "NewAutoInitialize.h"
 #include <algorithm>
 #include <functional>
+#include <iterator>
+
 using namespace std;
 #include "CSS.h"
 
