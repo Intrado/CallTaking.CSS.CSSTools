@@ -62,16 +62,16 @@ int cViperTools::GetViperServicePack(std::string diagModuleName)
 
   if (gViperServicePack == -1)
   {
-    string version = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "SP");
-    if (version.size() == 0)
+    string sp = GetRegistryKey(diagModuleName, "Software\\Positron\\Pots", "SP");
+    if (sp.size() == 0)
     {
-      version = GetRegistryKey(diagModuleName, "Software\\Positron Industries Inc.\\Viper", "SP");
+      sp = GetRegistryKey(diagModuleName, "Software\\Positron Industries Inc.\\Viper", "SP");
     }
   
-    if (version.size() > 0)
+    if (sp.size() > 0)
     {
       istringstream iss;
-      iss.str(version.c_str());
+      iss.str(sp.c_str());
       iss >> gViperServicePack;
     }
   }
@@ -101,7 +101,7 @@ string GetRegistryKey(string diagModuleName, string path, string value)
   {
     char val[1024];
     DWORD size = 1024;
-    r = RegQueryValueEx(hKey, "Version", 0, 0, (unsigned char*)val, &size);
+    r = RegQueryValueEx(hKey, value.c_str(), 0, 0, (unsigned char*)val, &size);
     if (r != ERROR_SUCCESS)
     {
       if (r == ERROR_FILE_NOT_FOUND)
@@ -110,7 +110,7 @@ string GetRegistryKey(string diagModuleName, string path, string value)
       }
       else
       {
-        DiagTrace(diagModuleName, "GetRegistryKey", "Can't open " + path + "\\" + value + " Version registry key.");
+        DiagTrace(diagModuleName, "GetRegistryKey", "Can't open " + path + "\\" + value + " registry key.");
       }
     }
     else
