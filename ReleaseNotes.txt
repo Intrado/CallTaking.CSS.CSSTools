@@ -1,3 +1,6 @@
+5.5.3.1 - Released 2012/01/03
+   - Update build scripts and binaries for VS10 compilation   (http://perforce:8080/@c=2Kf@/174634?ac=10)
+
 5.5.2.1 - Released 2012/01/03
    - Fix GetRegistryKey to fetch key passed as a parameter and not always the "version" key.   (http://perforce:8080/@c=2Kf@/174235?ac=10)
    - CSSTools compatibility modifications for VS10   (http://perforce:8080/@c=2Kf@/173480?ac=10)
@@ -87,4 +90,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 174235 =====
+===== Do not remove this line 174634 =====
