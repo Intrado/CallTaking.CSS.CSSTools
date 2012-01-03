@@ -102,12 +102,18 @@ $toCopy = [
   %w(ReleaseVS8/CSSTools8.lib _export/vs8),
   %w(ReleaseVS8/CSSTools8.pdb _export/vs8),
   %w(ReleaseLibVS8/CSSToolsLib8.lib _export/vs8),
+
+  %w(ReleaseVS10/CSSTools.dll _export/vs10),
+  %w(ReleaseVS10/CSSTools.lib _export/vs10),
+  %w(ReleaseVS10/CSSTools.pdb _export/vs10),
+  %w(ReleaseLibVS10/CSSToolsLib.lib _export/vs10),
 ]
 
 $buildCmd = [
   "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
   "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
   "#{$devenv8} CSSToolsVS8.sln /Rebuild Release",
+  "#{$devenv10} CSSToolsVS10.sln /Rebuild Release",
 ]
 $docCmd = []
 $setupCmd = []
