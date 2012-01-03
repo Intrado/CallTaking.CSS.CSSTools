@@ -1,3 +1,8 @@
+5.5.2.1 - Released 2012/01/03
+   - Fix GetRegistryKey to fetch key passed as a parameter and not always the "version" key.   (http://perforce:8080/@c=2Kf@/174235?ac=10)
+   - CSSTools compatibility modifications for VS10   (http://perforce:8080/@c=2Kf@/173480?ac=10)
+   - Add CSSTools VS10 projects into source control   (http://perforce:8080/@c=2Kf@/173477?ac=10)
+
 1.2.0.5 - Released 2011/11/25
    - Fix bug in getting version number of service pack from registry   (http://perforce:8080/@c=2Kf@/173331?ac=10)
    - TicketPad for A9C: The files with extension .sav should not be located under Default but directly in A9CCallControl directory.    (http://perforce:8080/@c=2Kf@/173330?ac=10)
@@ -82,4 +87,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 173331 =====
+===== Do not remove this line 174235 =====
