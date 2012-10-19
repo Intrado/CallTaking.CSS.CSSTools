@@ -221,6 +221,13 @@ inline std::string ToStr(double d)
 	return buf.str();
 }
 
+inline std::wstring ToWStr(std::string s)
+{
+  std::wstring ws(s.length(), L'');
+  std::copy(s.begin(), s.end(), ws.begin());
+  return ws;
+}
+
 inline std::string Pad(std::string text, int length, char padChar=' ', Align align=Right)
 {
 	std::ostringstream buf;
