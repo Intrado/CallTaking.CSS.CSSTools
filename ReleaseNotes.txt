@@ -1,3 +1,6 @@
+5.5.3.3 - Released 2012/10/30
+   - ViperTools: Get the viper service pack in "HKLM\\Software\\Positron\\Pots\\Servicepacks" on pots server  (http://perforce:8080/@c=2Kf@/184871?ac=10)
+
 5.5.3.2 - Released 2012/10/22
    - Correct compilation error by adding sxl directory into CSSTools.lib project   (http://perforce:8080/@c=2Kf@/184394?ac=10)
    - Correct compilation error in VC6 by adding sxl directory in project file   (http://perforce:8080/@c=2Kf@/184390?ac=10)
@@ -95,4 +98,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 184394 =====
+===== Do not remove this line 184871 =====
