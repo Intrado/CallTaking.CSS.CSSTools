@@ -3,6 +3,7 @@
 #include "Diag.h"
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,8 +11,11 @@ double cViperTools::gViperVersion = 0;
 int cViperTools::gViperServicePack = -1;
 double cViperTools::gDefaultViperVersion = 3.0;
 int cViperTools::gDefaultViperServicePack = 2;
+bool cViperTools::gViperKBChecked = false;
+cViperTools::tStringMap cViperTools::gViperKBs;
 
 string GetRegistryKey(string diagModuleName, string path, string value);
+bool GetAllRegistryKeySZValues(string diagModuleName, string path, cViperTools::tStringMap *valueMap);
 
 void cViperTools::SetDefaultViperVersion(double version, int servicePack)
 {
@@ -124,6 +128,54 @@ int cViperTools::GetViperServicePack(std::string diagModuleName)
   }
 }
 
+// Check if the Viper KBs registry key is present
+bool cViperTools::IsViperKBPresent(std::string diagModuleName, std::string kbToCheck)
+{
+  bool isApplied = false;
+  string kbValueToCheck = kbToCheck;
+  // Convert to lowercase for comparison
+  std::transform(kbValueToCheck.begin(), kbValueToCheck.end(), kbValueToCheck.begin(), ::tolower);
+
+  if (diagModuleName.size() == 0)
+  {
+    diagModuleName = "ViperTools";
+  }
+
+  if (!gViperKBChecked)
+  {
+    // KBs key has not been retrieve yet try to retrieve it then validate the KBs presence.
+    bool keyExists = GetAllRegistryKeySZValues(diagModuleName, "Software\\Positron\\Pots\\KBs", &gViperKBs);
+    if (!keyExists)
+    {
+      keyExists = GetAllRegistryKeySZValues(diagModuleName, "Software\\Positron Industries Inc.\\Viper\\KBs", &gViperKBs);
+    }
+  
+    if (keyExists)
+    {
+      cViperTools::tStringMap::iterator it;
+      it = gViperKBs.find(kbValueToCheck);
+      if ((it != gViperKBs.end()) && (it->second == "applied"))
+      {
+        isApplied = true;
+      }
+    }
+
+    gViperKBChecked = true;  // prevent multiple registry check if the key not found
+  }
+  else
+  {
+    // The KBs kay has already been stored in the gViperKBs map, check for KBs presence in map.
+    cViperTools::tStringMap::iterator it;
+    it = gViperKBs.find(kbValueToCheck);
+    if ((it != gViperKBs.end()) && (it->second == "applied"))
+    {
+      isApplied = true;
+    }
+  }
+
+  return isApplied;
+}
+
 string GetRegistryKey(string diagModuleName, string path, string value)
 {
   HKEY hKey;
@@ -156,5 +208,52 @@ string GetRegistryKey(string diagModuleName, string path, string value)
    
     RegCloseKey(hKey);
   }
+  return returnValue;
+}
+
+bool GetAllRegistryKeySZValues(std::string diagModuleName, std::string path, cViperTools::tStringMap *valueMap)
+{
+  bool returnValue = true;
+  HKEY hKey;
+  LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+  if (r != ERROR_SUCCESS)
+  {
+    returnValue = false;
+    DiagTrace(diagModuleName, "GetAllRegistryKeyValues", "Can't open " + path + " registry key.");
+  }
+  else
+  {
+    char val[1024];
+    BYTE data[1024];
+    DWORD val_size = 1024, data_size = 1024, type = 0;
+    int index = 0;
+
+    // Retrieve all REG_SZ value from the key and add to the map provided
+    r = RegEnumValue(hKey, index, val, &val_size, 0, &type, data, &data_size);
+    while( r == ERROR_SUCCESS )
+    {
+      if (type == REG_SZ)
+      {
+        string strVal = val;
+        string strData = (char*)data;
+        // Convert to lowercase before storing the value and data
+        std::transform(strVal.begin(), strVal.end(), strVal.begin(), ::tolower);
+        std::transform(strData.begin(), strData.end(), strData.begin(), ::tolower);
+        valueMap->insert(cViperTools::tStringMap::value_type(strVal, strData));
+        DiagTrace(diagModuleName, "GetAllRegistryKeyValues", "Found value " + strVal + " with data " + strData + "in registry key " + path + ".");
+      }
+      index++;
+      val_size = data_size = 1024;
+      r = RegEnumValue(hKey, index, val, &val_size, 0, &type, data, &data_size);
+    }
+
+    if (index == 0)
+    {
+      DiagTrace(diagModuleName, "GetAllRegistryKeyValues", "Can't find any value in " + path + " registry key.");
+    }
+
+    RegCloseKey(hKey);
+  }
+
   return returnValue;
 }
