@@ -1,3 +1,6 @@
+5.5.3.4 - Released 2013/01/17
+   - Add the cViperTools::IsViperKBPresent function to check if a specified Viper KB as been applied to the system   (http://perforce:8080/@c=2Kf@/187883?ac=10)
+
 5.5.3.3 - Released 2012/10/30
    - ViperTools: Get the viper service pack in "HKLM\\Software\\Positron\\Pots\\Servicepacks" on pots server  (http://perforce:8080/@c=2Kf@/184871?ac=10)
 
@@ -98,4 +101,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 184871 =====
+===== Do not remove this line 187883 =====
