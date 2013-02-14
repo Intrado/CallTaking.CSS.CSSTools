@@ -1,6 +1,8 @@
 #include "CSSTools.h"	// Needed for CSSTOOLS_API
 #include <sstream>	// Needed for ostringstream
 #include <iomanip>	// Needed for iosflags
+#include <vector>
+#include "windows.h"
 
 /* 
 	This header replaces the string formatting utility class called Fmt.
@@ -223,9 +225,17 @@ inline std::string ToStr(double d)
 
 inline std::wstring ToWStr(std::string s)
 {
-  std::wstring ws(s.length(), L'');
-  std::copy(s.begin(), s.end(), ws.begin());
-  return ws;
+  std::vector<wchar_t> s1(s.size()+1, 0);
+  MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s.c_str(), s.size()+1, &s1[0], s.size()+1);
+  return &s1[0];
+}
+
+inline std::string ToStr(std::wstring ws)
+{
+  std::vector<char> s1(ws.size()+1, 0);
+  int defUsed = 0;
+  WideCharToMultiByte(CP_ACP, 0, ws.c_str(), ws.size()+1, &s1[0], ws.size()+1, " ", &defUsed);  
+  return &s1[0];
 }
 
 inline std::string Pad(std::string text, int length, char padChar=' ', Align align=Right)
