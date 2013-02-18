@@ -223,10 +223,17 @@ inline std::string ToStr(double d)
 	return buf.str();
 }
 
+inline std::string ToStr(DWORD d)
+{
+  std::ostringstream buf; 
+  buf << d;
+  return buf.str();
+}
+
 inline std::wstring ToWStr(std::string s)
 {
   std::vector<wchar_t> s1(s.size()+1, 0);
-  MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s.c_str(), s.size()+1, &s1[0], s.size()+1);
+  MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s.c_str(), (int)s.size()+1, &s1[0],(int)s.size()+1);
   return &s1[0];
 }
 
@@ -234,8 +241,14 @@ inline std::string ToStr(std::wstring ws)
 {
   std::vector<char> s1(ws.size()+1, 0);
   int defUsed = 0;
-  WideCharToMultiByte(CP_ACP, 0, ws.c_str(), ws.size()+1, &s1[0], ws.size()+1, " ", &defUsed);  
+  WideCharToMultiByte(CP_ACP, 0, ws.c_str(), (int)ws.size()+1, &s1[0], (int)ws.size()+1, " ", &defUsed);  
   return &s1[0];
+}
+
+inline std::string ToStr(const wchar_t* wc)
+{
+  std::wstring ws(wc); 
+  return ToStr(ws);
 }
 
 inline std::string Pad(std::string text, int length, char padChar=' ', Align align=Right)
