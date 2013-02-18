@@ -1,3 +1,6 @@
+5.5.3.6 - Released 2013/02/18
+   - Add ToStr(DWORD), ToStr(wchar_t*)   (http://perforce:8080/@c=2Kf@/189420?ac=10)
+
 5.5.3.5 - Released 2013/02/14
    - ToWStr() uses MultiByteToWideChar() function. Add ToStr(wstring) function   (http://perforce:8080/@c=2Kf@/189234?ac=10)
 
@@ -104,4 +107,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 189234 =====
+===== Do not remove this line 189420 =====
