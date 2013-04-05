@@ -180,12 +180,19 @@ string GetRegistryKey(string diagModuleName, string path, string value)
 {
   HKEY hKey;
   string returnValue;
-  LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+  LONG r = RegOpenKeyEx(HKEY_CURRENT_USER, path.c_str(), 0, KEY_READ, &hKey);
   if (r != ERROR_SUCCESS)
   {        
-    DiagTrace(diagModuleName, "GetRegistryKey", "Can't open " + path + " registry key.");
+    DiagTrace(diagModuleName, "GetRegistryKey", "Can't open HKEY_CURRENT_USER\\" + path + " registry key.");
+    // search the key under HKEY_LOCAL_MACHINE
+    r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+    if (r != ERROR_SUCCESS)
+    {        
+      DiagTrace(diagModuleName, "GetRegistryKey", "Can't open HKEY_LOCAL_MACHINE\\" + path + " registry key.");
+    }
   }
-  else
+
+  if (r == ERROR_SUCCESS)
   {
     char val[1024];
     DWORD size = 1024;
@@ -215,13 +222,20 @@ bool GetAllRegistryKeySZValues(std::string diagModuleName, std::string path, cVi
 {
   bool returnValue = true;
   HKEY hKey;
-  LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+  LONG r = RegOpenKeyEx(HKEY_CURRENT_USER, path.c_str(), 0, KEY_READ, &hKey);
   if (r != ERROR_SUCCESS)
   {
-    returnValue = false;
-    DiagTrace(diagModuleName, "GetAllRegistryKeyValues", "Can't open " + path + " registry key.");
+    DiagTrace(diagModuleName, "GetAllRegistryKeyValues", "Can't open HKEY_CURRENT_USER\\" + path + " registry key.");
+    // search the key under HKEY_LOCAL_MACHINE
+    r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, path.c_str(), 0, KEY_READ, &hKey);
+    if (r != ERROR_SUCCESS)
+    {
+      returnValue = false;
+      DiagTrace(diagModuleName, "GetAllRegistryKeyValues", "Can't open HKEY_LOCAL_MACHINE\\" + path + " registry key.");
+    }
   }
-  else
+
+  if (r == ERROR_SUCCESS)
   {
     char val[1024];
     BYTE data[1024];
