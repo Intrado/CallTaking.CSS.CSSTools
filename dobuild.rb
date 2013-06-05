@@ -118,6 +118,7 @@ $buildCmd = [
   "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
   "#{$devenv8} CSSToolsVS8.sln /Rebuild Release",
   "#{$devenv10} CSSToolsVS10.sln /Rebuild Release",
+  "#{$devenv10} CSSToolsVS10.sln /Rebuild BackroomRelease",
 ]
 $docCmd = []
 $setupCmd = []
