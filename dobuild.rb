@@ -107,6 +107,10 @@ $toCopy = [
   %w(ReleaseVS10/CSSTools.lib _export/vs10),
   %w(ReleaseVS10/CSSTools.pdb _export/vs10),
   %w(ReleaseLibVS10/CSSToolsLib.lib _export/vs10),
+
+  %w(ReleaseVS10_Backroom/CSSTools.dll _export/Backroom/VS10),
+  %w(ReleaseVS10_Backroom/CSSTools.lib _export/Backroom/VS10),
+  %w(ReleaseVS10_Backroom/CSSTools.pdb _export/Backroom/VS10),
 ]
 
 $buildCmd = [

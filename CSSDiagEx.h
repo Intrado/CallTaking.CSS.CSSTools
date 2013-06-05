@@ -4,13 +4,17 @@
 #include "CSSTools.h"
 #include "Diag.h"
 #include <sstream>
-
+#ifdef DIAG_BACKROOM
+using namespace std;
+#endif
 // DiagDll* functions.
 CSSTOOLS_API void DiagDllWarningI(const char *module, const char *position, const char *message, const int iVal);
 CSSTOOLS_API void DiagDllErrorI(const char *module, const char *position, const char *message, const int iVal, bool trace = true);
 
 // DiagTrace functions.
+#ifndef DIAG_BACKROOM
 inline void DiagTrace(const char *module, const char *position, const char *message = "Starting") {  DiagDllTrace(module, position, message); }
+#endif
 inline void DiagTrace(const char *module, const char *position, const std::string &message) {  DiagDllTrace(module, position, message.c_str()); }
 
 inline void DiagTrace(const char *module, const char *position, const std::string &message, const int iVal) { DiagDllTraceI(module, position, message.c_str(), iVal); }
@@ -29,7 +33,9 @@ inline void DiagTrace(const char *module, const char *position, const std::strin
 inline void DiagTrace(const char *module, const char *position, const std::ostringstream &message) { DiagDllTrace(module, position, message.str().c_str()); }
 
 // DiagWarning functions.
+#ifndef DIAG_BACKROOM
 inline void DiagWarning(const char *module, const char *position, const char *message) {  DiagDllWarning(module, position, message); }
+#endif
 inline void DiagWarning(const char *module, const char *position, const std::string &message) {  DiagDllWarning(module, position, message.c_str()); }
 
 inline void DiagWarning(const char *module, const char *position, const char *message, const int iVal) { DiagDllWarningI(module, position, message, iVal); }
@@ -68,7 +74,9 @@ inline void DiagError(const char *module, const char *position, const std::strin
 inline void DiagError(const char *module, const char *position, const std::ostringstream &message, bool trace = true) { DiagDllError(module, position, message.str().c_str(), trace); }
 
 // DiagOut functions.
+#ifndef DIAG_BACKROOM
 inline void DiagOut(const char *module, const char *position, const char *message) {  DiagDllOut(module, position, message); }
+#endif
 inline void DiagOut(const char *module, const char *position, const std::string &message) {  DiagDllOut(module, position, message.c_str()); }
 
 inline void DiagOut(const char *module, const char *position, const std::string &message, const int iVal) { DiagDllOutI(module, position, message.c_str(), iVal); }
