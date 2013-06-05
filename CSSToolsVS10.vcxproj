@@ -127,7 +127,7 @@
       <AdditionalLibraryDirectories>_import\DiagBackroom\VS10;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
-      <ImportLibrary>.\ReleaseVS10/CSSTools.lib</ImportLibrary>
+      <ImportLibrary>.\ReleaseVS10_Backroom/CSSTools.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
