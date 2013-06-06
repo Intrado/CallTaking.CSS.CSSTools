@@ -1,3 +1,8 @@
+5.5.3.8 - Released 2013/06/06
+   - Fix BackroomRelease version output directory for CSSTools.lib   (http://perforce:8080/@c=2Kf@/193919?ac=10)
+   - Add BackroomRelease in build command   (http://perforce:8080/@c=2Kf@/193917?ac=10)
+   - Add Backroom CSSTools configuration using Diag10 backroom version of Diag10   (http://perforce:8080/@c=2Kf@/193914?ac=10)
+
 5.5.3.7 - Released 2013/04/09
    - Check Viper version info from HKCU, if not availble, then from HKLM   (http://perforce:8080/@c=2Kf@/191403?ac=10)
 
@@ -110,4 +115,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 191403 =====
+===== Do not remove this line 193919 =====
