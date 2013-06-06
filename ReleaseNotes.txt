@@ -1,3 +1,6 @@
+5.5.3.9 - Released 2013/06/06
+   - Add Backroom\VS10 export   (http://perforce:8080/@c=2Kf@/193944?ac=10)
+
 5.5.3.8 - Released 2013/06/06
    - Fix BackroomRelease version output directory for CSSTools.lib   (http://perforce:8080/@c=2Kf@/193919?ac=10)
    - Add BackroomRelease in build command   (http://perforce:8080/@c=2Kf@/193917?ac=10)
@@ -115,4 +118,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 193919 =====
+===== Do not remove this line 193944 =====
