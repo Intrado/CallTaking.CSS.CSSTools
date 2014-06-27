@@ -83,6 +83,7 @@ $toCopy = [
   %w(TicketOutlet.h _export),
   %w(TicketPad.h _export),
   %w(TimedItem.h _export),
+  %w(TimedStringMap.h _export),
   %w(TimedQueue.h _export),
   %w(TimerQueueManager.h _export),
   %w(ToStr.h _export),

@@ -414,6 +414,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='BackroomRelease|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="TimedStringMap.cpp" />
     <ClCompile Include="TimerQueueManager.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='BackroomRelease|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -502,6 +503,7 @@
     <ClInclude Include="TicketPad.h" />
     <ClInclude Include="TimedItem.h" />
     <ClInclude Include="TimedQueue.h" />
+    <ClInclude Include="TimedStringMap.h" />
     <ClInclude Include="TimerQueueManager.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="ViperTools.h" />

@@ -13,7 +13,7 @@
 #include "TimedItem.h"
 #include "cNotifiableObject.h"
 
-class cLimitedTimeQueue : public cTimedQueue  , private cNotifiableObject
+class CSSTOOLS_API cLimitedTimeQueue : public cTimedQueue  , private cNotifiableObject
 {
 public:
 	cLimitedTimeQueue(int MaximumTimeInQueue);

@@ -250,6 +250,10 @@ SOURCE=.\TimedQueue.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TimedStringMap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TimerQueueManager.cpp
 # End Source File
 # Begin Source File
@@ -523,6 +527,10 @@ SOURCE=.\TimedItem.h
 # Begin Source File
 
 SOURCE=.\TimedQueue.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TimedStringMap.h
 # End Source File
 # Begin Source File
 

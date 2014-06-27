@@ -584,6 +584,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TimedStringMap.cpp">
+			</File>
+			<File
 				RelativePath="TimerQueueManager.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -806,6 +809,9 @@
 			</File>
 			<File
 				RelativePath="TimedQueue.h">
+			</File>
+			<File
+				RelativePath=".\TimedStringMap.h">
 			</File>
 			<File
 				RelativePath="TimerQueueManager.h">
