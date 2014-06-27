@@ -1,3 +1,7 @@
+5.5.4.2 - Released 2014/06/27
+   - Remove useless .cpp file from _export   (http://perforce:8080/@c=2Kf@/212609?ac=10)
+   - Add missing files from _export.   (http://perforce:8080/@c=2Kf@/212606?ac=10)
+
 5.5.4.1 - Released 2014/06/27
    - Remove VS8 compilation and binaries.   (http://perforce:8080/@c=2Kf@/212578?ac=10)
    - Add cTimedStringMap in CSSTools   (http://perforce:8080/@c=2Kf@/212577?ac=10)
@@ -122,4 +126,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 212578 =====
+===== Do not remove this line 212609 =====
