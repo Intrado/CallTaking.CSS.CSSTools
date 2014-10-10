@@ -542,9 +542,10 @@ void cTimerManager::Pulse()
 long cTimerManager::ThreadProc()
 {
   // Set overflow to true for first pass.
-  bool bOverflow = true;
+  bool bOverflow = false;
 
   DWORD ticker = GetTickCount() + (DWORD) (mnPrecisionMs);
+  DWORD currTick;
 
   while(_isRunning) // infinite loop
   {
@@ -554,7 +555,7 @@ long cTimerManager::ThreadProc()
       bOverflow = true;
     }
 
-    while((ticker > GetTickCount()) || bOverflow)
+    while((ticker > (currTick = GetTickCount())) || bOverflow)
     {
       unsigned int nSleepTime;
 
@@ -565,7 +566,7 @@ long cTimerManager::ThreadProc()
       }
       else
       {
-        nSleepTime = ticker - GetTickCount();
+        nSleepTime = ticker - currTick;
       }
 
       Sleep(nSleepTime);
