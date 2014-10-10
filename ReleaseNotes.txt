@@ -1,3 +1,6 @@
+5.5.4.3 - Released 2014/10/10
+   - PAG-109: Fixed nSleepTime in cTimerManager::ThreadProc() to avoid wrap around numbers, causing thread to being stalled in Sleep with a sleep time of close to 47 days in msec (2^32 msec).  This was having the effect of timers never timing out.   (http://perforce:8080/@c=2Kf@/216953?ac=10)
+
 5.5.4.2 - Released 2014/06/27
    - Remove useless .cpp file from _export   (http://perforce:8080/@c=2Kf@/212609?ac=10)
    - Add missing files from _export.   (http://perforce:8080/@c=2Kf@/212606?ac=10)
@@ -126,4 +129,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 212609 =====
+===== Do not remove this line 216953 =====
