@@ -107,13 +107,24 @@ $toCopy = [
   %w(ReleaseVS10_Backroom/CSSTools.dll _export/Backroom/VS10),
   %w(ReleaseVS10_Backroom/CSSTools.lib _export/Backroom/VS10),
   %w(ReleaseVS10_Backroom/CSSTools.pdb _export/Backroom/VS10),
-]
+
+  %w(ReleaseVS12/CSSTools.dll _export/vs12),
+  %w(ReleaseVS12/CSSTools.lib _export/vs12),
+  %w(ReleaseVS12/CSSTools.pdb _export/vs12),
+  %w(ReleaseLibVS12/CSSToolsLib.lib _export/vs12),
+
+  %w(ReleaseVS12_Backroom/CSSTools.dll _export/Backroom/VS12),
+  %w(ReleaseVS12_Backroom/CSSTools.lib _export/Backroom/VS12),
+  %w(ReleaseVS12_Backroom/CSSTools.pdb _export/Backroom/VS12),
+  ]
 
 $buildCmd = [
   "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
   "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
   "#{$devenv10} CSSToolsVS10.sln /Rebuild Release",
   "#{$devenv10} CSSToolsVS10.sln /Rebuild BackroomRelease",
+  "#{$devenv12} CSSToolsVS12.sln /Rebuild Release",
+  "#{$devenv12} CSSToolsVS12.sln /Rebuild BackroomRelease",
 ]
 $docCmd = []
 $setupCmd = []
