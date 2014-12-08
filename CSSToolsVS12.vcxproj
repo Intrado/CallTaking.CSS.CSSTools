@@ -49,6 +49,9 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='BackroomRelease|Win32'">false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>CSSTools12</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -82,7 +85,7 @@
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;diag.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\ReleaseVS12/CSSTools12.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>_import\DiagVS10\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\_import\diagVS10\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\ReleaseVS12/CSSTools12.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\ReleaseVS12/CSSTools12.lib</ImportLibrary>
@@ -123,7 +126,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;Diag.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;Diag10.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\ReleaseVS12_Backroom/CSSTools12.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>_import\DiagBackroom\VS10;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
