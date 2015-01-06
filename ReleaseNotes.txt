@@ -1,3 +1,8 @@
+5.5.4.5 - Released 2015/01/06
+   - Added Diag VS2013 support
+diagvs12 2.0.12.2
+"backroom/Tools/Diag version 4.1.3.5   (http://perforce:8080/@c=2Kf@/221098?ac=10)
+
 5.5.4.4 - Released 2014/12/08
    - Fixed csstoolsVS12 pdb file name   (http://perforce:8080/@c=2Kf@/220013?ac=10)
    - Fix build script and project for VS2013   (http://perforce:8080/@c=2Kf@/220009?ac=10)
@@ -135,4 +140,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 220013 =====
+===== Do not remove this line 221098 =====
