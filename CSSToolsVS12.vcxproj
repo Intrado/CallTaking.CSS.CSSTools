@@ -64,7 +64,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>_import\DiagVS10\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>_import\Diagvs12\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CSSTOOLS_EXPORTS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -85,7 +85,7 @@
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;diag.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\ReleaseVS12/CSSTools12.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>.\_import\diagVS10\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\_import\diagvs12\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\ReleaseVS12/CSSTools12.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\ReleaseVS12/CSSTools12.lib</ImportLibrary>
@@ -126,10 +126,10 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;Diag10.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;Diag12.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\ReleaseVS12_Backroom/CSSTools12.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>_import\DiagBackroom\VS10;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>_import\DiagBackroom\vs12;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)CSSTools12.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\ReleaseVS12_Backroom/CSSTools12.lib</ImportLibrary>
