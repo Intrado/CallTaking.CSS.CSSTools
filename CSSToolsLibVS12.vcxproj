@@ -31,9 +31,6 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\ReleaseLibVS12\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\ReleaseLibVS12\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>CSSToolsLib12</TargetName>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -41,7 +38,7 @@
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;CSSTOOLS_EXPORTS;_CRT_SECURE_NO_DEPRECATE;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeaderOutputFile>.\ReleaseLibVS12/CSSToolsLib12.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\ReleaseLibVS12/CSSToolsLib.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\ReleaseLibVS12/</AssemblerListingLocation>
       <ObjectFileName>.\ReleaseLibVS12/</ObjectFileName>
       <ProgramDataBaseFileName>.\ReleaseLibVS12/</ProgramDataBaseFileName>
@@ -54,13 +51,13 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>.\ReleaseLibVS12\CSSToolsLib12.lib</OutputFile>
+      <OutputFile>.\ReleaseLibVS12\CSSToolsLib.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>_import\Diagvs12\Release</AdditionalLibraryDirectories>
     </Lib>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\ReleaseLib/CSSToolsLib12.bsc</OutputFile>
+      <OutputFile>.\ReleaseLib/CSSToolsLib.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
