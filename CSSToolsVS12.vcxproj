@@ -128,7 +128,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>_import\DiagBackroom\vs12;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(TargetDir)CSSTools12.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(TargetDir)CSSTools.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\ReleaseVS12_Backroom/CSSTools.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
