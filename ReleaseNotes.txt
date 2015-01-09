@@ -1,3 +1,8 @@
+5.5.4.6 - Released 2015/01/09
+   - Fix pdb name   (http://perforce:8080/@c=2Kf@/221457?ac=10)
+   - fix VS2013 output name   (http://perforce:8080/@c=2Kf@/221450?ac=10)
+   - Rename/move file(s) in EXPort for VS2013   (http://perforce:8080/@c=2Kf@/221448?ac=10)
+
 5.5.4.5 - Released 2015/01/06
    - Added Diag VS2013 support
 diagvs12 2.0.12.2
@@ -140,4 +145,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 221098 =====
+===== Do not remove this line 221457 =====
