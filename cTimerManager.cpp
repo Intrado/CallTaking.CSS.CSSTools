@@ -64,11 +64,13 @@ cTimerManager::cTimerManager(unsigned int nPrecisionMs): cThread("TheTimerManage
   mnPrecisionMs = nPrecisionMs;
   mTimers = NULL;
 
+  Lock();
   // Init internal arrays
   mnElementCount=0;
   Grow();
 
   Run();
+  Unlock();
 }
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -91,6 +93,8 @@ cTimerManager::cTimerManager(unsigned int nPrecisionMs): cThread("TheTimerManage
 cTimerManager::~cTimerManager()
 {
   Lock();
+
+  Stop();
   mnElementCount = 0;
 
   if(mTimers != NULL)
@@ -98,7 +102,6 @@ cTimerManager::~cTimerManager()
     delete[] mTimers;
   }
 
-  Stop();
 }
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -72,11 +72,12 @@ cEvtThread::~cEvtThread()
   //Est-tu mord ou encore en vie ???
   WaitForSingleObject(mhThread, INFINITE);
   GetExitCodeThread(mhThread,&ExitCode);      // handle to the thread
+  LIST_TO_PURGE *pHiddenNotifiableObjListToPurge= (LIST_TO_PURGE*)pmHiddenNotifiableObjectListToPurge;
+  delete pHiddenNotifiableObjListToPurge;
   
   CloseHandle (mhThread);
   --inst;
   LockT.Release();
-  
   
 }
 
