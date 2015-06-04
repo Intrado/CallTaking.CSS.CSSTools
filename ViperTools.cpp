@@ -149,28 +149,14 @@ bool cViperTools::IsViperKBPresent(std::string diagModuleName, std::string kbToC
     {
       keyExists = GetAllRegistryKeySZValues(diagModuleName, "Software\\Positron Industries Inc.\\Viper\\KBs", &gViperKBs);
     }
-  
-    if (keyExists)
-    {
-      cViperTools::tStringMap::iterator it;
-      it = gViperKBs.find(kbValueToCheck);
-      if ((it != gViperKBs.end()) && (it->second == "applied"))
-      {
-        isApplied = true;
-      }
-    }
-
     gViperKBChecked = true;  // prevent multiple registry check if the key not found
   }
-  else
+   
+  cViperTools::tStringMap::iterator it;
+  it = gViperKBs.find(kbValueToCheck);
+  if ((it != gViperKBs.end()) && (it->second.find("applied") != string::npos))
   {
-    // The KBs kay has already been stored in the gViperKBs map, check for KBs presence in map.
-    cViperTools::tStringMap::iterator it;
-    it = gViperKBs.find(kbValueToCheck);
-    if ((it != gViperKBs.end()) && (it->second == "applied"))
-    {
-      isApplied = true;
-    }
+    isApplied = true;
   }
 
   return isApplied;
