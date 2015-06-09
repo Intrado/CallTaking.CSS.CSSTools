@@ -12,7 +12,7 @@ namespace CSS
 {
   const char *cDLLIF::moduleName = "cDLLIF";
 
-  LPCSTR dllModuleName;
+  LPSTR dllModuleName;
   const int REPORTDIAG_ENABLE = 128;
   const int DIAGEVENTNUMBER = -1;
 
@@ -468,7 +468,9 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
         {
           DiagTrace(moduleName, "Apply", "Enabling ", dllIF->dllBaseName, ("." + modName).c_str());;
           dllModuleName = new char[modName.length() + 1]; //T2S
-          dllModuleName = ((string)modName).c_str(); //T2S
+          //dllModuleName = ((string)modName).c_str(); //T2S
+          memset(dllModuleName, 0, modName.length() + 1);
+          strncpy(dllModuleName, ((string)modName).c_str(), modName.length());
           
           if (*dllIF->lpfnAddDiagFileToList != NULL)
             (*dllIF->lpfnAddDiagFileToList) (dllModuleName, Trace);
@@ -484,8 +486,10 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
         else if ((eventType == DiagDisableModule))
         {
           DiagTrace(moduleName, "Apply", "Disabling ", dllIF->dllBaseName, ("." + modName).c_str());;
-	  dllModuleName = new char[modName.length() + 1]; //T2S
-	  dllModuleName = ((string)modName).c_str(); //T2S
+	        dllModuleName = new char[modName.length() + 1]; //T2S
+          //dllModuleName = ((string)modName).c_str(); //T2S
+          memset(dllModuleName, 0, modName.length() + 1);
+          strncpy(dllModuleName, ((string)modName).c_str(), modName.length());
           if (*dllIF->lpfnRemoveDiagFileFromList != NULL)
             (*dllIF->lpfnRemoveDiagFileFromList) (dllModuleName);
           else if (*dllIF->lpfnRemoveDiagFileFromListc != NULL)
