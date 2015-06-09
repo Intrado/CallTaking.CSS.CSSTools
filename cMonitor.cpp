@@ -73,7 +73,8 @@ void cMonitor::Show(char *pDllName)
                                                                  "GetMonitoringObject");
   if (pEnableFunction == 0)
   {
-    DWORD lastError = GetLastError();
+    //DWORD lastError = GetLastError();
+    delete pInfo;   // Coverity #14656: free pInfo to avoid resource leak
     return;
   }
 

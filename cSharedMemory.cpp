@@ -21,6 +21,7 @@ cSharedMemory::~cSharedMemory()
    m_Size      = 0;
    bCreated = false;
 
+   delete sa;   // Coverity #14260: free sa to avoid resource leak
 }
 
  void cSharedMemory::InitSecurity(void)
