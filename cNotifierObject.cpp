@@ -28,10 +28,8 @@ cNotifierObject::cNotifierObject()
 cNotifierObject::~cNotifierObject()
 {
   LISTOBJ* pHidden;
-  int nbEle;
   
   pHidden= (LISTOBJ*)(pHiddenNotifiableObjectList);
-  nbEle=pHidden->size();
   
   // Auto -desenregistrement
   UnregisterAll();

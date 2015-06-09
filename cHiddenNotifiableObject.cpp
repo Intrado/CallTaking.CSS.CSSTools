@@ -59,13 +59,8 @@ cHiddenNotifiableObject::cHiddenNotifiableObject(cNotifiableObject *pNotifiableO
 cHiddenNotifiableObject::~cHiddenNotifiableObject()
 {
   LISTNOTIFIER *pNotifierObjList;
-  int nbElem;
-  
-  
   
   pNotifierObjList= (LISTNOTIFIER*)pmNotifierObjectList;
-  nbElem=pNotifierObjList->size();
-  //_ASSERT(nbElem==0);
   
   if (pNotifierObjList!= NULL)
   {
@@ -73,7 +68,6 @@ cHiddenNotifiableObject::~cHiddenNotifiableObject()
   }
   
   --nNbInstance;
-  
 }
 
 cHiddenNotifiableObject* cHiddenNotifiableObject::Expand(cNotifiableObject *pNotifiableObject)
