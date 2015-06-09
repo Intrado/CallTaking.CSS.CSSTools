@@ -18,6 +18,8 @@ cCommandLine::cCommandLine(bool aExtractCommandLine)
 
 cCommandLine::cCommandLine(char* apFromString)
 {
+  mArgc = 0;    // Coverity #15226: initialize the pointer field
+  mArgv = NULL;
   mpCommandLine = NULL;
   cCommandLine::FromString(apFromString);
 }

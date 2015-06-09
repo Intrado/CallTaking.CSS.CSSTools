@@ -38,7 +38,7 @@ namespace CSS
     class CSSTOOLS_API InstanceRec:public cCSSObject
     {
     public:
-      InstanceRec (){};
+      InstanceRec(){ RefInstance = 0; };  // Coverity 14980: initialize pointer field
       
     private:
       std::string NameInstance;

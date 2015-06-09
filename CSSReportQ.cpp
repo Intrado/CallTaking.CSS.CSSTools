@@ -41,6 +41,9 @@ namespace CSS
     id = 0;
     suspended = 0;
     mReportQueueName="RQ";
+    eventThread = 0;          // Coverity #15294: initialize pointer fields
+    isInFlushMode = false;
+    terminateThread = false;
   };
 
   cCSSReportQ::~cCSSReportQ()

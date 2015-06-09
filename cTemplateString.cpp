@@ -33,6 +33,7 @@ cTemplateString::cTemplateString(const cTemplateString& copyFrom)
 cTemplateString::cTemplateString()
 {
   data = new string;
+  lastValue = ACC(data)->c_str();   // Coverity 14937: initialize pointer field: lastValue
 }
 cTemplateString::cTemplateString(const bool   copyFrom)
 {

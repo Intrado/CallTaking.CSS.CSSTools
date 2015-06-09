@@ -37,7 +37,7 @@ namespace CSS
     class EventThread : public cThread
     {
     public:
-      EventThread(std::string aThreadName) : cThread(aThreadName.c_str()) {};
+      EventThread(std::string aThreadName) : cThread(aThreadName.c_str()) { report = 0; };  // Coverity 15044: initialize pointer field
     protected:
       virtual long ThreadProc();
     private:

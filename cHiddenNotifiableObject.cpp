@@ -53,6 +53,7 @@ cHiddenNotifiableObject::cHiddenNotifiableObject(cNotifiableObject *pNotifiableO
   // Creation de cEvtThread s'il n'y a pas de thread associe a ce groupe
   pmEvtThread= LookupThreadTable.GetThread(pGroupId);
   
+  pCurrHiddenNotifiableObject = 0;  // Coverity 14983: initialzie the pointer field
 }
 
 cHiddenNotifiableObject::~cHiddenNotifiableObject()

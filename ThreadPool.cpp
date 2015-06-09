@@ -22,7 +22,7 @@ public:
 
 cThreadPool::cThreadPool(int minThreadCount, int maxThreadCount, int queueThreshold)
 {
-
+  pHelper = 0;    // Coverity #15094: initialize the pointer field
 }
 
 cThreadPool::~cThreadPool()
