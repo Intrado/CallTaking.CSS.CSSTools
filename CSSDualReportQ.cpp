@@ -86,6 +86,7 @@ namespace CSS
     if (deleteEvent)
     {
       delete event;
+      event = NULL;     // Coverity #14974: set the pointer to NULL to avoid double-deletion
     }
 
     DiagTrace(moduleName, "SignalEvent", "Ending");

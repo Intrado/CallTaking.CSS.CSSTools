@@ -240,7 +240,10 @@ namespace CSS
              signaled. */
           report->signalEvent(currEvent->reporters, currEvent);
         }
+      }
 
+      if (currEvent != NULL)    // Coverity #14974: re-check currEvent because it could be freed in cCSSDualReportQ::signalEvent(), 
+      {
         // The event will no longer be used
         delete currEvent;
       }
