@@ -116,7 +116,6 @@ void cMonitor::Dismiss(char *pDllName)
   pDisableFunction = (void (*)()) GetProcAddress(pInfo->dllHandle, "DisableMonitoringObject");
   if (pDisableFunction == 0)
   {
-    DWORD lastError = GetLastError();
     return;
   }
 
@@ -125,7 +124,6 @@ void cMonitor::Dismiss(char *pDllName)
   BOOL res = FreeLibrary(pInfo->dllHandle);
   if (res == 0)
   {
-    DWORD lastError = GetLastError();
     return;
   }
 

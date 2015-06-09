@@ -46,9 +46,7 @@ long cTimerQueueManager::ThreadProc()
   while(1)
   {
     // Create the event list to wait on
-    int count = managedObjects.size()+1;
     long nextWakeup = INFINITE;    
-    int iIndex = 1;
     list<cTimedQueue*>::iterator index;
 
     for(index = managedObjects.begin();    index!=managedObjects.end();    ++index)

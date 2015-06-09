@@ -62,7 +62,7 @@ long cTimedQueue::NextWakeup()
   iterator index;
   list<cTimedQueueEvent*> signals;
   unsigned long nextWakeup = INFINITE;
-  bool oneExpiration;
+  bool oneExpiration = false;
   Acquire();
   for(index = begin();index != end();++index)
   {

@@ -62,7 +62,7 @@ string util::Toupper (string TheText)
   Lg = (TheText).length();
   for (int I = 0; I <= Lg - 1; I++)
   {
-    UpperChar = toupper(TheText[I]);
+    UpperChar = (char)toupper(TheText[I]);
     TheUpperText = (TheUpperText + UpperChar);
   };
   return TheUpperText;

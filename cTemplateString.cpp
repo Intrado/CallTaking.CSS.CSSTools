@@ -221,7 +221,6 @@ cTemplateString::operator bool() const
   if(compareNoCase(strTrue) == 0) return true;
   if(compareNoCase(strFalse) == 0) return false;
   throw(BadCast);
-  return false;
 }
 
 cTemplateString::operator int() const
@@ -264,7 +263,7 @@ cTemplateString cTemplateString::upper() const
 
   for(unsigned int i = 0; i < sUpper.size(); i++)
   {
-    sUpper[i] = toupper(sUpper[i]);
+    sUpper[i] = (char)toupper(sUpper[i]);
   }
 
   return sUpper.c_str();
@@ -276,7 +275,7 @@ cTemplateString cTemplateString::lower() const
 
   for(unsigned int i = 0; i < sLower.size(); i++)
   {
-    sLower[i] = tolower(sLower[i]);
+    sLower[i] = (char)tolower(sLower[i]);
   }
 
   return sLower.c_str();
