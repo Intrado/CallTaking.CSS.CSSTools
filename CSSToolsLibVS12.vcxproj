@@ -42,9 +42,10 @@
       <AssemblerListingLocation>.\ReleaseLibVS12/</AssemblerListingLocation>
       <ObjectFileName>.\ReleaseLibVS12/</ObjectFileName>
       <ProgramDataBaseFileName>.\ReleaseLibVS12/</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

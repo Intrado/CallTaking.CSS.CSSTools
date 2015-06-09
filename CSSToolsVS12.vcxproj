@@ -113,10 +113,11 @@
       <AssemblerListingLocation>.\ReleaseVS12_Backroom/</AssemblerListingLocation>
       <ObjectFileName>.\ReleaseVS12_Backroom/</ObjectFileName>
       <ProgramDataBaseFileName>.\ReleaseVS12_Backroom/</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
