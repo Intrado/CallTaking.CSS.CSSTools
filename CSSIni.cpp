@@ -83,7 +83,7 @@ namespace CSS
 				DiagTrace(moduleName, "Init", "No Path specified");;
 			};
 		};
-		if (WinResult > 0)
+    if (WinResult > 0 && lpValidPathFileNameFound != NULL)
 		{
 			Path = string(lpValidPathFileNameFound);
 		}
@@ -92,14 +92,14 @@ namespace CSS
 			Path = "";
 			if (lpValidPathFileNameFound != NULL)
 			{
-				delete lpValidPathFileNameFound;
+        delete[] lpValidPathFileNameFound;     // Coverity #14296: Add [] because it is an array
 				lpValidPathFileNameFound = NULL;
 			};
 			throw E(FileIniNotFound);
 		};
 		if (lpValidPathFileNameFound != NULL)
 		{
-			delete lpValidPathFileNameFound;
+			delete [] lpValidPathFileNameFound;     // Coverity #14296: Add [] because it is an array
 			lpValidPathFileNameFound = NULL;
 		};
 
@@ -377,14 +377,14 @@ namespace CSS
 		  Lg = (TheText).length();
 		  if (Diag::TraceOn)
 		  {
-			  DiagTrace(cCSSIni::moduleName, "FilterSpace", "CaR:" + C);;
+			  DiagTrace(cCSSIni::moduleName, "FilterSpace", "CaR:", C);;
 		  };
 		  for (int I = Lg - 1; I >= 0; I += -1)
 		  {
 			  C = TheText[I];
 			  if (Diag::TraceOn)
 			  {
-				  DiagTrace(cCSSIni::moduleName, "FilterSpace", "CaR:" + C);;
+				  DiagTrace(cCSSIni::moduleName, "FilterSpace", "CaR:", C);;
 			  };
 			  if ((C != ' '))
 			  {
