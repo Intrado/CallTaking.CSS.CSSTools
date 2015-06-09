@@ -9,7 +9,7 @@
 class cMonitorPVFCThread : public cThread
 {
 public:
-  cMonitorPVFCThread() : cThread("cMonitorPVFCThread"), mTerminate(false){};
+  cMonitorPVFCThread() : cThread("cMonitorPVFCThread"), mTerminate(false), mFrequencyInSeconds(0) {};   // Coverity #15194: initialize scalar field 
   virtual long ThreadProc();
   void Signal(){mWaitEvent.Signal();}
   bool CheckForPVFC();

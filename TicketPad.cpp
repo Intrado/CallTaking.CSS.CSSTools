@@ -119,6 +119,7 @@ namespace CSS
   {
     bFirstReading = true;
     backupFileNumber = 0;
+    TicketNumber = 0;   // Coverity bugfix #14996: initialize scalar field of the class
   };
   
   cTicketPad * cTicketPad::init(string aTicketPadName)

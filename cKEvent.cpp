@@ -19,7 +19,7 @@ cKEvent::~cKEvent()
 cKEvent::cKEvent(char *pName, bool Manual,bool bInitialState, LPSECURITY_ATTRIBUTES lpEventAttributes):
 cEvent(pName, Manual,bInitialState,lpEventAttributes)
 {
-
+  Kind = 0;   // Coverity #15239: initialize scalar filed
 }
 
 int cKEvent::GetKind()
