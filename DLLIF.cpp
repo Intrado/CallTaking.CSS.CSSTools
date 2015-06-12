@@ -479,7 +479,7 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
           else
             assert(0);
 
-	  if( dllModuleName != NULL ) { delete (void *)dllModuleName; }; //T2S
+	  if( dllModuleName != NULL ) { delete []dllModuleName; }; //T2S
 
         }
         
@@ -497,7 +497,7 @@ void cDLLIF::DLLIFClosure::MemberApply (DiagDllEventType eventType, const char *
           else
             assert(0);
 
-	  if( dllModuleName != NULL ) { delete (void *)dllModuleName; }; //T2S
+	  if( dllModuleName != NULL ) { delete []dllModuleName; }; //T2S
 
         }
         
