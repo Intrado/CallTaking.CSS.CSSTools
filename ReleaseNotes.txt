@@ -1,3 +1,16 @@
+5.5.4.8 - Released 2015/06/19
+   - Coverity: Fixed deleting void pointer (CID-14300).   (http://perforce:8080/@c=2Kf@/229257?ac=10)
+   - Bugfix: Remove some warning messages after warning level raised to 4   (http://perforce:8080/@c=2Kf@/229102?ac=10)
+   - Raise projects warning level to 4 and explicitly ignore warning 4100 (unreferenced formal paramters)   (http://perforce:8080/@c=2Kf@/229101?ac=10)
+   - Coverity bugfix 14656/14260: Free allocated memory to avoid resource leak   (http://perforce:8080/@c=2Kf@/229098?ac=10)
+   - Coverity bugfix 14300/14723/15293: Fix resource leak and using of freed pointer   (http://perforce:8080/@c=2Kf@/229096?ac=10)
+   - Coverity bugfix #14974: Perform a null-checking before delete the pointer to avoid double-deletion   (http://perforce:8080/@c=2Kf@/229095?ac=10)
+   - Coverity bugfix #14825: Remove useless code   (http://perforce:8080/@c=2Kf@/229093?ac=10)
+   - Coverity bugfix: initialize the scalar fields in class constructor   (http://perforce:8080/@c=2Kf@/229078?ac=10)
+   - Coverity bugfix: initialized pointer fields in class constructors   (http://perforce:8080/@c=2Kf@/229077?ac=10)
+   - Coverity bugfix 14296/14643/14831: Fix illegal address computation, add null-checking   (http://perforce:8080/@c=2Kf@/229073?ac=10)
+   - Add build scripts to be used for coverity not to have to build in all versions since not required for analysis.   (http://perforce:8080/@c=2Kf@/229038?ac=10)
+
 5.5.4.7 - Released 2015/06/06
    - VIPER-7688: Fixed a memory leak seen in cEvtThread and add protection in cTimerManager constructor when calling Grow().   (http://perforce:8080/@c=2Kf@/228926?ac=10)
    - When checking if a Viper KB is present, search if applied keyword is present in key value instead of doing a strict comparison. Otherwise, if the kb had been marked by another kb that supercedes it, it would not have been able to detect application correctly. Cleanup IsViperKBPresent code.   (http://perforce:8080/@c=2Kf@/228918?ac=10)
@@ -147,4 +160,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 228926 =====
+===== Do not remove this line 229257 =====
