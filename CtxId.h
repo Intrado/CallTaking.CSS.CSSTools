@@ -22,6 +22,7 @@ namespace CSS
     cCtxId()
     {
       bNewCtxID = false;
+      nCtxId = 0;   // Coverity #14970: Add init
     };
     
     virtual cCtxId *init (int ContextID);

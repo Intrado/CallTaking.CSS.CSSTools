@@ -41,7 +41,7 @@ namespace CSS
       void remove(cCSSReporter *reporter);
     };
 
-    cCSSEvent() { mSignalLowPriorityOnly = false; }
+    cCSSEvent() { mSignalLowPriorityOnly = false; reporters = NULL; timeStamp = 0; }    // Coverity #10282: Add init
     virtual ~cCSSEvent() {}
     ReporterList *reporters;
     std::string detail;
