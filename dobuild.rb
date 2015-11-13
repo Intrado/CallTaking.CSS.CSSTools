@@ -116,7 +116,7 @@ $toCopy = [
   %w(DebugVS12/CSSToolsd.dll _export/vs12),
   %w(DebugVS12/CSSToolsd.lib _export/vs12),
   %w(DebugVS12/CSSToolsd.pdb _export/vs12),
-  %w(DebugLibVS12/CSSToolsLib.lib _export/vs12),
+  %w(DebugLibVS12/CSSToolsLibd.lib _export/vs12),
 
   %w(ReleaseVS12_Backroom/CSSTools.dll _export/Backroom/VS12),
   %w(ReleaseVS12_Backroom/CSSTools.lib _export/Backroom/VS12),
