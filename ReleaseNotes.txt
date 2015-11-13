@@ -1,3 +1,9 @@
+5.5.4.9 - Released 2015/11/13
+   - Add missing d suffix in dobuild.rb   (http://perforce:8080/@c=2Kf@/237443?ac=10)
+   - Add a debug configuration   (http://perforce:8080/@c=2Kf@/237439?ac=10)
+   - Correct fix for Coverity ID 10282. Initialize _timestamp instead of timestamp.   (http://perforce:8080/@c=2Kf@/237435?ac=10)
+   - Coverity bugfix #14970/10282: Add init for uninitialized fields   (http://perforce:8080/@c=2Kf@/230010?ac=10)
+
 5.5.4.8 - Released 2015/06/19
    - Coverity: Fixed deleting void pointer (CID-14300).   (http://perforce:8080/@c=2Kf@/229257?ac=10)
    - Bugfix: Remove some warning messages after warning level raised to 4   (http://perforce:8080/@c=2Kf@/229102?ac=10)
@@ -160,4 +166,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 229257 =====
+===== Do not remove this line 237443 =====
