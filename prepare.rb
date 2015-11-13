@@ -14,7 +14,7 @@ $p4Deps = [
   ["positron/common libraries/diag/2.0.1.29/Export", "_import/diagVS7"],
   ["positron/common libraries/diag/2.0.1.29/Export", "_import/diagVS8"],
   ["positron/common libraries/diag/2.0.10.1/Export", "_import/diagVS10"],
-  ["positron/common libraries/diag/2.0.12.2/Export", "_import/diagVS12"],
+  ["positron/common libraries/diag/2.0.12.12/Export", "_import/diagVS12"],
   ["backroom/Tools/Diag/4.1.3.5/_export", "_import/DiagBackroom"]
 ]
 
