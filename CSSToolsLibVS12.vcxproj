@@ -298,6 +298,10 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="cTcp.cpp" />
+    <ClCompile Include="cTcpClient.cpp" />
+    <ClCompile Include="cTcpMsg.cpp" />
+    <ClCompile Include="cTcpServer.cpp" />
     <ClCompile Include="cTemplateString.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -454,6 +458,10 @@
     <ClInclude Include="CSSTools.h" />
     <ClInclude Include="CSSTrace.h" />
     <ClInclude Include="cSuspendReporting.h" />
+    <ClInclude Include="cTcp.h" />
+    <ClInclude Include="cTcpClient.h" />
+    <ClInclude Include="cTcpMsg.h" />
+    <ClInclude Include="cTcpServer.h" />
     <ClInclude Include="cTemplateString.h" />
     <ClInclude Include="cTEvent.h" />
     <ClInclude Include="cThread.h" />

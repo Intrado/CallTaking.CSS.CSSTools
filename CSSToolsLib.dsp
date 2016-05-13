@@ -182,6 +182,22 @@ SOURCE=.\CSSTools.rc
 # End Source File
 # Begin Source File
 
+SOURCE=.\cTcp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpClient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpMsg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpServer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\cTemplateString.cpp
 # End Source File
 # Begin Source File
@@ -435,6 +451,22 @@ SOURCE=.\CSSTrace.h
 # Begin Source File
 
 SOURCE=.\cSuspendReporting.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpClient.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpMsg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpServer.h
 # End Source File
 # Begin Source File
 

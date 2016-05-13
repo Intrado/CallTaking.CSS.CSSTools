@@ -413,6 +413,18 @@
 				RelativePath="CSSTools.rc">
 			</File>
 			<File
+				RelativePath=".\cTcp.cpp">
+			</File>
+			<File
+				RelativePath=".\cTcpClient.cpp">
+			</File>
+			<File
+				RelativePath=".\cTcpMsg.cpp">
+			</File>
+			<File
+				RelativePath=".\cTcpServer.cpp">
+			</File>
+			<File
 				RelativePath="cTemplateString.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -740,6 +752,18 @@
 			</File>
 			<File
 				RelativePath="cSuspendReporting.h">
+			</File>
+			<File
+				RelativePath=".\cTcp.h">
+			</File>
+			<File
+				RelativePath=".\cTcpClient.h">
+			</File>
+			<File
+				RelativePath=".\cTcpMsg.h">
+			</File>
+			<File
+				RelativePath=".\cTcpServer.h">
 			</File>
 			<File
 				RelativePath="cTemplateString.h">

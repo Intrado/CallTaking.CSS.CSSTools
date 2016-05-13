@@ -18,6 +18,7 @@ CFG=CSSTools - Win32 Release
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "CSSTools - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "CSSTools - Win32 Release Backroom" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -27,6 +28,9 @@ CFG=CSSTools - Win32 Release
 CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
+
+!IF  "$(CFG)" == "CSSTools - Win32 Release"
+
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -39,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CSSTOOLS_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Z7 /Od /I "l:\sxl\233\include" /I "_import\Diag\Include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CSSTOOLS_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Z7 /Od /I "l:\sxl\233\include" /I "_import\Diag\Include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CSSTOOLS_EXPORTS" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -50,9 +54,40 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # ADD LINK32 sxlrt.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib diag.lib /nologo /dll /pdb:none /debug /machine:I386 /libpath:"l:\sxl\233\lib" /libpath:"_import\Diag\Release"
+
+!ELSEIF  "$(CFG)" == "CSSTools - Win32 Release Backroom"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "CSSTools___Win32_Release_Backroom"
+# PROP BASE Intermediate_Dir "CSSTools___Win32_Release_Backroom"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Release_Backroom"
+# PROP Intermediate_Dir "Release_Backroom"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W3 /GR /GX /Z7 /Od /I "l:\sxl\233\include" /I "_import\Diag\Include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CSSTOOLS_EXPORTS" /FR /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Z7 /Od /I "l:\sxl\233\include" /I "_import\DiagBackroom" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CSSTOOLS_EXPORTS" /D "DIAG_BACKROOM" /FR /YX /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 sxlrt.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib diag.lib /nologo /dll /pdb:none /debug /machine:I386 /libpath:"l:\sxl\233\lib" /libpath:"_import\Diag\Release"
+# ADD LINK32 sxlrt.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib diag.lib /nologo /dll /pdb:none /debug /machine:I386 /libpath:"l:\sxl\233\lib" /libpath:"_import\DiagBackroom\vs6"
+
+!ENDIF 
+
 # Begin Target
 
 # Name "CSSTools - Win32 Release"
+# Name "CSSTools - Win32 Release Backroom"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -183,6 +218,22 @@ SOURCE=.\CSSTools.cpp
 # Begin Source File
 
 SOURCE=.\CSSTools.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpClient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpMsg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpServer.cpp
 # End Source File
 # Begin Source File
 
@@ -443,6 +494,22 @@ SOURCE=.\CSSTrace.h
 # Begin Source File
 
 SOURCE=.\cSuspendReporting.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpClient.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpMsg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cTcpServer.h
 # End Source File
 # Begin Source File
 

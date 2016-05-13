@@ -31,7 +31,7 @@ class cTEvent;
 
 class cTimerEntry;
 
-#define INVALID_TIMER -1
+#define INVALID_TIMER 0xFFFFFFFF
 
 class CSSTOOLS_API cTimerManager : public cThread
 {

@@ -62,6 +62,10 @@ $toCopy = [
   %w(CSSTools.h _export),
   %w(CSSTrace.h _export),
   %w(cSuspendReporting.h _export),
+  %w(cTcp.h _export),
+  %w(cTcpClient.h _export),
+  %w(cTcpMsg.h _export),
+  %w(cTcpServer.h _export),
   %w(cTemplateString.h _export),
   %w(cTEvent.h _export),
   %w(cThread.h _export),
@@ -93,6 +97,9 @@ $toCopy = [
   %w(Release/CSSTools.dll _export/vs6),
   %w(Release/CSSTools.lib _export/vs6),
   %w(ReleaseLib/CSSToolsLib.lib _export/vs6),
+
+  %w(Release_Backroom/CSSTools.dll _export/Backroom/VS6),
+  %w(Release_Backroom/CSSTools.lib _export/Backroom/VS6)
 
   %w(ReleaseVS7/CSSTools7.dll _export/vs7),
   %w(ReleaseVS7/CSSTools7.lib _export/vs7),
