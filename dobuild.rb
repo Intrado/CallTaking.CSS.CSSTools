@@ -99,7 +99,7 @@ $toCopy = [
   %w(ReleaseLib/CSSToolsLib.lib _export/vs6),
 
   %w(Release_Backroom/CSSTools.dll _export/Backroom/VS6),
-  %w(Release_Backroom/CSSTools.lib _export/Backroom/VS6)
+  %w(Release_Backroom/CSSTools.lib _export/Backroom/VS6),
 
   %w(ReleaseVS7/CSSTools7.dll _export/vs7),
   %w(ReleaseVS7/CSSTools7.lib _export/vs7),
