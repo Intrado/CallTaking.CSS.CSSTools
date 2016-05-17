@@ -199,6 +199,8 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
         if (mAllowedClients.find(ClientAddress) == string::npos)
         {
           bool foundByHostName = false;
+
+#if _MSC_VER >= 1400 // not available in VC6, VC7
           // Check by host name
           char hostname[NI_MAXHOST], servInfo[NI_MAXSERV];
           DWORD dwRetval = getnameinfo((struct sockaddr *) &adr_inet, sizeof(struct sockaddr), hostname, NI_MAXHOST, servInfo, NI_MAXSERV, NI_NUMERICSERV);
@@ -208,6 +210,17 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
               foundByHostName = true;
             }
           }
+#else
+          struct hostent *remoteHost = gethostbyaddr((const char *)&adr_inet.sin_addr, 4, AF_INET);
+
+          if (remoteHost != NULL) 
+          {
+            if (mAllowedClients.find(remoteHost->h_name) != string::npos)
+            {
+              foundByHostName = true;
+            }
+          }
+#endif
 
           if (!foundByHostName)
           {
