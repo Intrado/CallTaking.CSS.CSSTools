@@ -198,10 +198,24 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
 #endif
         if (mAllowedClients.find(ClientAddress) == string::npos)
         {
-          DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Client <") +  ClientAddress + string("> not allowed to connect") );
-          //Peer is not allowed to connect to server
-          closesocket(ClientSocket);
-          return false;
+          bool foundByHostName = false;
+          // Check by host name
+          char hostname[NI_MAXHOST], servInfo[NI_MAXSERV];
+          DWORD dwRetval = getnameinfo((struct sockaddr *) &adr_inet, sizeof(struct sockaddr), hostname, NI_MAXHOST, servInfo, NI_MAXSERV, NI_NUMERICSERV);
+          if (dwRetval == 0) {
+            if (mAllowedClients.find(hostname) != string::npos)
+            {
+              foundByHostName = true;
+            }
+          }
+
+          if (!foundByHostName)
+          {
+            DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Client <") + ClientAddress + string("> not allowed to connect"));
+            //Peer is not allowed to connect to server
+            closesocket(ClientSocket);
+            return false;
+          }
         }
       }
     }
