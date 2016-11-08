@@ -10,7 +10,7 @@
 
 struct EnumWindowsCallbackArgs 
 {
-  EnumWindowsCallbackArgs( DWORD p, string t ) : pid( p ), title( t), gotMatch(false) { }
+  EnumWindowsCallbackArgs( DWORD p, string t ) : pid( p ), title( t), gotMatch(false) {};
   const DWORD pid;
   bool gotMatch;
   string title;
