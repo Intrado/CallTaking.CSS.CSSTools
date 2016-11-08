@@ -79,14 +79,39 @@ long cMonitorPVFCThread::ThreadProc()
   return 0;
 }
 
+struct EnumWindowsCallbackArgs 
+{
+  EnumWindowsCallbackArgs( DWORD p, string t ) : pid( p ), title( t), gotMatch(false) { }
+  const DWORD pid;
+  bool gotMatch;
+  string title;
+};
+
+BOOL CALLBACK EnumWindowsProcMatch(HWND hwnd,LPARAM lParam)
+{
+    EnumWindowsCallbackArgs *args = (EnumWindowsCallbackArgs *)lParam;
+    char wnd_title[256];
+    string titleStr;
+    DWORD lpdwProcessId;
+    GetWindowThreadProcessId(hwnd,&lpdwProcessId);
+    if(lpdwProcessId==args->pid)
+    {
+      GetWindowText(hwnd,wnd_title,sizeof(wnd_title));
+      titleStr = wnd_title;
+      if (!titleStr.empty() && (titleStr.find(args->title) != string::npos))
+      {
+        args->gotMatch = true;
+        return FALSE;
+      }
+    }
+    return TRUE;
+}
+
 bool cMonitorPVFCThread::CheckForPVFC()
 {
-  HWND hWnd = FindWindow(NULL, "Microsoft Visual C++ Runtime Library");
-  if (hWnd != NULL)
-  {
-    return true;
-  }
-  return false;
+  EnumWindowsCallbackArgs args( ::GetCurrentProcessId() , "Microsoft Visual C++ Runtime Library");
+  ::EnumWindows(EnumWindowsProcMatch, (LPARAM)&args);
+  return args.gotMatch;
 }
 
 void cMonitorPVFCThread::StopWerfaultIfRunning()
