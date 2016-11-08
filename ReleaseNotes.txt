@@ -1,3 +1,6 @@
+5.5.4.12 - Released 2016/11/08
+   - VIPER-9174: Stop WerFault.exe if running prior to exiting in a detected pure virtual function call run-time error.   (http://perforce:8080/@c=2Kf@/251858?ac=10)
+
 5.5.4.11 - Released 2016/05/17
    - Allowed client can be search by FQDN.   (http://perforce:8080/@c=2Kf@/245689?ac=10)
 
@@ -172,4 +175,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 245692 =====
+===== Do not remove this line 251858 =====
