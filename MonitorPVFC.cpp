@@ -11,8 +11,8 @@
 
 struct EnumWindowsCallbackArgs 
 {
-	EnumWindowsCallbackArgs( DWORD p, std::string t ) : pid( p ), title( t), gotMatch(false) {};
-  const DWORD pid;
+  EnumWindowsCallbackArgs( DWORD p, std::string t ) : pid( p ), title( t), gotMatch(false) {};
+  DWORD pid;
   bool gotMatch;
   std::string title;
 };
