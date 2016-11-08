@@ -8,6 +8,15 @@
 
 #define kModuleName "MonitorPVFC"
 
+struct EnumWindowsCallbackArgs 
+{
+  EnumWindowsCallbackArgs( DWORD p, string t ) : pid( p ), title( t), gotMatch(false) { }
+  const DWORD pid;
+  bool gotMatch;
+  string title;
+};
+BOOL CALLBACK EnumWindowsProcMatch(HWND hwnd,LPARAM lParam);
+
 class cMonitorPVFCThread : public cThread
 {
 public:
@@ -78,14 +87,6 @@ long cMonitorPVFCThread::ThreadProc()
   DiagTrace(kModuleName, "cMonitorPVFCThread", "Exiting");
   return 0;
 }
-
-struct EnumWindowsCallbackArgs 
-{
-  EnumWindowsCallbackArgs( DWORD p, string t ) : pid( p ), title( t), gotMatch(false) { }
-  const DWORD pid;
-  bool gotMatch;
-  string title;
-};
 
 BOOL CALLBACK EnumWindowsProcMatch(HWND hwnd,LPARAM lParam)
 {
