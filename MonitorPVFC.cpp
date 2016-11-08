@@ -4,16 +4,17 @@
 #include "Diag.h"
 #include "windows.h"
 #include <Tlhelp32.h>
+#include <string>
 
 
 #define kModuleName "MonitorPVFC"
 
 struct EnumWindowsCallbackArgs 
 {
-  EnumWindowsCallbackArgs( DWORD p, string t ) : pid( p ), title( t), gotMatch(false) {};
+	EnumWindowsCallbackArgs( DWORD p, std::string t ) : pid( p ), title( t), gotMatch(false) {};
   const DWORD pid;
   bool gotMatch;
-  string title;
+  std::string title;
 };
 BOOL CALLBACK EnumWindowsProcMatch(HWND hwnd,LPARAM lParam);
 
@@ -92,14 +93,14 @@ BOOL CALLBACK EnumWindowsProcMatch(HWND hwnd,LPARAM lParam)
 {
     EnumWindowsCallbackArgs *args = (EnumWindowsCallbackArgs *)lParam;
     char wnd_title[256];
-    string titleStr;
+	std::string titleStr;
     DWORD lpdwProcessId;
     GetWindowThreadProcessId(hwnd,&lpdwProcessId);
     if(lpdwProcessId==args->pid)
     {
       GetWindowText(hwnd,wnd_title,sizeof(wnd_title));
       titleStr = wnd_title;
-      if (!titleStr.empty() && (titleStr.find(args->title) != string::npos))
+      if (!titleStr.empty() && (titleStr.find(args->title) != std::string::npos))
       {
         args->gotMatch = true;
         return FALSE;
