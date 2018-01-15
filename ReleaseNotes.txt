@@ -1,3 +1,7 @@
+5.5.4.14 - Released 2018/01/15
+   - TCP Classes create extern C interface for usage in Delphi application.   (http://perforce:8080/@c=2Kf@/266731?ac=10)
+   - Got rid of a compiler warning.   (http://perforce:8080/@c=2Kf@/251897?ac=10)
+
 5.5.4.13 - Released 2016/11/08
    - Fix some more compile issues.   (http://perforce:8080/@c=2Kf@/251893?ac=10)
    - Fix compiler issue.   (http://perforce:8080/@c=2Kf@/251891?ac=10)
@@ -181,4 +185,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 251893 =====
+===== Do not remove this line 266731 =====
