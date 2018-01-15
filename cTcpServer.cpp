@@ -20,6 +20,8 @@ cTcpServer::cTcpServer(unsigned int port, string clientAddresses, cTimerManager*
   // our sockets for the server
   ListenSocket = INVALID_SOCKET;
 
+  DiagTrace(cTcp::moduleName, "cTcpServer::cTcpServer", string("Create with port: ")+ToStr(port) + string(", clientAddresses: ") + clientAddresses);
+
 #if _MSC_VER >= 1300 // not available in VC6
   // address info for the server to listen to
   struct addrinfo *result = NULL;
@@ -121,6 +123,10 @@ cTcpServer::cTcpServer(unsigned int port, string clientAddresses, cTimerManager*
     WSACleanup();
     throw iResult;
   }
+  else
+  {
+    DiagError(cTcp::moduleName, "cTcpServer::cTcpServer", string("listening to port: ") + ToStr(port));
+  }
 }
 
 
@@ -173,6 +179,7 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
 
   if (ClientSocket != INVALID_SOCKET) 
   {
+    DiagTrace(cTcp::moduleName, "cTcpServer::AcceptNewClient", "Accept New Client");
     // If a list of allowed client is configured check if it is part of it
     if (mAllowedClients.size() > 0)
     {
@@ -189,7 +196,7 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
       else
       {
 
-#if _MSC_VER >= 1400 // not available in VC6, VC7
+#if _MSC_VER > 1700 // not available in VC6, VC7
         char ipstr[INET6_ADDRSTRLEN];
         inet_ntop(AF_INET, &(adr_inet.sin_addr), (PSTR)ipstr, sizeof(ipstr));
         string ClientAddress(ipstr);
@@ -200,7 +207,7 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
         {
           bool foundByHostName = false;
 
-#if _MSC_VER >= 1400 // not available in VC6, VC7
+#if _MSC_VER >= 1700 // not available in VC6, VC7
           // Check by host name
           char hostname[NI_MAXHOST], servInfo[NI_MAXSERV];
           DWORD dwRetval = getnameinfo((struct sockaddr *) &adr_inet, sizeof(struct sockaddr), hostname, NI_MAXHOST, servInfo, NI_MAXSERV, NI_NUMERICSERV);

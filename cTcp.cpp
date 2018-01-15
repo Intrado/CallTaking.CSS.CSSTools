@@ -18,9 +18,9 @@ const char* const cTcp::Status[] =
 
 ////////////////////////////////////////////////////////////////
 cTcp::cTcp(const tInitParamsIF* pInitParamsIf) : 
-  pClient(NULL), pServer(NULL), pRxMsg(NULL), pTxMsg(NULL), pRxMsgHandlerCb(),
+mpClient(NULL), mpServer(NULL), mpRxMsg(NULL), mpTxMsg(NULL), mpRxMsgHandlerCb(),
   mHeartbeatTimerId(INVALID_TIMER), mRxTimerId(INVALID_TIMER), mTXstate(LinkDown), mRXstate(LinkDown), mRxThreadHandle(NULL), mTxThreadHandle(NULL),
-  mTxThreadRunning(false)
+mTxThreadRunning(false), mpfOnEventCB(NULL), mpfReportLinkStatusCB(NULL), mOnEventOwnerCB(NULL), mOnReportLinkStatusOwnerCB(NULL)
 {
   DiagTrace(moduleName, "cTcp::cTcp", string("Started Tcp")+(mInitParams.mode == modeClient ? " in Client mode" : " in Server mode"));
   // id's to assign clients for our table
@@ -53,7 +53,14 @@ cTcp::cTcp(const tInitParamsIF* pInitParamsIf) :
 
   mInitParams.RemoveEndStr = pInitParamsIf->RemoveEndStr;
 
-  mpTimerManager = pInitParamsIf->pTimerManager;
+  if (pInitParamsIf->pTimerManager)
+  {
+    mpTimerManager = pInitParamsIf->pTimerManager;
+  }
+  else
+  {
+    mpTimerManager = &mTimerManager;
+  }
 
   std::string clientAddresses, serverAddress;
   if (pInitParamsIf->pClientAddresses)
@@ -70,13 +77,13 @@ cTcp::cTcp(const tInitParamsIF* pInitParamsIf) :
   if (mInitParams.mode == modeServer)
   {
     // set up the server to listen 
-    pServer = new cTcpServer(pInitParamsIf->port, clientAddresses, mpTimerManager, pInitParamsIf->singleClientServer);
+    mpServer = new cTcpServer(pInitParamsIf->port, clientAddresses, mpTimerManager, pInitParamsIf->singleClientServer);
   }
 
   // client mode
   else if (mInitParams.mode == modeClient)
   {
-    pClient = new cTcpClient(pInitParamsIf->port, serverAddress);
+    mpClient = new cTcpClient(pInitParamsIf->port, serverAddress);
   }
 
 }
@@ -111,11 +118,11 @@ cTcp::~cTcp(void)
   }
   DiagTrace(moduleName, "cTcp::~cTcp", "RX timer stopped.");
 
-  if (pClient) delete pClient;
+  if (mpClient) delete mpClient;
   DiagTrace(moduleName, "cTcp::~cTcp", "pClient deleted.");
-  if (pServer) delete pServer;
+  if (mpServer) delete mpServer;
   DiagTrace(moduleName, "cTcp::~cTcp", "pServer deleted.");
-  if (pRxMsg) delete pRxMsg;
+  if (mpRxMsg) delete mpRxMsg;
   DiagTrace(moduleName, "cTcp::~cTcp", "pRxMsg deleted.");
   // clean up tx message queue
   for (std::vector<cTcpMsg*>::iterator it = msgsTxQueue.begin(); it != msgsTxQueue.end();)
@@ -135,12 +142,12 @@ void cTcp::Update()
   bool initialConnectedState = false;
   bool currentConnectedState = false;
 
-  if (pServer)
+  if (mpServer)
   {
-    initialConnectedState = pServer->IsConnected();
+    initialConnectedState = mpServer->IsConnected();
     cAutoLock lock(mLockMutex);
     // get new clients
-    if(pServer->AcceptNewClient(client_id))
+    if(mpServer->AcceptNewClient(client_id))
     {
       DiagWarning(moduleName, "cTcp::Update", "Client "+ToStr(client_id)+" has been connected to the server");
       client_id++;
@@ -148,46 +155,54 @@ void cTcp::Update()
 
     receiveFromClients();
 
-    currentConnectedState = pServer->IsConnected();
+    currentConnectedState = mpServer->IsConnected();
   }
   /*
    * CLIENT MODE
    */
-  else if (pClient)
+  else if (mpClient)
   {
-    initialConnectedState = pClient->IsConnected();
-    bool wasconnected = pClient->IsConnected();
+    initialConnectedState = mpClient->IsConnected();
+    bool wasconnected = mpClient->IsConnected();
     receiveFromServer();
-    if (!wasconnected && pClient->IsConnected() && (mInitParams.hb != ""))
+    if (!wasconnected && mpClient->IsConnected() && (mInitParams.hb != ""))
     {
       // Send heartbeat message
       DiagTrace(moduleName, "cTcp::Update", "Sending hearbeat message after it was re-connected");
       Send((char *)mInitParams.hb.c_str());
     }
-    else if (wasconnected && !pClient->IsConnected())
+    else if (wasconnected && !mpClient->IsConnected())
     {
       // stop heartbeat timer
       DiagTrace(moduleName, "cTcp::Update", "Stopping hearbeat message since disconnected");
       StopHBTimer();
     }
-    currentConnectedState = pClient->IsConnected();
+    currentConnectedState = mpClient->IsConnected();
   }
 
   if (initialConnectedState != currentConnectedState)
   {
     if (currentConnectedState)
     {
-      if (pRxMsgHandlerCb)
+      if (mpRxMsgHandlerCb)
       {
-        pRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkUp);
+        mpRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkUp);
+      }
+      else if (mpfReportLinkStatusCB)
+      {
+        mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "SOCKET", LinkUp);
       }
       DiagWarning(moduleName, "cTcp::Update", string("Socket state changed to ")+(Status[LinkUp]));
     }
     else
     {
-      if (pRxMsgHandlerCb)
+      if (mpRxMsgHandlerCb)
       {
-        pRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkDown);
+        mpRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkDown);
+      }
+      else if (mpfReportLinkStatusCB)
+      {
+        mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "SOCKET", LinkDown);
       }
       DiagWarning(moduleName, "cTcp::Update", string("Socket state changed to ")+(Status[LinkDown]));
     }
@@ -226,10 +241,10 @@ cTcpMsg::eAckNakStatus cTcp::IsAckNak(cTcpMsg* pMsg)
 void cTcp::receiveFromServer()
 {
   // for client only
-  if (pClient)
+  if (mpClient)
   {
     memset(mRxBuf, 0, sizeof(mRxBuf));
-    int data_length = pClient->ReceivePackets(mRxBuf);
+    int data_length = mpClient->ReceivePackets(mRxBuf);
 
     if (data_length <= 0) 
     {
@@ -238,16 +253,16 @@ void cTcp::receiveFromServer()
     }
 
     // handle received data to build receive message
-    if (pRxMsg == NULL)
+    if (mpRxMsg == NULL)
     {
-      pRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+      mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
     }
 
     int i = 0;
     int lenAdded = 0;
-    while (pRxMsg && (i < data_length))
+    while (mpRxMsg && (i < data_length))
     {
-      lenAdded = pRxMsg->Add(&mRxBuf[i], data_length-i);
+      lenAdded = mpRxMsg->Add(&mRxBuf[i], data_length-i);
       if (lenAdded < 0)
       {
         // an error occurred, skip data
@@ -260,32 +275,39 @@ void cTcp::receiveFromServer()
       i += lenAdded;
 
       // if message is complete, or no delimiter exists process it
-      if (pRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "")))
+      if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "")))
       {
         KickRxTimer(); // since a message has been received, reset Rx timer
-        if (IsAckNak(pRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
+        if (IsAckNak(mpRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
         {
           // callback function needs to be called
           DiagTrace(moduleName, "cTcp::receiveFromServer", "Callback function is called since a complete message was received.");
           // pass received message to callback if valid
-          if (pRxMsgHandlerCb)
+          if (mpRxMsgHandlerCb)
           {
-            pRxMsgHandlerCb->CBOnEvent(pRxMsg);
+            mpRxMsgHandlerCb->CBOnEvent(mpRxMsg);
             // de-allocation needs to take place in the handler since allocating a new one for next message
-            pRxMsg->Dismiss(); pRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
-            pRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+            mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
+            mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+          }
+          else if (mpfOnEventCB)
+          {
+            mpfOnEventCB(mOnEventOwnerCB, mpRxMsg->GetData());
+            // de-allocation needs to take place in the handler since allocating a new one for next message
+            mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
+            mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
           }
           else
           {
             // clear message for now -- or TBC: delete handle by called back entity and new message to instantiate if handle
-            pRxMsg->Clear();
+            mpRxMsg->Clear();
           }
         }
         else
         {
           // de-allocation needs to take place for this ACK/NAK message
-          pRxMsg->Dismiss(); pRxMsg = NULL;
-          pRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+          mpRxMsg->Dismiss(); mpRxMsg = NULL;
+          mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
         }
       }
     }
@@ -297,15 +319,15 @@ void cTcp::receiveFromServer()
 void cTcp::receiveFromClients()
 {
   // for server only
-  if (pServer)
+  if (mpServer)
   {
     // go through all clients
     std::map<unsigned int, cClientSocket*>::iterator iter;
 
-    for(iter = pServer->sessions.begin(); iter != pServer->sessions.end(); iter++)
+    for(iter = mpServer->sessions.begin(); iter != mpServer->sessions.end(); iter++)
     {
       memset(mRxBuf, 0, sizeof(mRxBuf));
-      int data_length = pServer->ReceiveData(iter->first, mRxBuf);
+      int data_length = mpServer->ReceiveData(iter->first, mRxBuf);
 
       if (data_length <= 0) 
       {
@@ -314,16 +336,16 @@ void cTcp::receiveFromClients()
       }
 
       // handle received data to build receive message
-      if (pRxMsg == NULL)
+      if (mpRxMsg == NULL)
       {
-        pRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+        mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
       }
 
       int i = 0;
       int lenAdded = 0;
-      while (pRxMsg && (i < data_length))
+      while (mpRxMsg && (i < data_length))
       {
-        lenAdded = pRxMsg->Add(&mRxBuf[i], data_length-i);
+        lenAdded = mpRxMsg->Add(&mRxBuf[i], data_length-i);
         if (lenAdded < 0)
         {
           // an error occurred, skip data
@@ -336,32 +358,39 @@ void cTcp::receiveFromClients()
         i += lenAdded;
 
         // if message is complete, process it
-        if (pRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "")))
+        if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "")))
         {
           KickRxTimer(); // since a message has been received, reset Rx timer
-          if (IsAckNak(pRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
+          if (IsAckNak(mpRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
           {
             // callback function needs to be called
             DiagTrace(moduleName, "cTcp::receiveFromClients", "Callback function is called since a complete message was received.");
             // use callback if valid
-            if (pRxMsgHandlerCb)
+            if (mpRxMsgHandlerCb)
             {
-              pRxMsgHandlerCb->CBOnEvent(pRxMsg);
+              mpRxMsgHandlerCb->CBOnEvent(mpRxMsg);
               // de-allocation needs to take place in the handler since allocating a new one for next message
-              pRxMsg->Dismiss(); pRxMsg = NULL;
-              pRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+              mpRxMsg->Dismiss(); mpRxMsg = NULL;
+              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+            }
+            else if (mpfOnEventCB)
+            {
+              mpfOnEventCB(mOnEventOwnerCB, mpRxMsg->GetData());
+              // de-allocation needs to take place in the handler since allocating a new one for next message
+              mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
+              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
             }
             else
             {
               // clear message for now -- or TBC: delete handle by called back entity and new message to instantiate if handle
-              pRxMsg->Clear();
+              mpRxMsg->Clear();
             }
           }
           else
           {
               // de-allocation needs to take place for this ACK/NAK message
-              pRxMsg->Dismiss(); pRxMsg = NULL;
-              pRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+              mpRxMsg->Dismiss(); mpRxMsg = NULL;
+              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
           }
         }
       }
@@ -460,8 +489,6 @@ void cTcp::SendQueuedMsg()
   pToSendMsg->AddRef(); // make sure message cannot be deleted until we complete since it may need to be resent
   if (SendMsg(pToSendMsg))
   {
-    KickHBTimer();
-
     // check if it should wait for ACK before continuing
     if (mInitParams.waitForAckP)
     {
@@ -507,9 +534,15 @@ void cTcp::SendQueuedMsg()
     else
     {
       // a message was sent, consider TX link as up
-      if ((pClient && pClient->IsConnected()) || !pClient)
+      if ((mpClient && mpClient->IsConnected()) || !mpClient)
+      {
         UpdateTxState(LinkUp);
+      }
     }
+  }
+  if ((mpClient && mpClient->IsConnected()) || !mpClient)
+  {
+    KickHBTimer();
   }
   pToSendMsg->Dismiss();
 }
@@ -526,13 +559,13 @@ bool cTcp::SendMsg(cTcpMsg* pMsg)
   cAutoLock lock(mLockMutex);
 
   // send action packet
-  if (pServer)
+  if (mpServer)
   {
-    return(pServer->SendToAll(pMsg));
+    return(mpServer->SendToAll(pMsg));
   }
-  if (pClient)
+  if (mpClient)
   {
-    return(pClient->Send(pMsg));
+    return(mpClient->Send(pMsg));
   }
   return false;
 }
@@ -548,7 +581,7 @@ int cTcp::Start()
   mTxThreadRunning = true;
   mTxThreadHandle = (HANDLE) _beginthread(cTcp::TxThread, 0, (void *)this);
   // send initial heartbeat if set to get things going
-  if ((mInitParams.hb != "") && (!pClient || (pClient && pClient->IsConnected())))
+  if ((mInitParams.hb != "") && (!mpClient || (mpClient && mpClient->IsConnected())))
   {
     // Send heartbeat message
     DiagWarning(moduleName, "cTcp::Start", "Sending first hearbeat message.");
@@ -562,10 +595,10 @@ int cTcp::Start()
 int cTcp::GetNbClients()
 {
   int nb = 0;
-  if (pServer)
+  if (mpServer)
   {
     cAutoLock lock(mLockMutex);
-    nb = pServer->GetNbClients();
+    nb = mpServer->GetNbClients();
   }
   return nb;
 }
@@ -694,8 +727,14 @@ void cTcp::UpdateTxState(eStatus state)
   if (state != mTXstate)
   {
     mTXstate = state;
-    if (pRxMsgHandlerCb)
-      pRxMsgHandlerCb->CBReportLinkStatus("TX", state);
+    if (mpRxMsgHandlerCb)
+    {
+      mpRxMsgHandlerCb->CBReportLinkStatus("TX", state);
+    }
+    else if (mpfReportLinkStatusCB)
+    {
+      mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "TX", state);
+    }
     DiagWarning(moduleName, "cTcp::UpdateTxState", string("TX state changed to ")+(Status[state]));
   }
 }
@@ -708,9 +747,181 @@ void cTcp::UpdateRxState(eStatus state)
   if (state != mRXstate)
   {
     mRXstate = state;
-    if (pRxMsgHandlerCb)
-      pRxMsgHandlerCb->CBReportLinkStatus("RX", state);
+    if (mpRxMsgHandlerCb)
+    {
+      mpRxMsgHandlerCb->CBReportLinkStatus("RX", state);
+    }
+    else if (mpfReportLinkStatusCB)
+    {
+      mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "RX", state);
+    }
+
     DiagWarning(moduleName, "cTcp::UpdateRxState", string("RX state changed to ")+(Status[state]));
   }
 }
 
+////////////////////////////////////////////////////////////////
+int cTcp::RegisterOnEventCB(cTcp::tOnEventCB onEventCB, void* owner)
+{
+  mpfOnEventCB = onEventCB;
+  mOnEventOwnerCB = owner;
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+int cTcp::RegisterReportLinkStatusCB(cTcp::tReportLinkStatusCB reportLinkStatuseCB, void* owner)
+{
+  mpfReportLinkStatusCB = reportLinkStatuseCB;
+  mOnReportLinkStatusOwnerCB = owner;
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+int cTcp::UnregisterOnEventCB(void* owner)
+{
+  if (owner == mOnEventOwnerCB)
+  {
+    mpfOnEventCB = NULL;
+    mOnEventOwnerCB = NULL;
+  }
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+int cTcp::UnregisterReportLinkStatusCB(void* owner)
+{
+  if (owner == mOnReportLinkStatusOwnerCB)
+  {
+    mpfReportLinkStatusCB = NULL;
+    mOnReportLinkStatusOwnerCB = NULL;
+  }
+  return 0;
+}
+
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API long Init(int mode, unsigned int port, const char* pServerAddress, const char* pClientAddresses, char* hb,
+                       int hbtoP, int acktoP, int maxretriesP, int silenttoP, int maxperiodsP, int TxCarStartP, int TxCarEndP, char* TxEndStrP,
+                       int RxCarStartP, int RxCarEndP, char* RxEndStrP, bool RemoveEndStr, bool waitForAckP, bool sendAckP, bool singleClientServer)
+{
+  cTcp::tInitParamsIF initParams;
+  initParams.mode = (cTcp::eModeType)mode;
+  initParams.port = port;
+  initParams.pServerAddress = pServerAddress;
+  initParams.pClientAddresses = pClientAddresses;
+  initParams.pHb = hb;
+  initParams.hbtoP = hbtoP;
+  initParams.acktoP = acktoP;
+  initParams.maxretriesP = maxretriesP;
+  initParams.silenttoP = silenttoP;
+  initParams.TxCarStartP = TxCarStartP;
+  initParams.TxCarEndP = TxCarEndP;
+  initParams.pTxEndStrP = TxEndStrP;
+  initParams.RxCarStartP = RxCarStartP;
+  initParams.RxCarEndP = RxCarEndP;
+  initParams.pRxEndStrP = RxEndStrP;
+  initParams.RemoveEndStr = RemoveEndStr;
+  initParams.waitForAckP = waitForAckP;
+  initParams.sendAckP = sendAckP;
+  initParams.singleClientServer = singleClientServer;
+  initParams.pTimerManager = NULL;
+
+  cTcp* ptr = new cTcp(&initParams);
+  long handle = NULL;
+  if (ptr)
+  {
+    ptr->Start();
+    handle = (long)ptr;
+  }
+  return handle;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int Exit(long handle)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr) delete ptr;
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int Send(long handle, char *pMsg)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->Send(pMsg);
+  }
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int Update(long handle)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->Update();
+  }
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int GetNbClients(long handle)
+{
+  cTcp* ptr = (cTcp*)handle;
+  int nb = 0;
+  if (ptr)
+  {
+    nb = ptr->GetNbClients();
+  }
+  return nb;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int RegisterOnEventCB(long handle, cTcp::tOnEventCB onEventCB, void* owner)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->RegisterOnEventCB(onEventCB, owner);
+    return 0;
+  }
+  return -1;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int RegisterReportLinkStatusCB(long handle, cTcp::tReportLinkStatusCB reportLinkStatuseCB, void* owner)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->RegisterReportLinkStatusCB(reportLinkStatuseCB, owner);
+    return 0;
+  }
+  return -1;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int UnregisterOnEventCB(long handle, void* owner)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->UnregisterOnEventCB(owner);
+    return 0;
+  }
+  return -1;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int UnregisterReportLinkStatusCB(long handle, void* owner)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->UnregisterReportLinkStatusCB(owner);
+    return 0;
+  }
+  return -1;
+}

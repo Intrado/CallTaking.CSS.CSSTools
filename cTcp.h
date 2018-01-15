@@ -18,13 +18,17 @@ class CSSTOOLS_API cTcp : public cTimerHandler
 public:
   static const char *moduleName;
 
+  // also defined in CAsync.h - need to match
+  enum eStatus{ LinkUp, LinkDown, LinkUnknown };
+
+  enum eModeType { modeClient = 0, modeServer = 1 };
+
   // function callback prototype
   typedef void (__stdcall *tRxMsgHandlerCb)(cTcpMsg* pMsg);
 
-  // also defined in CAsync.h - need to match
-  enum eStatus{LinkUp,LinkDown,LinkUnknown};
-
-  enum eModeType {modeClient=0,modeServer=1};
+  // function callback for Delphi
+  typedef void(*tOnEventCB)(void* Handle, const char* msg);
+  typedef void(*tReportLinkStatusCB)(void* Handle, char* pTyp, cTcp::eStatus state);
 
   // structure used for initial parameter passed during creation
   struct CSSTOOLS_API tInitParamsIF
@@ -80,8 +84,14 @@ public:
   virtual void Update();
 
   // Callback registration for received message handling
-  virtual void __stdcall RegisterRxMsgHandlerCB(cRxCb* cb) {pRxMsgHandlerCb = cb;};
-  virtual void __stdcall UnregisterRxMsgHandlerCB() {pRxMsgHandlerCb = 0;};
+  virtual void __stdcall RegisterRxMsgHandlerCB(cRxCb* cb) {mpRxMsgHandlerCb = cb;};
+  virtual void __stdcall UnregisterRxMsgHandlerCB() {mpRxMsgHandlerCb = 0;};
+
+
+  int RegisterOnEventCB(cTcp::tOnEventCB onEventCB, void* owner);
+  int RegisterReportLinkStatusCB(cTcp::tReportLinkStatusCB reportLinkStatuseCB, void* owner);
+  int UnregisterOnEventCB(void* owner);
+  int UnregisterReportLinkStatusCB(void* owner);
 
   // Start
   virtual int Start();
@@ -91,7 +101,7 @@ public:
 
   virtual char* const GetHBMsg() {return((char* const)mInitParams.hb.c_str()); };
 
-  virtual bool IsClientConnected() { return pClient->IsConnected();}
+  virtual bool IsClientConnected() { return mpClient->IsConnected();}
 
 protected:
   // from cTimerHandler for timer handler callback
@@ -152,20 +162,20 @@ private:
   static unsigned int client_id;
 
   // The Tcp server object 
-  cTcpServer* pServer;
+  cTcpServer* mpServer;
 
   // The TCP client object
-  cTcpClient* pClient;
+  cTcpClient* mpClient;
 
   // data buffer
   char mRxBuf[MAX_BUFFER_SIZE];
 
   // message handling
-  cTcpMsg* pRxMsg;
-  cTcpMsg* pTxMsg;
+  cTcpMsg* mpRxMsg;
+  cTcpMsg* mpTxMsg;
 
   // registered callback function to call for each receive message
-  cRxCb* pRxMsgHandlerCb;
+  cRxCb* mpRxMsgHandlerCb;
 
   cCritSec mLockMutex;
 
@@ -196,6 +206,7 @@ private:
   void UpdateRxState(eStatus state);
 
   static const char* const Status[3];
+  cTimerManager mTimerManager;
 
   // thread handles and flags for Tx and Rx
   HANDLE mTxThreadHandle;
@@ -205,6 +216,47 @@ private:
 
   cEvent mTxMsgEvent;
   vector<cTcpMsg*> msgsTxQueue;
+
+  tOnEventCB mpfOnEventCB;
+  void* mOnEventOwnerCB;
+  tReportLinkStatusCB mpfReportLinkStatusCB;
+  void* mOnReportLinkStatusOwnerCB;
 };
+
+// exported function prototypes for Delphi
+
+extern "C"
+{
+  CSSTOOLS_API long Init(
+    int mode,                     // TCP communication mode type, i.e. 0 for client or  1 for server
+    unsigned int port,            // TCP port used (listening port if server and destination port if client mode)
+    const char* pServerAddress,   // Server address to connect to if client mode
+    const char* pClientAddresses, // comma delimited ip addresses list of clients allowed to connect to server
+    char* hb,                     // Heart beat message to use.
+    int hbtoP,                    // Timeout period to send an heart beat if no message was sent during this period (in msec).
+    int acktoP,                   // Timeout period to receive acknowledge after sending a message (in msec).
+    int maxretriesP,              // Number of retries for sending a message.
+    int silenttoP,                // The silent timeout period.
+    int maxperiodsP,              // The number of silent periods before the link is turned down. 
+    int TxCarStartP,              // Transmission start of block character. -1 for none and TxEndStrP will be used.
+    int TxCarEndP,                // Transmission end of block character. -1 for none.
+    char* TxEndStrP,              // Transmission end of block string.
+    int RxCarStartP,              // Reception start of block character. -1 for none and RxEndStrP will be used.
+    int RxCarEndP,                // Reception end of block character. -1 for none.
+    char* RxEndStrP,              // Reception end of block string.
+    bool RemoveEndStr,            // Remove the end of block string from the reception buffer. 
+    bool waitForAckP,             // Have to wait for acknowledge after sending a message?
+    bool sendAckP,                // Generate an ACK after each message received?
+    bool singleClientServer       // Server that support only one connected client.
+    );
+  CSSTOOLS_API int Exit(long handle);
+  CSSTOOLS_API int Send(long handle, char *pMsg);
+  CSSTOOLS_API int Update(long handle);
+  CSSTOOLS_API int GetNbClients(long handle);
+  CSSTOOLS_API int RegisterOnEventCB(long handle, cTcp::tOnEventCB onEventCB, void* owner);
+  CSSTOOLS_API int RegisterReportLinkStatusCB(long handle, cTcp::tReportLinkStatusCB reportLinkStatuseCB, void* owner);
+  CSSTOOLS_API int UnregisterOnEventCB(long handle, void* owner);
+  CSSTOOLS_API int UnregisterReportLinkStatusCB(long handle, void* owner);
+}
 
 #endif
