@@ -1,3 +1,6 @@
+5.5.4.15 - Released 2018/01/16
+   - Add connectedList parameter to return ip address of connected clients on CB for ReportLinkStatus.   (http://perforce:8080/@c=2Kf@/266756?ac=10)
+
 5.5.4.14 - Released 2018/01/15
    - TCP Classes create extern C interface for usage in Delphi application.   (http://perforce:8080/@c=2Kf@/266731?ac=10)
    - Got rid of a compiler warning.   (http://perforce:8080/@c=2Kf@/251897?ac=10)
@@ -185,4 +188,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 266731 =====
+===== Do not remove this line 266756 =====
