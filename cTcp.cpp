@@ -184,13 +184,18 @@ void cTcp::Update()
   {
     if (currentConnectedState)
     {
+      string connectedClients;
+      if (mpServer)
+      {
+        connectedClients = mpServer->GetClientsList();
+      }
       if (mpRxMsgHandlerCb)
       {
-        mpRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkUp);
+        mpRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkUp, (char*)connectedClients.c_str());
       }
       else if (mpfReportLinkStatusCB)
       {
-        mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "SOCKET", LinkUp);
+        mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "SOCKET", LinkUp, (char*)connectedClients.c_str());
       }
       DiagWarning(moduleName, "cTcp::Update", string("Socket state changed to ")+(Status[LinkUp]));
     }
@@ -198,11 +203,11 @@ void cTcp::Update()
     {
       if (mpRxMsgHandlerCb)
       {
-        mpRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkDown);
+        mpRxMsgHandlerCb->CBReportLinkStatus("SOCKET", LinkDown, "");
       }
       else if (mpfReportLinkStatusCB)
       {
-        mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "SOCKET", LinkDown);
+        mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "SOCKET", LinkDown, "");
       }
       DiagWarning(moduleName, "cTcp::Update", string("Socket state changed to ")+(Status[LinkDown]));
     }
@@ -729,11 +734,11 @@ void cTcp::UpdateTxState(eStatus state)
     mTXstate = state;
     if (mpRxMsgHandlerCb)
     {
-      mpRxMsgHandlerCb->CBReportLinkStatus("TX", state);
+      mpRxMsgHandlerCb->CBReportLinkStatus("TX", state, "");
     }
     else if (mpfReportLinkStatusCB)
     {
-      mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "TX", state);
+      mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "TX", state, "");
     }
     DiagWarning(moduleName, "cTcp::UpdateTxState", string("TX state changed to ")+(Status[state]));
   }
@@ -749,11 +754,11 @@ void cTcp::UpdateRxState(eStatus state)
     mRXstate = state;
     if (mpRxMsgHandlerCb)
     {
-      mpRxMsgHandlerCb->CBReportLinkStatus("RX", state);
+      mpRxMsgHandlerCb->CBReportLinkStatus("RX", state, "");
     }
     else if (mpfReportLinkStatusCB)
     {
-      mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "RX", state);
+      mpfReportLinkStatusCB(mOnReportLinkStatusOwnerCB, "RX", state, "");
     }
 
     DiagWarning(moduleName, "cTcp::UpdateRxState", string("RX state changed to ")+(Status[state]));

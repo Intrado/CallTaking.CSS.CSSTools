@@ -17,9 +17,10 @@ using namespace std;
 class cClientSocket
 {
 public:
-  cClientSocket(SOCKET sock){ mSock = sock; };
+  cClientSocket(SOCKET sock, string clientAddress = ""){ mSock = sock; mClientAddress = clientAddress;};
   ~cClientSocket(){};
   SOCKET mSock;
+  string mClientAddress;
   vector<cTcpMsg*> msgsToSend;
 };
 
@@ -41,6 +42,9 @@ public:
 
   // get number of clients currently connected
   int GetNbClients();
+
+  // get list of clients currently connected
+  string GetClientsList();
 
   bool IsConnected() {return mConnected;};
 

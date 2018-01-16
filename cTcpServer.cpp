@@ -179,63 +179,64 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
 
   if (ClientSocket != INVALID_SOCKET) 
   {
+    string ClientAddress;
+    struct sockaddr_in adr_inet;
+    int len_inet = sizeof(adr_inet);
+
+    if (getpeername(ClientSocket, (struct sockaddr *)&adr_inet, &len_inet) == SOCKET_ERROR)
+    {
+      DiagError(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("getpeername failed with error: ") + ToStr(WSAGetLastError()));
+      //Unable to retrieve peer information 
+      closesocket(ClientSocket);
+      return false;
+    }
+    else
+    {
+#if _MSC_VER > 1700 // not available in VC6, VC7
+      char ipstr[INET6_ADDRSTRLEN];
+      inet_ntop(AF_INET, &(adr_inet.sin_addr), (PSTR)ipstr, sizeof(ipstr));
+      ClientAddress = ipstr;
+#else
+      ClientAddress = inet_ntoa(adr_inet.sin_addr);
+#endif
+    }
+
     DiagTrace(cTcp::moduleName, "cTcpServer::AcceptNewClient", "Accept New Client");
     // If a list of allowed client is configured check if it is part of it
     if (mAllowedClients.size() > 0)
     {
-      struct sockaddr_in adr_inet;
-      int len_inet = sizeof(adr_inet);
-
-      if (getpeername(ClientSocket, (struct sockaddr *)&adr_inet, &len_inet) == SOCKET_ERROR)
+      if (mAllowedClients.find(ClientAddress) == string::npos)
       {
-        DiagError(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("getpeername failed with error: ") + ToStr(WSAGetLastError()));
-        //Unable to retrieve peer information 
-        closesocket(ClientSocket);
-        return false;
-      }
-      else
-      {
-
-#if _MSC_VER > 1700 // not available in VC6, VC7
-        char ipstr[INET6_ADDRSTRLEN];
-        inet_ntop(AF_INET, &(adr_inet.sin_addr), (PSTR)ipstr, sizeof(ipstr));
-        string ClientAddress(ipstr);
-#else
-        string ClientAddress(inet_ntoa(adr_inet.sin_addr));
-#endif
-        if (mAllowedClients.find(ClientAddress) == string::npos)
-        {
-          bool foundByHostName = false;
+        bool foundByHostName = false;
 
 #if _MSC_VER >= 1700 // not available in VC6, VC7
-          // Check by host name
-          char hostname[NI_MAXHOST], servInfo[NI_MAXSERV];
-          DWORD dwRetval = getnameinfo((struct sockaddr *) &adr_inet, sizeof(struct sockaddr), hostname, NI_MAXHOST, servInfo, NI_MAXSERV, NI_NUMERICSERV);
-          if (dwRetval == 0) {
-            if (mAllowedClients.find(hostname) != string::npos)
-            {
-              foundByHostName = true;
-            }
-          }
-#else
-          struct hostent *remoteHost = gethostbyaddr((const char *)&adr_inet.sin_addr, 4, AF_INET);
-
-          if (remoteHost != NULL) 
+        // Check by host name
+        char hostname[NI_MAXHOST], servInfo[NI_MAXSERV];
+        DWORD dwRetval = getnameinfo((struct sockaddr *) &adr_inet, sizeof(struct sockaddr), hostname, NI_MAXHOST, servInfo, NI_MAXSERV, NI_NUMERICSERV);
+        if (dwRetval == 0) {
+          if (mAllowedClients.find(hostname) != string::npos)
           {
-            if (mAllowedClients.find(remoteHost->h_name) != string::npos)
-            {
-              foundByHostName = true;
-            }
+            foundByHostName = true;
           }
+        }
+#else
+        struct hostent *remoteHost = gethostbyaddr((const char *)&adr_inet.sin_addr, 4, AF_INET);
+
+        if (remoteHost != NULL) 
+        {
+          if (mAllowedClients.find(remoteHost->h_name) != string::npos)
+          {
+            foundByHostName = true;
+          }
+        }
 #endif
 
-          if (!foundByHostName)
-          {
-            DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Client <") + ClientAddress + string("> not allowed to connect"));
-            //Peer is not allowed to connect to server
-            closesocket(ClientSocket);
-            return false;
-          }
+        if (!foundByHostName)
+        {
+          DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Client <") + ClientAddress + string("> not allowed to connect"));
+          //Peer is not allowed to connect to server
+          closesocket(ClientSocket);
+          return false;
         }
       }
     }
@@ -271,9 +272,10 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
       }
     }
 
+
     // insert new client into session id table
-    DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Server has accepted new client id ") + ToStr(id) + " on port "+ ToStr(mPort));
-    cClientSocket* pClientSocket = new cClientSocket(ClientSocket);
+    DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Server has accepted new client ") +  ClientAddress + " on port "+ ToStr(mPort));
+    cClientSocket* pClientSocket = new cClientSocket(ClientSocket, ClientAddress);
     sessions.insert( pair<unsigned int, cClientSocket*> (id, pClientSocket) );
     mConnected = true;
     return true;
@@ -289,6 +291,22 @@ int cTcpServer::GetNbClients()
   return(sessions.size());
 }
 
+////////////////////////////////////////////////////////////////
+// get list of clients currently connected
+string cTcpServer::GetClientsList()
+{
+  string connectedClients;
+  std::map<unsigned int, cClientSocket*>::iterator iter;
+  for (iter = sessions.begin(); iter != sessions.end(); iter++)
+  {
+    if (!connectedClients.empty())
+    {
+      connectedClients+= ",";
+    }
+    connectedClients += iter->second->mClientAddress;
+  }
+  return connectedClients;
+}
 
 ////////////////////////////////////////////////////////////////
 // receive incoming data

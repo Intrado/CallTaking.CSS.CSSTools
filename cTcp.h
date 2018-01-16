@@ -28,7 +28,7 @@ public:
 
   // function callback for Delphi
   typedef void(*tOnEventCB)(void* Handle, const char* msg);
-  typedef void(*tReportLinkStatusCB)(void* Handle, char* pTyp, cTcp::eStatus state);
+  typedef void(*tReportLinkStatusCB)(void* Handle, char* pTyp, cTcp::eStatus state, char *connectedList);
 
   // structure used for initial parameter passed during creation
   struct CSSTOOLS_API tInitParamsIF
@@ -74,7 +74,7 @@ public:
   {
   public:
     virtual void CALLBACK CBOnEvent(cTcpMsg* pMsg) = 0;
-    virtual void CALLBACK CBReportLinkStatus(char* pTyp, eStatus state) = 0;
+    virtual void CALLBACK CBReportLinkStatus(char* pTyp, eStatus state, char *connectedList) = 0;
   };
 
   // to send a message over TCP link (assumed to end with null character)
