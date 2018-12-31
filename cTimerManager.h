@@ -26,6 +26,7 @@
 #include "cMutex.h"
 #include "cCritSec.h"
 #include "cThread.h"
+#include "cEvent.h"
 
 class cTEvent;
 
@@ -76,6 +77,8 @@ private:
 
   unsigned int mnPrecisionMs;
   bool mPauseAll;
+
+  cEvent mTimerManagerThreadStarted;
 };
 
 #endif
