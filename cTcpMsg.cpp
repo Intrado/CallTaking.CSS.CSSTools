@@ -49,6 +49,7 @@ cTcpMsg::cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeE
     toSendStr  += string(1, (char)etx);
   toSendStr += endStr;
   mDataV.insert(mDataV.end(), &toSendStr[0], &toSendStr[toSendStr.length()]);
+  mDataV.push_back('\0');
   mSize = mDataV.size();
   mIsCompleted = true;
 }
