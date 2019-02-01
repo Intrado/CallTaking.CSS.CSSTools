@@ -1,3 +1,6 @@
+5.5.4.17 - Released 2019/02/01
+   - Append NULL char to end of vector when creating the TcpMsg.   (http://perforce:8080/@c=2Kf@/280182?ac=10)
+
 5.5.4.16 - Released 2018/12/31
    - Synchronize start and stop of the timer manager thread to avoid crash when quickly creating and then deleting a timer manager. Fixes issue where CDRManager crashes after reload config in TCP mode.   (http://perforce:8080/@c=2Kf@/279032?ac=10)
 
@@ -191,4 +194,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 279032 =====
+===== Do not remove this line 280182 =====
