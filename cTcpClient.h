@@ -20,7 +20,7 @@ class cTcpClient
 {
 public:
   // ctor/dtor
-  cTcpClient(const unsigned int port, const std::string& ip);
+  cTcpClient(const unsigned int port, const std::string& ip, bool prependCount);
   ~cTcpClient(void);
 
   int ReceivePackets(char *);
@@ -39,5 +39,6 @@ private:
   bool TryToConnect();
   unsigned int mPort;
   std::string mServerAddress; 
+  bool mPrependCount;  // Count of message is prepending the message on first 3 Bytes
 };
 

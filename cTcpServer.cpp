@@ -8,7 +8,7 @@
 #include <vector>
 
 ////////////////////////////////////////////////////////////////
-cTcpServer::cTcpServer(unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection) : mPort(port), mpTimerManager(pTimerManager), mSingleClientConnection(singleClientConnection), mAllowedClients(clientAddresses)
+cTcpServer::cTcpServer(unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection, bool prependCount) : mPort(port), mpTimerManager(pTimerManager), mSingleClientConnection(singleClientConnection), mAllowedClients(clientAddresses), mPrependCount(prependCount)
 {
   mSendTimerId = INVALID_TIMER;
 
@@ -372,9 +372,31 @@ bool cTcpServer::SendToAll(cTcpMsg* pMsg)
       int sres = 0;
       for (vector<cTcpMsg*>::iterator it = iter->second->msgsToSend.begin(); it != iter->second->msgsToSend.end();)
       {
-        totalSize = (*it)->GetSize();
-        packets = (char *)(*it)->GetData();
+
+        if (mPrependCount)
+        {
+          totalSize = (*it)->GetSize();
+          packets = new char[totalSize + 4];
+
+          packets[0] = (char)((totalSize & 0xFF0000) >> 16);
+          packets[1] = (char)((totalSize & 0xFF00) >> 8);
+          packets[2] = (char)((totalSize & 0xFF));
+          memcpy(packets + 3, (const char *)(*it)->GetData(), totalSize);
+          totalSize += 3;
+        }
+        else
+        {
+          totalSize = (*it)->GetSize();
+          packets = (char *)(*it)->GetData();
+        }
+
         sres = send(currentSocket, packets, totalSize, 0);
+
+        if (mPrependCount)
+        {
+          delete[] packets;
+        }
+
         if (sres != SOCKET_ERROR)
         {
           // clear message since it was sent properly
@@ -415,9 +437,29 @@ bool cTcpServer::SendToAll(cTcpMsg* pMsg)
     // send current message or queue it if unable to send right away
     if (pMsg && !newMsgWasQueued && !pleaseCloseSocket)
     {
-      totalSize = pMsg->GetSize();
-      packets = (char *)pMsg->GetData();
+      if (mPrependCount)
+      {
+        totalSize = pMsg->GetSize();
+        packets = new char[totalSize + 4];
+
+        packets[0] = (char)((totalSize & 0xFF0000) >> 16);
+        packets[1] = (char)((totalSize & 0xFF00) >> 8);
+        packets[2] = (char)((totalSize & 0xFF));
+        memcpy(packets + 3, (const char *)pMsg->GetData(), totalSize);
+        totalSize += 3;
+      }
+      else
+      {
+        totalSize = pMsg->GetSize();
+        packets = (char *)pMsg->GetData();
+      }
+
       iSendResult = send(currentSocket, packets, totalSize, 0);
+
+      if (mPrependCount)
+      {
+        delete[] packets;
+      }
 
       if ((iSendResult == SOCKET_ERROR) && (WSAGetLastError() == WSAEWOULDBLOCK))
       {

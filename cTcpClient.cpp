@@ -5,7 +5,7 @@
 #include "ToStr.h"
 
 ////////////////////////////////////////////////////////////////
-cTcpClient::cTcpClient(const unsigned int port, const std::string& ip) : mPort(port), mServerAddress(ip)
+cTcpClient::cTcpClient(const unsigned int port, const std::string& ip, bool prependCount) : mPort(port), mServerAddress(ip), mPrependCount(prependCount)
 {
   // start as not connected
   mConnected = false;
@@ -187,9 +187,30 @@ bool cTcpClient::Send(cTcpMsg* pMsg)
   if (mConnected)
   {
     int sres = 0;
-    const unsigned int packet_size = pMsg->GetSize();
-    char *packet_data = (char *) pMsg->GetData();
+    unsigned int packet_size = pMsg->GetSize();
+    char *packet_data = NULL;
+
+    if (mPrependCount)
+    {
+      packet_data = new char[packet_size + 4];
+      packet_data[0] = (char)((packet_size & 0xFF0000) >> 16);
+      packet_data[1] = (char)((packet_size & 0xFF00) >> 8);
+      packet_data[2] = (char)(packet_size & 0xFF);
+      memcpy(packet_data + 3, (const char *)pMsg->GetData(), packet_size);
+      packet_size += 3;
+    }
+    else
+    {
+      packet_data = (char *)pMsg->GetData();
+    }
+
     sres = send(ConnectSocket, packet_data, packet_size, 0);
+
+    if (mPrependCount)
+    {
+      delete[] packet_data;
+    }
+
     if ( (iResult == 0) || ((iResult == SOCKET_ERROR) &&
       ((WSAGetLastError() == WSAENOTCONN) ||
       (WSAGetLastError() == WSAESHUTDOWN) ||

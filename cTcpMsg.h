@@ -33,7 +33,7 @@ public:
 
   cTcpMsg(void);
   // constructor to be used for received message
-  cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr);
+  cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool prependCount);
   // constructor to use for message to send
   cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeEndStr);
   // destructor
@@ -46,6 +46,7 @@ public:
   bool isCompleted() {return mIsCompleted;};
   const char* GetData() {return &mDataV[0];};
   int GetSize() {return mSize;};
+  bool MsgWithPrependCount() { return mPrependCount; }
 
   // clear message content
   void Clear() {mDataV.clear(); mSize=0; mIsCompleted=false;};
@@ -73,6 +74,7 @@ private:
   int mRxEtx;
   std::string mRxEndStr;
   bool mRemoveEndStr;
+  bool mPrependCount;
 
 };
 

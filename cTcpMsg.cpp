@@ -6,27 +6,29 @@
 
 ////////////////////////////////////////////////////////////////
 cTcpMsg::cTcpMsg(void) :
-  mIsCompleted(false),
-  mSize(0),
-  mUseCnt(1),
-  mRxStx(0x02),
-  mRxEtx(0x03),
-  mRxEndStr(),
-  mRemoveEndStr(true)
+mIsCompleted(false),
+mSize(0),
+mUseCnt(1),
+mRxStx(0x02),
+mRxEtx(0x03),
+mRxEndStr(),
+mRemoveEndStr(true),
+mPrependCount(false)
 {
   mDataV.clear();
 }
 
 ////////////////////////////////////////////////////////////////
 // use this constructor for receive message
-cTcpMsg::cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr) :
+cTcpMsg::cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool prependCount) :
   mIsCompleted(false),
   mSize(0),
   mUseCnt(1),
   mRxStx(rxStx),
   mRxEtx(rxEtx),
   mRxEndStr(rxEndStr),
-  mRemoveEndStr(removeEndStr)
+  mRemoveEndStr(removeEndStr),
+  mPrependCount(prependCount)
 {
   mDataV.clear();
 }
@@ -37,7 +39,8 @@ cTcpMsg::cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeE
   mIsCompleted(false),
   mSize(0),
   mUseCnt(1),
-  mRemoveEndStr(removeEndStr)
+  mRemoveEndStr(removeEndStr),
+  mPrependCount(false)
 {
   mDataV.clear();
   int len = strlen(msg);
@@ -181,6 +184,24 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
     // add null character at the end to make sure string is ended
     mDataV.push_back('\0');
     mIsCompleted = true;
+  }
+  else if (mPrependCount && (mDataV.size() > 3))
+  {
+    unsigned int totalCount = ((unsigned char)mDataV.at(0) << 16);
+    totalCount += ((unsigned char)mDataV.at(1) << 8);
+    totalCount += (unsigned char)mDataV.at(2);
+    if (totalCount <= (mDataV.size() - 3))
+    {
+      mDataV.erase(mDataV.begin());
+      mSize--;
+      mDataV.erase(mDataV.begin());
+      mSize--;
+      mDataV.erase(mDataV.begin());
+      mSize--;
+      sizeToCopy = rcvBufSize - (mDataV.size() - totalCount);
+      mDataV.push_back('\0');
+      mIsCompleted = true;
+    }
   }
   else if ((mRxStx == -1) && (mRxEndStr == ""))
   {

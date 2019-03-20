@@ -27,7 +27,7 @@ public:
 class cTcpServer : public cTimerHandler
 {
 public:
-  cTcpServer(unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection);
+  cTcpServer(unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection, bool prependCount);
   ~cTcpServer(void);
 
   // send data to all clients
@@ -78,6 +78,8 @@ private:
   
   // List of clients allowed to connect
   string mAllowedClients;
+
+  bool mPrependCount;  // Count of message is prepending the message on first 3 Bytes
 
   bool mSingleClientConnection;
 

@@ -53,6 +53,8 @@ mTxThreadRunning(false), mpfOnEventCB(NULL), mpfReportLinkStatusCB(NULL), mOnEve
 
   mInitParams.RemoveEndStr = pInitParamsIf->RemoveEndStr;
 
+  mInitParams.prependCount = pInitParamsIf->prependCount;
+
   if (pInitParamsIf->pTimerManager)
   {
     mpTimerManager = pInitParamsIf->pTimerManager;
@@ -77,13 +79,13 @@ mTxThreadRunning(false), mpfOnEventCB(NULL), mpfReportLinkStatusCB(NULL), mOnEve
   if (mInitParams.mode == modeServer)
   {
     // set up the server to listen 
-    mpServer = new cTcpServer(pInitParamsIf->port, clientAddresses, mpTimerManager, pInitParamsIf->singleClientServer);
+    mpServer = new cTcpServer(pInitParamsIf->port, clientAddresses, mpTimerManager, pInitParamsIf->singleClientServer, pInitParamsIf->prependCount);
   }
 
   // client mode
   else if (mInitParams.mode == modeClient)
   {
-    mpClient = new cTcpClient(pInitParamsIf->port, serverAddress);
+    mpClient = new cTcpClient(pInitParamsIf->port, serverAddress, pInitParamsIf->prependCount);
   }
 
 }
@@ -260,7 +262,7 @@ void cTcp::receiveFromServer()
     // handle received data to build receive message
     if (mpRxMsg == NULL)
     {
-      mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+      mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
     }
 
     int i = 0;
@@ -280,7 +282,7 @@ void cTcp::receiveFromServer()
       i += lenAdded;
 
       // if message is complete, or no delimiter exists process it
-      if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "")))
+      if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "") && !mpRxMsg->MsgWithPrependCount()))
       {
         KickRxTimer(); // since a message has been received, reset Rx timer
         if (IsAckNak(mpRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
@@ -293,14 +295,14 @@ void cTcp::receiveFromServer()
             mpRxMsgHandlerCb->CBOnEvent(mpRxMsg);
             // de-allocation needs to take place in the handler since allocating a new one for next message
             mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
-            mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+            mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
           }
           else if (mpfOnEventCB)
           {
             mpfOnEventCB(mOnEventOwnerCB, mpRxMsg->GetData());
             // de-allocation needs to take place in the handler since allocating a new one for next message
             mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
-            mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+            mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
           }
           else
           {
@@ -312,7 +314,7 @@ void cTcp::receiveFromServer()
         {
           // de-allocation needs to take place for this ACK/NAK message
           mpRxMsg->Dismiss(); mpRxMsg = NULL;
-          mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+          mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
         }
       }
     }
@@ -343,7 +345,7 @@ void cTcp::receiveFromClients()
       // handle received data to build receive message
       if (mpRxMsg == NULL)
       {
-        mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+        mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
       }
 
       int i = 0;
@@ -363,7 +365,7 @@ void cTcp::receiveFromClients()
         i += lenAdded;
 
         // if message is complete, process it
-        if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "")))
+        if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "") && !mpRxMsg->MsgWithPrependCount()))
         {
           KickRxTimer(); // since a message has been received, reset Rx timer
           if (IsAckNak(mpRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
@@ -376,14 +378,14 @@ void cTcp::receiveFromClients()
               mpRxMsgHandlerCb->CBOnEvent(mpRxMsg);
               // de-allocation needs to take place in the handler since allocating a new one for next message
               mpRxMsg->Dismiss(); mpRxMsg = NULL;
-              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
             }
             else if (mpfOnEventCB)
             {
               mpfOnEventCB(mOnEventOwnerCB, mpRxMsg->GetData());
               // de-allocation needs to take place in the handler since allocating a new one for next message
               mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
-              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
             }
             else
             {
@@ -395,7 +397,7 @@ void cTcp::receiveFromClients()
           {
               // de-allocation needs to take place for this ACK/NAK message
               mpRxMsg->Dismiss(); mpRxMsg = NULL;
-              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr);
+              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
           }
         }
       }
@@ -807,7 +809,8 @@ int cTcp::UnregisterReportLinkStatusCB(void* owner)
 ////////////////////////////////////////////////////////////////
 CSSTOOLS_API long Init(int mode, unsigned int port, const char* pServerAddress, const char* pClientAddresses, char* hb,
                        int hbtoP, int acktoP, int maxretriesP, int silenttoP, int maxperiodsP, int TxCarStartP, int TxCarEndP, char* TxEndStrP,
-                       int RxCarStartP, int RxCarEndP, char* RxEndStrP, bool RemoveEndStr, bool waitForAckP, bool sendAckP, bool singleClientServer)
+                       int RxCarStartP, int RxCarEndP, char* RxEndStrP, bool RemoveEndStr, bool waitForAckP, bool sendAckP, bool singleClientServer,
+                       bool prependCount)
 {
   cTcp::tInitParamsIF initParams;
   initParams.mode = (cTcp::eModeType)mode;
@@ -829,6 +832,7 @@ CSSTOOLS_API long Init(int mode, unsigned int port, const char* pServerAddress, 
   initParams.waitForAckP = waitForAckP;
   initParams.sendAckP = sendAckP;
   initParams.singleClientServer = singleClientServer;
+  initParams.prependCount = prependCount;
   initParams.pTimerManager = NULL;
 
   cTcp* ptr = new cTcp(&initParams);

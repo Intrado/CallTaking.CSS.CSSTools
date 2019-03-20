@@ -62,6 +62,8 @@ public:
 
     bool singleClientServer;   // Server that support only one connected client.
 
+    bool prependCount;         // Count of message is prepending the message on first 3 Bytes
+
     cTimerManager* pTimerManager; //Pointer to the timer manager to use
   };
 
@@ -135,6 +137,7 @@ private:
 
     bool waitForAckP;          // Have to wait for acknowledge after sending a message?
     bool sendAckP;             // Generate an ACK after each message received?
+    bool prependCount;         // Count of message is prepending the message on first 3 Bytes
   } tInitParams;
 
   // Rx thread
@@ -247,7 +250,8 @@ extern "C"
     bool RemoveEndStr,            // Remove the end of block string from the reception buffer. 
     bool waitForAckP,             // Have to wait for acknowledge after sending a message?
     bool sendAckP,                // Generate an ACK after each message received?
-    bool singleClientServer       // Server that support only one connected client.
+    bool singleClientServer,      // Server that support only one connected client.
+    bool prependCount             // Count of message is prepending the message on first 3 Bytes
     );
   CSSTOOLS_API int Exit(long handle);
   CSSTOOLS_API int Send(long handle, char *pMsg);
