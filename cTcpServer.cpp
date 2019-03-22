@@ -377,12 +377,11 @@ bool cTcpServer::SendToAll(cTcpMsg* pMsg)
         {
           totalSize = (*it)->GetSize();
           packets = new char[totalSize + 4];
-
+          totalSize += 3;
           packets[0] = (char)((totalSize & 0xFF0000) >> 16);
           packets[1] = (char)((totalSize & 0xFF00) >> 8);
           packets[2] = (char)((totalSize & 0xFF));
-          memcpy(packets + 3, (const char *)(*it)->GetData(), totalSize);
-          totalSize += 3;
+          memcpy(packets + 3, (const char *)(*it)->GetData(), totalSize-3);
         }
         else
         {
@@ -441,12 +440,11 @@ bool cTcpServer::SendToAll(cTcpMsg* pMsg)
       {
         totalSize = pMsg->GetSize();
         packets = new char[totalSize + 4];
-
+        totalSize += 3;
         packets[0] = (char)((totalSize & 0xFF0000) >> 16);
         packets[1] = (char)((totalSize & 0xFF00) >> 8);
         packets[2] = (char)((totalSize & 0xFF));
-        memcpy(packets + 3, (const char *)pMsg->GetData(), totalSize);
-        totalSize += 3;
+        memcpy(packets + 3, (const char *)pMsg->GetData(), totalSize-3);
       }
       else
       {

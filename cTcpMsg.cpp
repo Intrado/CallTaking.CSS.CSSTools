@@ -190,7 +190,7 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
     unsigned int totalCount = ((unsigned char)mDataV.at(0) << 16);
     totalCount += ((unsigned char)mDataV.at(1) << 8);
     totalCount += (unsigned char)mDataV.at(2);
-    if (totalCount <= (mDataV.size() - 3))
+    if (totalCount <= (mDataV.size()))
     {
       mDataV.erase(mDataV.begin());
       mSize--;
