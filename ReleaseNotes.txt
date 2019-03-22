@@ -1,3 +1,6 @@
+5.5.4.19 - Released 2019/03/22
+   - PWR-10565: In Tcp message with PrependCount option enabled, Message count must be inclusive (i.e. it must include the message count + the 3 bytes of the count itself).   (http://perforce:8080/@c=2Kf@/281921?ac=10)
+
 5.5.4.18 - Released 2019/03/20
    - PWR-10565: Implement prependCount option to cTcpClient and cTcpServer for supporting messages that are prepended with three bytes containing the size of the message.   (http://perforce:8080/@c=2Kf@/281824?ac=10)
 
@@ -197,4 +200,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 281824 =====
+===== Do not remove this line 281921 =====
