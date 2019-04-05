@@ -192,14 +192,19 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
     totalCount += (unsigned char)mDataV.at(2);
     if (totalCount <= (mDataV.size()))
     {
-      mDataV.erase(mDataV.begin());
-      mSize--;
-      mDataV.erase(mDataV.begin());
-      mSize--;
-      mDataV.erase(mDataV.begin());
-      mSize--;
       sizeToCopy = rcvBufSize - (mDataV.size() - totalCount);
-      mDataV.push_back('\0');
+      while (mDataV.size() > totalCount)
+      {
+        mDataV.pop_back();
+        mSize--;
+      }
+
+      mDataV.erase(mDataV.begin());
+      mSize--;
+      mDataV.erase(mDataV.begin());
+      mSize--;
+      mDataV.erase(mDataV.begin());
+      mDataV.push_back('\0');  //Add NULL char
       mIsCompleted = true;
     }
   }
