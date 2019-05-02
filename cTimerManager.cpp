@@ -69,10 +69,7 @@ cTimerManager::cTimerManager(unsigned int nPrecisionMs): cThread("TheTimerManage
   mnElementCount=0;
   Grow();
 
-  // Start the thread and wait for the thread to be started
   Run();
-  mTimerManagerThreadStarted.Wait(INFINITE);
-
   Unlock();
 }
 
@@ -547,9 +544,6 @@ void cTimerManager::Pulse()
 
 long cTimerManager::ThreadProc()
 {
-  // Signal that the thread is started
-  mTimerManagerThreadStarted.Signal();
-
   // Set overflow to true for first pass.
   bool bOverflow = false;
 
