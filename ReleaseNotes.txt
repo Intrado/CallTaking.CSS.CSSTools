@@ -1,3 +1,6 @@
+5.5.4.22 - Released 2019/11/19
+   - PWR-10974: If mutex already exists, try to open existing one.   (http://perforce:8080/@c=2Kf@/288849?ac=10)
+
 5.5.4.21 - Released 2019/05/02
    - VIPER-18248: Revert changelist 279032 has it causes issue with cTimerManager created during dynamic initialisation (i.e global or static instance).   (http://perforce:8080/@c=2Kf@/283397?ac=10)
 
@@ -206,4 +209,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 283397 =====
+===== Do not remove this line 288849 =====
