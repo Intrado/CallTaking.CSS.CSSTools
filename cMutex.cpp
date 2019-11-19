@@ -16,6 +16,15 @@ cMutex::cMutex(char *pName, bool bInitialState, LPSECURITY_ATTRIBUTES lpMutexAtt
     lpMutexAttributes,       // no security attributes
     bInitialState,            // initially not owned
     pName);           // name of mutex
+
+  DWORD dwErr = GetLastError();
+
+  if (dwErr == ERROR_ACCESS_DENIED)
+  {
+    // Try to open exixting Mutex
+    handle = OpenMutex(SYNCHRONIZE, FALSE, pName);
+  }
+
   if (handle == NULL) 
   {
     HandleInvalid();
