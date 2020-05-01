@@ -500,6 +500,10 @@ bool cTcpServer::SendToAll(cTcpMsg* pMsg)
     }
   }
   LeaveCriticalSection(&mSendCs);
+
+  // remove message regardless
+  pMsg->Dismiss();
+
   return(sent);
 }
 
