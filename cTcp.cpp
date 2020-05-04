@@ -24,7 +24,7 @@ mTxThreadRunning(false), mpfOnEventCB(NULL), mpfReportLinkStatusCB(NULL), mOnEve
 {
   DiagTrace(moduleName, "cTcp::cTcp", string("Started Tcp")+(mInitParams.mode == modeClient ? " in Client mode" : " in Server mode"));
   // id's to assign clients for our table
-  client_id = 0;
+  client_id = 1;
 
   mInitParams.mode = pInitParamsIf->mode;
   if (pInitParamsIf->pHb)
@@ -79,7 +79,7 @@ mTxThreadRunning(false), mpfOnEventCB(NULL), mpfReportLinkStatusCB(NULL), mOnEve
   if (mInitParams.mode == modeServer)
   {
     // set up the server to listen 
-    mpServer = new cTcpServer(pInitParamsIf->port, clientAddresses, mpTimerManager, pInitParamsIf->singleClientServer, pInitParamsIf->prependCount);
+    mpServer = new cTcpServer(this, pInitParamsIf->port, clientAddresses, mpTimerManager, pInitParamsIf->singleClientServer, pInitParamsIf->prependCount);
   }
 
   // client mode
@@ -331,28 +331,37 @@ void cTcp::receiveFromClients()
     // go through all clients
     std::map<unsigned int, cClientSocket*>::iterator iter;
 
-    for(iter = mpServer->sessions.begin(); iter != mpServer->sessions.end(); iter++)
+    for(iter = mpServer->sessions.begin(); iter != mpServer->sessions.end();)
     {
+      bool removeIterator;
       memset(mRxBuf, 0, sizeof(mRxBuf));
-      int data_length = mpServer->ReceiveData(iter->first, mRxBuf);
+      int data_length = mpServer->ReceiveData(iter->first, mRxBuf, removeIterator);
 
       if (data_length <= 0) 
       {
+        if (removeIterator)
+        {
+          iter = mpServer->sessions.erase(iter);
+        }
+        else
+        {
+          iter++;
+        }
         //no data received
-        return;
+        continue;
       }
 
       // handle received data to build receive message
-      if (mpRxMsg == NULL)
+      if (iter->second->mpRxMsg == NULL)
       {
-        mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
+        iter->second->mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount, iter->first);
       }
 
       int i = 0;
       int lenAdded = 0;
-      while (mpRxMsg && (i < data_length))
+      while (iter->second->mpRxMsg && (i < data_length))
       {
-        lenAdded = mpRxMsg->Add(&mRxBuf[i], data_length-i);
+        lenAdded = iter->second->mpRxMsg->Add(&mRxBuf[i], data_length - i);
         if (lenAdded < 0)
         {
           // an error occurred, skip data
@@ -365,41 +374,53 @@ void cTcp::receiveFromClients()
         i += lenAdded;
 
         // if message is complete, process it
-        if (mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "") && !mpRxMsg->MsgWithPrependCount()))
+        if (iter->second->mpRxMsg->isCompleted() || ((mInitParams.RxCarStartP == -1) && (mInitParams.RxEndStrP == "") && !iter->second->mpRxMsg->MsgWithPrependCount()))
         {
           KickRxTimer(); // since a message has been received, reset Rx timer
-          if (IsAckNak(mpRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
+          if (IsAckNak(iter->second->mpRxMsg) == cTcpMsg::noackReceived) // use callback if not an ACK or NAK handled within this class
           {
             // callback function needs to be called
             DiagTrace(moduleName, "cTcp::receiveFromClients", "Callback function is called since a complete message was received.");
             // use callback if valid
             if (mpRxMsgHandlerCb)
             {
-              mpRxMsgHandlerCb->CBOnEvent(mpRxMsg);
+              mpRxMsgHandlerCb->CBOnEvent(iter->second->mpRxMsg);
               // de-allocation needs to take place in the handler since allocating a new one for next message
-              mpRxMsg->Dismiss(); mpRxMsg = NULL;
-              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
+              iter->second->mpRxMsg->Dismiss(); 
+              iter->second->mpRxMsg = NULL;
+              iter->second->mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount, iter->first);
             }
             else if (mpfOnEventCB)
             {
               mpfOnEventCB(mOnEventOwnerCB, mpRxMsg->GetData());
               // de-allocation needs to take place in the handler since allocating a new one for next message
-              mpRxMsg->Dismiss(); mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
-              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
+              iter->second->mpRxMsg->Dismiss();
+              iter->second->mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
+              iter->second->mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount, iter->first);
             }
             else
             {
               // clear message for now -- or TBC: delete handle by called back entity and new message to instantiate if handle
-              mpRxMsg->Clear();
+              iter->second->mpRxMsg->Clear();
             }
           }
           else
           {
               // de-allocation needs to take place for this ACK/NAK message
-              mpRxMsg->Dismiss(); mpRxMsg = NULL;
-              mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount);
+            iter->second->mpRxMsg->Dismiss(); 
+            iter->second->mpRxMsg = NULL;
+            iter->second->mpRxMsg = new cTcpMsg(mInitParams.RxCarStartP, mInitParams.RxCarEndP, mInitParams.RxEndStrP, mInitParams.RemoveEndStr, mInitParams.prependCount, iter->first);
           }
         }
+      }
+
+      if (removeIterator)
+      {
+        iter = mpServer->sessions.erase(iter);
+      }
+      else
+      {
+        iter++;
       }
     }
   }
@@ -407,11 +428,11 @@ void cTcp::receiveFromClients()
 
 ////////////////////////////////////////////////////////////////
 // create and put message into queue
-int cTcp::Send(char* pMsg)
+int cTcp::Send(char* pMsg, unsigned int client_id)
 {
   int res = 0;
   DiagTrace(moduleName, "cTcp::Send", "Create message");
-  cTcpMsg* pToSendMsg = new cTcpMsg(pMsg, mInitParams.TxCarStartP, mInitParams.TxCarEndP, mInitParams.TxEndStrP, mInitParams.RemoveEndStr);
+  cTcpMsg* pToSendMsg = new cTcpMsg(pMsg, mInitParams.TxCarStartP, mInitParams.TxCarEndP, mInitParams.TxEndStrP, mInitParams.RemoveEndStr, client_id);
   DiagTrace(moduleName, "cTcp::Send", "Put message into queue");
 
   if (mInitParams.waitForAckP)
@@ -568,7 +589,7 @@ bool cTcp::SendMsg(cTcpMsg* pMsg)
   // send action packet
   if (mpServer)
   {
-    return(mpServer->SendToAll(pMsg));
+    return(mpServer->SendMsgToClient(pMsg));
   }
   if (mpClient)
   {
@@ -805,6 +826,14 @@ int cTcp::UnregisterReportLinkStatusCB(void* owner)
   return 0;
 }
 
+////////////////////////////////////////////////////////////////
+void cTcp::ReportClientStatus(eClientStatus state, unsigned int clientId, char* address)
+{
+  if (mpRxMsgHandlerCb)
+  {
+    mpRxMsgHandlerCb->CBReportClientStatus((eStatus)state, clientId, address);
+  }
+}
 
 ////////////////////////////////////////////////////////////////
 CSSTOOLS_API long Init(int mode, unsigned int port, const char* pServerAddress, const char* pClientAddresses, char* hb,
@@ -860,6 +889,17 @@ CSSTOOLS_API int Send(long handle, char *pMsg)
   if (ptr)
   {
     ptr->Send(pMsg);
+  }
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+CSSTOOLS_API int SendClient(long handle, char *pMsg, unsigned int client_id)
+{
+  cTcp* ptr = (cTcp*)handle;
+  if (ptr)
+  {
+    ptr->Send(pMsg, client_id);
   }
   return 0;
 }

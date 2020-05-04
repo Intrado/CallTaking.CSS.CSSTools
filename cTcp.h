@@ -76,11 +76,12 @@ public:
   {
   public:
     virtual void CALLBACK CBOnEvent(cTcpMsg* pMsg) = 0;
-    virtual void CALLBACK CBReportLinkStatus(char* pTyp, eStatus state, char *connectedList) = 0;
+    virtual void CALLBACK CBReportLinkStatus(char* pTyp, eStatus state, char *connectedList) = 0;  
+    virtual void CALLBACK CBReportClientStatus(eStatus state, unsigned int clientId, char* address) = 0;
   };
 
   // to send a message over TCP link (assumed to end with null character)
-  virtual int Send(char *pMsg);
+  virtual int Send(char *pMsg, unsigned int client_id = 0);
 
   // for both server and client
   virtual void Update();
@@ -105,9 +106,13 @@ public:
 
   virtual bool IsClientConnected() { return mpClient->IsConnected();}
 
+  friend class cTcpServer;
+
 protected:
   // from cTimerHandler for timer handler callback
   virtual void OnTimerEvent(unsigned int timerId, cTEvent* eventInfo);
+
+  virtual void ReportClientStatus(eClientStatus state, unsigned int clientId, char* address);
 
 private:
 
@@ -254,7 +259,8 @@ extern "C"
     bool prependCount             // Count of message is prepending the message on first 3 Bytes
     );
   CSSTOOLS_API int Exit(long handle);
-  CSSTOOLS_API int Send(long handle, char *pMsg);
+  CSSTOOLS_API int Send(long handle, char *pMsg);                                //Send to all clients in server mode
+  CSSTOOLS_API int SendClient(long handle, char *pMsg, unsigned int client_id);  //Send to a specific clients in server mode
   CSSTOOLS_API int Update(long handle);
   CSSTOOLS_API int GetNbClients(long handle);
   CSSTOOLS_API int RegisterOnEventCB(long handle, cTcp::tOnEventCB onEventCB, void* owner);

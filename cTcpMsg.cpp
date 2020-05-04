@@ -13,14 +13,15 @@ mRxStx(0x02),
 mRxEtx(0x03),
 mRxEndStr(),
 mRemoveEndStr(true),
-mPrependCount(false)
+mPrependCount(false),
+mClientId(0)
 {
   mDataV.clear();
 }
 
 ////////////////////////////////////////////////////////////////
 // use this constructor for receive message
-cTcpMsg::cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool prependCount) :
+cTcpMsg::cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool prependCount, unsigned int clientId) :
   mIsCompleted(false),
   mSize(0),
   mUseCnt(1),
@@ -28,22 +29,23 @@ cTcpMsg::cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool
   mRxEtx(rxEtx),
   mRxEndStr(rxEndStr),
   mRemoveEndStr(removeEndStr),
-  mPrependCount(prependCount)
+  mPrependCount(prependCount),
+  mClientId(clientId)
 {
   mDataV.clear();
 }
 
 ////////////////////////////////////////////////////////////////
 // directly create a message ready to be sent, format is added as specified
-cTcpMsg::cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeEndStr) :
+cTcpMsg::cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeEndStr, unsigned int clientId) :
   mIsCompleted(false),
   mSize(0),
   mUseCnt(1),
   mRemoveEndStr(removeEndStr),
-  mPrependCount(false)
+  mPrependCount(false),
+  mClientId(clientId)
 {
   mDataV.clear();
-  int len = strlen(msg);
   string toSendStr = "";
   if (stx != -1)
     toSendStr = string(1, (char)stx);
@@ -94,6 +96,7 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
   char* pTmp = NULL;
   int sizeToCopy = 0;
   int sizeRemaining = rcvBufSize;
+  int trimSize = 0;
 
   // cannot add to an already completed message
   if (mIsCompleted)
@@ -130,6 +133,7 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
       return -1; // error since buffer cannot be taken
     }
     sizeRemaining -= (pStart-rcvBuf);
+    trimSize = rcvBufSize - sizeRemaining;
   }
   // check for received mRxEtx (i.e. ETX = 3) for end of message
   if (((mRxEtx == -1) || (pTmp = (char *) memchr(pStart, 0x03, sizeRemaining)) != NULL))
@@ -213,5 +217,5 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
     mDataV.push_back('\0');
     mIsCompleted = true;
   }
-  return sizeToCopy;
+  return sizeToCopy + trimSize;
 }

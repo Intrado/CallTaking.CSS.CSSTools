@@ -33,9 +33,9 @@ public:
 
   cTcpMsg(void);
   // constructor to be used for received message
-  cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool prependCount);
+  cTcpMsg(int rxStx, int rxEtx, string& rxEndStr, bool removeEndStr, bool prependCount, unsigned int clientId = 0);
   // constructor to use for message to send
-  cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeEndStr);
+  cTcpMsg(char* msg, int stx, int etx, const string& endStr, bool removeEndStr, unsigned int clientId = 0);
   // destructor
   ~cTcpMsg(void);
 
@@ -62,6 +62,7 @@ public:
     }
   };
 
+  unsigned int GetClientId() { return mClientId; }
   cEvent mAckEvent;
   eAckNakStatus mAckNakStatus;
 
@@ -75,6 +76,7 @@ private:
   std::string mRxEndStr;
   bool mRemoveEndStr;
   bool mPrependCount;
+  unsigned int mClientId;
 
 };
 

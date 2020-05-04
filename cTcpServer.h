@@ -13,29 +13,33 @@ using namespace std;
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "6543" 
 
+class cTcp;
+
+
+enum eClientStatus{ LinkUp, LinkDown, LinkUnknown };
 
 class cClientSocket
 {
 public:
-  cClientSocket(SOCKET sock, string clientAddress = ""){ mSock = sock; mClientAddress = clientAddress;};
+  cClientSocket(SOCKET sock, string clientAddress = ""){ mSock = sock; mClientAddress = clientAddress; mpRxMsg = NULL; };
   ~cClientSocket(){};
   SOCKET mSock;
   string mClientAddress;
   vector<cTcpMsg*> msgsToSend;
+  cTcpMsg* mpRxMsg;
 };
 
 class cTcpServer : public cTimerHandler
 {
 public:
-  cTcpServer(unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection, bool prependCount);
+  cTcpServer(cTcp* pTcp, unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection, bool prependCount);
   ~cTcpServer(void);
 
-  // send data to all clients
-  //void SendToAll(char * packets, int totalSize);
-  bool SendToAll(cTcpMsg* pMsg);
+  // send data to required clients
+  bool SendMsgToClient(cTcpMsg* pMsg);
 
   // receive incoming data
-  int ReceiveData(unsigned int client_id, char * recvbuf);
+  int ReceiveData(unsigned int client_id, char * recvbuf, bool& removeIterator);
 
   // accept new connections
   bool AcceptNewClient(unsigned int & id);
@@ -56,6 +60,11 @@ protected:
   virtual void OnTimerEvent(unsigned int timerId, cTEvent* eventInfo);
 
 private:
+
+  void ReportClientStatus(eClientStatus state, unsigned int clientId, char* address);
+
+  cTcp* mpTcp; 
+
   // Socket to listen for new connections
   SOCKET ListenSocket;
 
@@ -68,7 +77,7 @@ private:
   void KickSendTimer();
   void StopSendTimer();
 
-  // to protect SendToAll() in multi-thread 
+  // to protect SendMsgToClient() in multi-thread 
   CRITICAL_SECTION mSendCs;
 
   // TCP port to listen to

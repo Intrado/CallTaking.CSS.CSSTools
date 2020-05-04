@@ -8,7 +8,7 @@
 #include <vector>
 
 ////////////////////////////////////////////////////////////////
-cTcpServer::cTcpServer(unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection, bool prependCount) : mPort(port), mpTimerManager(pTimerManager), mSingleClientConnection(singleClientConnection), mAllowedClients(clientAddresses), mPrependCount(prependCount)
+cTcpServer::cTcpServer(cTcp* pTcp, unsigned int port, string clientAddresses, cTimerManager* pTimerManager, bool singleClientConnection, bool prependCount) : mpTcp(pTcp), mPort(port), mpTimerManager(pTimerManager), mSingleClientConnection(singleClientConnection), mAllowedClients(clientAddresses), mPrependCount(prependCount)
 {
   mSendTimerId = INVALID_TIMER;
 
@@ -268,6 +268,7 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
           // erase and go to next element
           it = iter->second->msgsToSend.erase(it);
         }
+        ReportClientStatus(LinkDown, iter->first, (char*)iter->second->mClientAddress.c_str());
         iter = sessions.erase(iter);
       }
     }
@@ -277,6 +278,7 @@ bool cTcpServer::AcceptNewClient(unsigned int & id)
     DiagWarning(cTcp::moduleName, "cTcpServer::AcceptNewClient", string("Server has accepted new client ") +  ClientAddress + " on port "+ ToStr(mPort));
     cClientSocket* pClientSocket = new cClientSocket(ClientSocket, ClientAddress);
     sessions.insert( pair<unsigned int, cClientSocket*> (id, pClientSocket) );
+    ReportClientStatus(LinkUp, id, (char*)ClientAddress.c_str());
     mConnected = true;
     return true;
   }
@@ -310,8 +312,9 @@ string cTcpServer::GetClientsList()
 
 ////////////////////////////////////////////////////////////////
 // receive incoming data
-int cTcpServer::ReceiveData(unsigned int client_id, char * recvbuf)
+int cTcpServer::ReceiveData(unsigned int client_id, char * recvbuf, bool& removeIterator)
 {
+  removeIterator = false;
   std::map<unsigned int, cClientSocket*>::iterator iter;
   iter = sessions.find(client_id);
   if( iter != sessions.end() )
@@ -337,9 +340,9 @@ int cTcpServer::ReceiveData(unsigned int client_id, char * recvbuf)
         it = iter->second->msgsToSend.erase(it);
       }
       // remove session from sessions map
-      sessions.erase(iter);
+      removeIterator = true;
       // signify server state change
-
+      ReportClientStatus(LinkDown, iter->first, (char*)iter->second->mClientAddress.c_str());
       mConnected = false;
     }
 
@@ -350,8 +353,8 @@ int cTcpServer::ReceiveData(unsigned int client_id, char * recvbuf)
 }
 
 ////////////////////////////////////////////////////////////////
-// send data to all clients
-bool cTcpServer::SendToAll(cTcpMsg* pMsg)
+// send data to required clients
+bool cTcpServer::SendMsgToClient(cTcpMsg* pMsg)
 {
   EnterCriticalSection(&mSendCs);
   SOCKET currentSocket;
@@ -363,142 +366,147 @@ bool cTcpServer::SendToAll(cTcpMsg* pMsg)
 
   for (iter = sessions.begin(); iter != sessions.end(); iter++)
   {
-    bool pleaseCloseSocket = false;
-    bool newMsgWasQueued = false;
-    currentSocket = iter->second->mSock;
-    // send any outstanding messages if queued
-    if (iter->second->msgsToSend.size() > 0)
+    if ((pMsg->GetClientId() == 0) || (pMsg->GetClientId() == iter->first))
     {
-      int sres = 0;
-      for (vector<cTcpMsg*>::iterator it = iter->second->msgsToSend.begin(); it != iter->second->msgsToSend.end();)
+      bool pleaseCloseSocket = false;
+      bool newMsgWasQueued = false;
+      currentSocket = iter->second->mSock;
+      // send any outstanding messages if queued
+      if (iter->second->msgsToSend.size() > 0)
       {
+        int sres = 0;
+        for (vector<cTcpMsg*>::iterator it = iter->second->msgsToSend.begin(); it != iter->second->msgsToSend.end();)
+        {
 
+          if (mPrependCount)
+          {
+            totalSize = (*it)->GetSize();
+            packets = new char[totalSize + 4];
+            totalSize += 3;
+            packets[0] = (char)((totalSize & 0xFF0000) >> 16);
+            packets[1] = (char)((totalSize & 0xFF00) >> 8);
+            packets[2] = (char)((totalSize & 0xFF));
+            memcpy(packets + 3, (const char *)(*it)->GetData(), totalSize - 3);
+          }
+          else
+          {
+            totalSize = (*it)->GetSize();
+            packets = (char *)(*it)->GetData();
+          }
+
+          sres = send(currentSocket, packets, totalSize, 0);
+
+          if (mPrependCount)
+          {
+            delete[] packets;
+          }
+
+          if (sres != SOCKET_ERROR)
+          {
+            // clear message since it was sent properly
+            sent = true;
+            (*it)->Dismiss();
+            it = iter->second->msgsToSend.erase(it);
+          }
+          else if ((sres == SOCKET_ERROR) && (WSAGetLastError() == WSAEWOULDBLOCK))
+          {
+            // add current message to queue
+            if (pMsg)
+            {
+              //DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send to queued messages to client " + ToStr(iter->first) + " - queuing new message + kick-in timer."));
+              pMsg->AddRef();
+              iter->second->msgsToSend.push_back(pMsg);
+              newMsgWasQueued = true;
+            }
+            //else
+            //  DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send to queued messages to client " + ToStr(iter->first) + " - kick-in timer."));
+
+            // keep message and get out of loop since an error occurred
+            // kick timer for resend if not already set
+            KickSendTimer();
+            // break out of for loop since unable to send
+            break;
+          }
+          else
+          {
+            DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("An error occurred when trying to send queued message (forcing socket to close) - error ") + ToStr(WSAGetLastError()));
+            // there was an error
+            pleaseCloseSocket = true;
+            // do not continue further with these messages since socket is not good
+            break;
+          }
+        }
+      }
+
+      // send current message or queue it if unable to send right away
+      if (pMsg && !newMsgWasQueued && !pleaseCloseSocket)
+      {
         if (mPrependCount)
         {
-          totalSize = (*it)->GetSize();
+          totalSize = pMsg->GetSize();
           packets = new char[totalSize + 4];
           totalSize += 3;
           packets[0] = (char)((totalSize & 0xFF0000) >> 16);
           packets[1] = (char)((totalSize & 0xFF00) >> 8);
           packets[2] = (char)((totalSize & 0xFF));
-          memcpy(packets + 3, (const char *)(*it)->GetData(), totalSize-3);
+          memcpy(packets + 3, (const char *)pMsg->GetData(), totalSize-3);
         }
         else
         {
-          totalSize = (*it)->GetSize();
-          packets = (char *)(*it)->GetData();
+          totalSize = pMsg->GetSize();
+          packets = (char *)pMsg->GetData();
         }
 
-        sres = send(currentSocket, packets, totalSize, 0);
+        iSendResult = send(currentSocket, packets, totalSize, 0);
 
         if (mPrependCount)
         {
           delete[] packets;
         }
 
-        if (sres != SOCKET_ERROR)
+        if ((iSendResult == SOCKET_ERROR) && (WSAGetLastError() == WSAEWOULDBLOCK))
         {
-          // clear message since it was sent properly
-          sent = true;
-          (*it)->Dismiss();
-          it = iter->second->msgsToSend.erase(it);
-        }
-        else if ((sres == SOCKET_ERROR) && (WSAGetLastError() == WSAEWOULDBLOCK))
-        {
-          // add current message to queue
-          if (pMsg)
-          {
-            //DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send to queued messages to client " + ToStr(iter->first) + " - queuing new message + kick-in timer."));
-            pMsg->AddRef();
-            iter->second->msgsToSend.push_back(pMsg);
-            newMsgWasQueued = true;
-          }
-          //else
-          //  DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send to queued messages to client " + ToStr(iter->first) + " - kick-in timer."));
-
-          // keep message and get out of loop since an error occurred
-          // kick timer for resend if not already set
+          //DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send to client " + ToStr(iter->first) + " - queuing message."));
+          // Add message to list of non sent message at end - keep order of messages
+          pMsg->AddRef();
+          iter->second->msgsToSend.push_back(pMsg);
           KickSendTimer();
-          // break out of for loop since unable to send
-          break;
         }
-        else
+        else if (iSendResult == SOCKET_ERROR)
         {
-          DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("An error occurred when trying to send queued message (forcing socket to close) - error ") + ToStr(WSAGetLastError()));
-          // there was an error
+          DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("An error occurred when trying to send new message (forcing socket to close) - error ") + ToStr(WSAGetLastError()));
           pleaseCloseSocket = true;
-          // do not continue further with these messages since socket is not good
-          break;
         }
       }
-    }
 
-    // send current message or queue it if unable to send right away
-    if (pMsg && !newMsgWasQueued && !pleaseCloseSocket)
-    {
-      if (mPrependCount)
+      if (pleaseCloseSocket)
       {
-        totalSize = pMsg->GetSize();
-        packets = new char[totalSize + 4];
-        totalSize += 3;
-        packets[0] = (char)((totalSize & 0xFF0000) >> 16);
-        packets[1] = (char)((totalSize & 0xFF00) >> 8);
-        packets[2] = (char)((totalSize & 0xFF));
-        memcpy(packets + 3, (const char *)pMsg->GetData(), totalSize-3);
+        DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send with error: ") + ToStr(WSAGetLastError())
+          + ", closing connection with client " + ToStr(iter->first));
+        closesocket(currentSocket);
+        // clear message queue if any
+        for (std::vector<cTcpMsg*>::iterator it = iter->second->msgsToSend.begin(); it < iter->second->msgsToSend.end();)
+        {
+          // Clear message
+          (*it)->Dismiss();
+          // erase and go to next element
+          it = iter->second->msgsToSend.erase(it);
+        }
+        ReportClientStatus(LinkDown, iter->first, (char*)iter->second->mClientAddress.c_str());
+        // remove session from sessions map
+        iter = sessions.erase(iter);
+        // signify server state change
+        mConnected = false;
+
       }
       else
       {
-        totalSize = pMsg->GetSize();
-        packets = (char *)pMsg->GetData();
+        // consider message sent if not closing the socket for at least one connection
+        sent = true;
       }
-
-      iSendResult = send(currentSocket, packets, totalSize, 0);
-
-      if (mPrependCount)
-      {
-        delete[] packets;
-      }
-
-      if ((iSendResult == SOCKET_ERROR) && (WSAGetLastError() == WSAEWOULDBLOCK))
-      {
-        //DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send to client " + ToStr(iter->first) + " - queuing message."));
-        // Add message to list of non sent message at end - keep order of messages
-        pMsg->AddRef();
-        iter->second->msgsToSend.push_back(pMsg);
-        KickSendTimer();
-      }
-      else if (iSendResult == SOCKET_ERROR)
-      {
-        DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("An error occurred when trying to send new message (forcing socket to close) - error ") + ToStr(WSAGetLastError()));
-        pleaseCloseSocket = true;
-      }
-    }
-
-    if (pleaseCloseSocket)
-    {
-      DiagWarning(cTcp::moduleName, "cTcpServer::SendToAll", string("Failed to send with error: ") + ToStr(WSAGetLastError())
-        + ", closing connection with client " + ToStr(iter->first));
-      closesocket(currentSocket);
-      // clear message queue if any
-      for (std::vector<cTcpMsg*>::iterator it = iter->second->msgsToSend.begin(); it < iter->second->msgsToSend.end();)
-      {
-        // Clear message
-        (*it)->Dismiss();
-        // erase and go to next element
-        it = iter->second->msgsToSend.erase(it);
-      }
-      // remove session from sessions map
-      iter = sessions.erase(iter);
-      // signify server state change
-      mConnected = false;
-
-    }
-    else
-    {
-      // consider message sent if not closing the socket for at least one connection
-      sent = true;
     }
   }
+
   LeaveCriticalSection(&mSendCs);
 
   // remove message regardless
@@ -546,6 +554,12 @@ void cTcpServer::OnTimerEvent(unsigned int timerId, cTEvent* eventInfo)
 
     // Try to send any remaining message
     DiagTrace(cTcp::moduleName, "cTcpServer::OnTimerEvent", "Try sending any remaining message.");
-    SendToAll(NULL);
+    SendMsgToClient(NULL);
   }
+}
+
+////////////////////////////////////////////////////////////////
+void cTcpServer::ReportClientStatus(eClientStatus state, unsigned int clientId, char* address)
+{
+  mpTcp->ReportClientStatus(state, clientId, address);
 }
