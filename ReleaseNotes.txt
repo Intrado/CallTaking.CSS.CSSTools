@@ -1,3 +1,6 @@
+5.5.4.50 - Released 2020/05/04
+   - VIPER-20146: TCP Server library support for multiple clients allowing to send to a specific clients.   (http://perforce:8080/@c=2Kf@/291209?ac=10)
+
 5.5.4.23 - Released 2020/05/01
    - VIPER-20261: Fix memory leak in TCPServer.   (http://perforce:8080/@c=2Kf@/291161?ac=10)
 
@@ -212,4 +215,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 291161 =====
+===== Do not remove this line 291209 =====
