@@ -187,7 +187,7 @@ bool cTcpClient::Send(cTcpMsg* pMsg)
   if (mConnected)
   {
     int sres = 0;
-    unsigned int packet_size = pMsg->GetSize();
+    unsigned int packet_size = pMsg->GetSize() -1;
     char *packet_data = NULL;
 
     if (mPrependCount)

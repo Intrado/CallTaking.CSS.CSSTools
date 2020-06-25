@@ -380,7 +380,7 @@ bool cTcpServer::SendMsgToClient(cTcpMsg* pMsg)
 
           if (mPrependCount)
           {
-            totalSize = (*it)->GetSize();
+            totalSize = (*it)->GetSize()-1;
             packets = new char[totalSize + 4];
             totalSize += 3;
             packets[0] = (char)((totalSize & 0xFF0000) >> 16);
@@ -390,7 +390,7 @@ bool cTcpServer::SendMsgToClient(cTcpMsg* pMsg)
           }
           else
           {
-            totalSize = (*it)->GetSize();
+            totalSize = (*it)->GetSize()-1;
             packets = (char *)(*it)->GetData();
           }
 
@@ -443,7 +443,7 @@ bool cTcpServer::SendMsgToClient(cTcpMsg* pMsg)
       {
         if (mPrependCount)
         {
-          totalSize = pMsg->GetSize();
+          totalSize = pMsg->GetSize()-1;
           packets = new char[totalSize + 4];
           totalSize += 3;
           packets[0] = (char)((totalSize & 0xFF0000) >> 16);
@@ -453,7 +453,7 @@ bool cTcpServer::SendMsgToClient(cTcpMsg* pMsg)
         }
         else
         {
-          totalSize = pMsg->GetSize();
+          totalSize = pMsg->GetSize()-1;
           packets = (char *)pMsg->GetData();
         }
 
