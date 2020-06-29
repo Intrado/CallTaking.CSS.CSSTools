@@ -392,7 +392,7 @@ void cTcp::receiveFromClients()
             }
             else if (mpfOnEventCB)
             {
-              mpfOnEventCB(mOnEventOwnerCB, mpRxMsg->GetData());
+              mpfOnEventCB(mOnEventOwnerCB, iter->second->mpRxMsg->GetData());
               // de-allocation needs to take place in the handler since allocating a new one for next message
               iter->second->mpRxMsg->Dismiss();
               iter->second->mpRxMsg = NULL; // !+ea - need to do that here since consumed in callback but not freed
