@@ -212,7 +212,7 @@ int cTcpMsg::Add(const char* rcvBuf, int rcvBufSize)
       mIsCompleted = true;
     }
   }
-  else if ((mRxStx == -1) && (mRxEndStr == ""))
+  else if ((mRxStx == -1) && (mRxEndStr == "") && !mPrependCount)
   {
     mDataV.push_back('\0');
     mIsCompleted = true;
