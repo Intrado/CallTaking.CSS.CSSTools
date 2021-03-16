@@ -1,3 +1,6 @@
+5.5.4.53 - Released 2021/03/16
+   - Merge change 293226 to Main: PWR-12074: EIR for Cobb County: Fix on Tcp Server, when count on message (in prepend count mode) was split in two different read. This was causing desynchronization issue leading to messages being lost.   (http://perforce:8080/@c=2Kf@/293708?ac=10)
+
 5.5.4.52 - Released 2020/06/29
    - Fix crash in Delphi interface for cTCP  (http://perforce:8080/@c=2Kf@/291656?ac=10)
 
@@ -221,4 +224,4 @@ Use new Diag 2.0.0.147   (http://srveng003:8080/@c=2Kf@/27851?ac=10)
 1.0.3.0
    - Initial P4 Release
 
-===== Do not remove this line 291656 =====
+===== Do not remove this line 293708 =====
