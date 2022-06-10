@@ -1,24 +1,33 @@
-require 'p4'
+#!/usr/bin/env ruby
 
-begin
-  p4 = P4.new()
-  p4.connect()
-  client = p4.fetch_client()
-  p4.run_sync("-f", "//backroom/buildtools/...")
-rescue P4Exception => msg
-  puts( msg )
-  p4.warnings.each { |w| puts( w ) }
-  p4.errors.each { |e| puts( e ) }
-ensure
-  p4.disconnect
+require 'fileutils'
+require '../gitscripts/CompileEnvDef.rb'
+
+def execCmd(cmd)
+  begin
+    puts ":> " + cmd
+    raise if not system(cmd)  
+  rescue
+    puts "Command FAILED: exiting ..."
+    exit 1
+  end
 end
 
-require client['Root']+'/backroom/buildtools/buildtools'
+# build command variable
+buildCmd = [
+  "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
+  "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
+  "#{$devenv10} CSSToolsVS10.sln /Rebuild Release",
+  "#{$devenv10} CSSToolsVS10.sln /Rebuild BackroomRelease",
+  "#{$devenv12} CSSToolsVS12.sln /Rebuild Release",
+  "#{$devenv12} CSSToolsVS12.sln /Rebuild Debug",
+  "#{$devenv12} CSSToolsVS12.sln /Rebuild BackroomRelease",
+]
 
 
-$project = "call_taking/CSS/CSSTools"
+# Files to be copied
 
-$toCopy = [
+toCopy = [
   %w(cAutoLock.h _export),
   %w(cBooleanToggler.h _export),
   %w(cCommandLine.h _export),
@@ -130,18 +139,22 @@ $toCopy = [
   %w(ReleaseVS12_Backroom/CSSTools.pdb _export/Backroom/VS12)
   ]
 
-$buildCmd = [
-  "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
-  "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
-  "#{$devenv10} CSSToolsVS10.sln /Rebuild Release",
-  "#{$devenv10} CSSToolsVS10.sln /Rebuild BackroomRelease",
-  "#{$devenv12} CSSToolsVS12.sln /Rebuild Release",
-  "#{$devenv12} CSSToolsVS12.sln /Rebuild Debug",
-  "#{$devenv12} CSSToolsVS12.sln /Rebuild BackroomRelease",
-]
-$docCmd = []
-$setupCmd = []
 
-$versionFile = ['csstools.rc']
+# execute all build command lines
+buildCmd.each {|cmd| execCmd(cmd)}
 
-startBuild()
+
+# execute all copies
+puts "\nCopying Files..."
+toCopy.each {|file| 
+  begin
+    puts 'Copying ' + file[0] + ' to ' + file[1]
+    FileUtils.mkdir_p(file[1])
+    FileUtils.cp_r(file[0], file[1], :remove_destination => true) 
+  rescue
+    puts "ERROR: Failed to copy, exiting ..."
+    exit 1
+  end
+}
+
+
