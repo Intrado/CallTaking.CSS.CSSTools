@@ -14,13 +14,7 @@ p4ReleaseDepot = "releases"
 
 # Dependencies obtained from Perforce
 
-p4Deps = [
-  "positron/common libraries/diag/2.0.0.147/Export",
-  ["positron/common libraries/diag/2.0.1.29/Export", "_import/diagVS7"],
-  ["positron/common libraries/diag/2.0.1.29/Export", "_import/diagVS8"],
-  ["positron/common libraries/diag/2.0.10.1/Export", "_import/diagVS10"],
-  ["positron/common libraries/diag/2.0.12.12/Export", "_import/diagVS12"],
-  ["backroom/Tools/Diag/4.1.3.5/_export", "_import/DiagBackroom"]
+p4Deps = []
 
 
 # To import dependencies from Perforce
@@ -46,6 +40,8 @@ p4Deps.each { |dep|
 githubDeps = [ # comma separated list of elements with following elements for each dependency
   # Convert Perforce dependencies to GitHub as it becomes available
   #['github-repo-name', 'github-release-version', 'github-release-file-asset', 'destination-directory']
+  ['CallTaking.CommonLibraries.Diag', '2.0.12.31', 'export.tar.gz', '_import/diagVS12'],
+  ['backroom-tools-diag', '7.0.0.6', 'export.tar.gz', '_import/DiagBackroom'],
 ]
 
 

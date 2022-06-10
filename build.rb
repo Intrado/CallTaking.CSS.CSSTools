@@ -15,10 +15,6 @@ end
 
 # build command variable
 buildCmd = [
-  "#{$msdev} CSSTools.dsw /MAKE ALL /REBUILD",
-  "#{$devenv7} CSSToolsVS7.sln /Rebuild Release",
-  "#{$devenv10} CSSToolsVS10.sln /Rebuild Release",
-  "#{$devenv10} CSSToolsVS10.sln /Rebuild BackroomRelease",
   "#{$devenv12} CSSToolsVS12.sln /Rebuild Release",
   "#{$devenv12} CSSToolsVS12.sln /Rebuild Debug",
   "#{$devenv12} CSSToolsVS12.sln /Rebuild BackroomRelease",
@@ -102,27 +98,6 @@ toCopy = [
   %w(ToStr.h _export),
   %w(util.h _export),
   %w(ViperTools.h _export),
-
-  %w(Release/CSSTools.dll _export/vs6),
-  %w(Release/CSSTools.lib _export/vs6),
-  %w(ReleaseLib/CSSToolsLib.lib _export/vs6),
-
-  %w(Release_Backroom/CSSTools.dll _export/Backroom/VS6),
-  %w(Release_Backroom/CSSTools.lib _export/Backroom/VS6),
-
-  %w(ReleaseVS7/CSSTools7.dll _export/vs7),
-  %w(ReleaseVS7/CSSTools7.lib _export/vs7),
-  %w(ReleaseVS7/CSSTools7.pdb _export/vs7),
-  %w(ReleaseLibVS7/CSSToolsLib7.lib _export/vs7),
-
-  %w(ReleaseVS10/CSSTools.dll _export/vs10),
-  %w(ReleaseVS10/CSSTools.lib _export/vs10),
-  %w(ReleaseVS10/CSSTools.pdb _export/vs10),
-  %w(ReleaseLibVS10/CSSToolsLib.lib _export/vs10),
-
-  %w(ReleaseVS10_Backroom/CSSTools.dll _export/Backroom/VS10),
-  %w(ReleaseVS10_Backroom/CSSTools.lib _export/Backroom/VS10),
-  %w(ReleaseVS10_Backroom/CSSTools.pdb _export/Backroom/VS10),
 
   %w(ReleaseVS12/CSSTools.dll _export/vs12),
   %w(ReleaseVS12/CSSTools.lib _export/vs12),
